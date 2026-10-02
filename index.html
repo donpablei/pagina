@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Página personal de José Pablo López: gestión de sitios de e-commerce, programación e IA.">
+  <meta name="color-scheme" content="dark">
+  <title>José Pablo López</title>
+  <link rel="icon" type="image/png" href="logo/icono.png">
+  <style>
+    :root {
+      --fondo: #07070d;
+      --superficie: #0e0f1a;
+      --superficie-alta: #14162a;
+      --texto: #e6f1ff;
+      --texto-suave: #8b93b0;
+      --borde: #232a4a;
+      --cian: #00f0ff;
+      --magenta: #ff2a6d;
+      --amarillo: #fcee0a;
+      --brillo-cian: 0 0 6px rgba(0, 240, 255, 0.55), 0 0 22px rgba(0, 240, 255, 0.25);
+      --brillo-magenta: 0 0 6px rgba(255, 42, 109, 0.55), 0 0 22px rgba(255, 42, 109, 0.25);
+      --mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, Menlo, "DejaVu Sans Mono", monospace;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    ::selection {
+      background: var(--magenta);
+      color: #000000;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-color: var(--fondo);
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255, 42, 109, 0.16), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(0, 240, 255, 0.1), transparent),
+        linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+      background-size: auto, auto, 40px 40px, 40px 40px;
+      background-attachment: fixed;
+      color: var(--texto);
+      font-family: var(--mono);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* Líneas de escaneo tipo monitor CRT */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 3px);
+      pointer-events: none;
+    }
+
+    .contenedor {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* Cabecera */
+    header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 72px 0 40px;
+    }
+
+    .logo {
+      flex-shrink: 0;
+      width: 120px;
+      height: 120px;
+      margin-top: -10px;
+    }
+
+    h1 {
+      position: relative;
+      margin: 0 0 20px;
+      color: var(--texto);
+      font-size: clamp(1.75rem, 7vw, 3.1rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.6), 0 0 32px rgba(0, 240, 255, 0.3);
+      text-wrap: balance;
+    }
+
+    /* Efecto glitch: dos copias desplazadas que aparecen por instantes */
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      content: attr(data-text) / "";
+      position: absolute;
+      inset: 0;
+      clip-path: inset(0 0 100% 0);
+      text-shadow: none;
+      pointer-events: none;
+    }
+
+    .glitch::before {
+      left: -3px;
+      color: var(--magenta);
+      animation: glitch-a 5s steps(1) infinite;
+    }
+
+    .glitch::after {
+      left: 3px;
+      color: var(--cian);
+      animation: glitch-b 5s steps(1) infinite;
+    }
+
+    @keyframes glitch-a {
+      0%, 91% { clip-path: inset(0 0 100% 0); }
+      92% { clip-path: inset(12% 0 62% 0); }
+      94% { clip-path: inset(58% 0 18% 0); }
+      96% { clip-path: inset(30% 0 48% 0); }
+      98%, 100% { clip-path: inset(0 0 100% 0); }
+    }
+
+    @keyframes glitch-b {
+      0%, 92% { clip-path: inset(0 0 100% 0); }
+      93% { clip-path: inset(66% 0 8% 0); }
+      95% { clip-path: inset(20% 0 55% 0); }
+      97% { clip-path: inset(44% 0 30% 0); }
+      99%, 100% { clip-path: inset(0 0 100% 0); }
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .chips li {
+      padding: 3px 12px;
+      border: 1px solid rgba(0, 240, 255, 0.45);
+      border-left: 3px solid var(--cian);
+      background: rgba(0, 240, 255, 0.07);
+      color: var(--cian);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Tarjetas tipo panel HUD */
+    main {
+      display: grid;
+      gap: 28px;
+    }
+
+    .tarjeta {
+      position: relative;
+      padding: 28px;
+      border: 1px solid var(--borde);
+      background: linear-gradient(160deg, var(--superficie-alta), var(--superficie) 60%);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 18px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Esquinas marcadas en neón */
+    .tarjeta::before,
+    .tarjeta::after {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      pointer-events: none;
+    }
+
+    .tarjeta::before {
+      top: -1px;
+      left: -1px;
+      border-top: 2px solid var(--cian);
+      border-left: 2px solid var(--cian);
+      filter: drop-shadow(0 0 4px var(--cian));
+    }
+
+    .tarjeta::after {
+      right: -1px;
+      bottom: -1px;
+      border-right: 2px solid var(--magenta);
+      border-bottom: 2px solid var(--magenta);
+      filter: drop-shadow(0 0 4px var(--magenta));
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      color: var(--amarillo);
+      font-size: 1.05rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h2::before {
+      content: "//";
+      margin-right: 10px;
+      color: var(--magenta);
+    }
+
+    .tarjeta p {
+      margin: 0 0 12px;
+      color: var(--texto-suave);
+    }
+
+    .tarjeta p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Lista de tareas */
+    .formulario {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .formulario input {
+      flex: 1;
+      min-width: 0;
+      padding: 12px 14px;
+      border: 1px solid var(--borde);
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.45);
+      color: var(--cian);
+      font: inherit;
+      caret-color: var(--magenta);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .formulario input::placeholder {
+      color: var(--texto-suave);
+    }
+
+    .formulario input:focus {
+      border-color: var(--cian);
+      outline: none;
+      box-shadow: var(--brillo-cian);
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .boton-principal {
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 0;
+      background: var(--amarillo);
+      color: #0a0a0a;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: background-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .boton-principal:hover {
+      background: var(--cian);
+      box-shadow: var(--brillo-cian);
+    }
+
+    .filtros {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 16px;
+    }
+
+    .filtros button {
+      padding: 5px 12px;
+      border: 1px solid var(--borde);
+      border-radius: 0;
+      background: transparent;
+      color: var(--texto-suave);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .filtros button:hover {
+      border-color: var(--texto-suave);
+      color: var(--texto);
+    }
+
+    .filtros button[aria-pressed="true"] {
+      border-color: var(--magenta);
+      background: rgba(255, 42, 109, 0.1);
+      color: var(--magenta);
+      box-shadow: var(--brillo-magenta);
+    }
+
+    .lista {
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tarea {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px dashed var(--borde);
+    }
+
+    .tarea label {
+      display: flex;
+      flex: 1;
+      align-items: flex-start;
+      gap: 12px;
+      min-width: 0;
+      cursor: pointer;
+    }
+
+    .tarea input[type="checkbox"] {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      margin: 4px 0 0;
+      border: 1px solid var(--cian);
+      border-radius: 0;
+      background: transparent;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      transition: background-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .tarea input[type="checkbox"]:checked {
+      background: var(--cian);
+      box-shadow: inset 0 0 0 3px var(--superficie), 0 0 10px rgba(0, 240, 255, 0.7);
+    }
+
+    .tarea span {
+      overflow-wrap: anywhere;
+      transition: color 0.15s ease;
+    }
+
+    .tarea.completada span {
+      color: var(--texto-suave);
+      text-decoration: line-through;
+      text-decoration-color: var(--magenta);
+    }
+
+    .eliminar {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border: 1px solid transparent;
+      border-radius: 0;
+      background: transparent;
+      color: var(--texto-suave);
+      font-size: 1.25rem;
+      line-height: 1;
+      transition: color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .eliminar:hover {
+      border-color: var(--magenta);
+      color: var(--magenta);
+      box-shadow: var(--brillo-magenta);
+    }
+
+    .vacio {
+      margin: 16px 0 0;
+      padding: 24px 0;
+      text-align: center;
+    }
+
+    .pie-tareas {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 16px;
+      color: var(--texto-suave);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .boton-texto {
+      padding: 4px 0;
+      border: 0;
+      background: transparent;
+      color: var(--texto-suave);
+      font-size: inherit;
+      letter-spacing: inherit;
+      text-decoration: underline;
+      text-transform: inherit;
+      text-underline-offset: 3px;
+    }
+
+    .boton-texto:hover {
+      color: var(--magenta);
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--amarillo);
+      outline-offset: 2px;
+    }
+
+    .solo-lectores {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    footer {
+      padding: 40px 0 56px;
+      color: var(--texto-suave);
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    /* Gaming */
+    #gaming {
+      scroll-margin-top: 16px;
+    }
+
+    /* La página de cada juego es más ancha para que el reproductor se vea grande */
+    .contenedor.ancho {
+      max-width: 1100px;
+    }
+
+    /* Títulos que reciben el foco por código al cambiar de vista */
+    h2[tabindex="-1"]:focus {
+      outline: none;
+    }
+
+    .juegos,
+    .videos {
+      display: grid;
+      gap: 8px;
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .juegos a,
+    .videos button {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--borde);
+      border-left: 3px solid var(--cian);
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.35);
+      color: var(--texto);
+      text-align: left;
+      text-decoration: none;
+      transition: color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .juegos a:hover,
+    .videos button:hover {
+      border-color: var(--cian);
+      color: var(--cian);
+      box-shadow: var(--brillo-cian);
+    }
+
+    .juego-nombre {
+      flex: 1;
+      min-width: 0;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      overflow-wrap: anywhere;
+    }
+
+    .juego-cuenta {
+      color: var(--texto-suave);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .video-num {
+      color: var(--magenta);
+      font-weight: 700;
+    }
+
+    .video-nombre {
+      flex: 1;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .videos button[aria-current="true"] {
+      border-color: var(--magenta);
+      background: rgba(255, 42, 109, 0.1);
+      color: var(--magenta);
+      box-shadow: var(--brillo-magenta);
+    }
+
+    .volver {
+      justify-self: start;
+      padding: 4px 0;
+      color: var(--cian);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: text-shadow 0.15s ease;
+    }
+
+    .volver:hover {
+      text-shadow: var(--brillo-cian);
+    }
+
+    .reproductor {
+      margin-top: 16px;
+    }
+
+    .reproductor iframe,
+    .miniatura {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 1px solid var(--cian);
+      background: #000000;
+      box-shadow: var(--brillo-cian);
+    }
+
+    /* Sustituto del reproductor cuando la página se abre desde el disco */
+    .miniatura {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .miniatura img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .miniatura span {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 12px 16px;
+      background: rgba(7, 7, 13, 0.88);
+      color: var(--texto);
+      font-size: 0.85rem;
+    }
+
+    .tarjeta p.reproductor-titulo {
+      margin: 10px 0 0;
+      color: var(--cian);
+      font-size: 0.85rem;
+      overflow-wrap: anywhere;
+    }
+
+    .reproductor-titulo a {
+      color: var(--amarillo);
+      text-underline-offset: 3px;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 480px) {
+      header {
+        gap: 16px;
+        padding: 48px 0 28px;
+      }
+
+      .logo {
+        width: 64px;
+        height: 64px;
+        margin-top: 0;
+      }
+
+      .tarjeta {
+        padding: 20px;
+      }
+
+      .boton-principal {
+        padding: 12px 14px;
+        letter-spacing: 0.06em;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+      }
+
+      .glitch::before,
+      .glitch::after {
+        display: none;
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <header>
+      <div>
+        <h1 class="glitch" data-text="José Pablo López">José Pablo López</h1>
+        <ul class="chips" aria-label="A qué me dedico">
+          <li>Gestión de sitios de e-commerce</li>
+          <li>Programación</li>
+          <li>IA</li>
+        </ul>
+      </div>
+      <img class="logo" src="logo/logo.png" alt="Retrato de José Pablo López en estilo neón" width="120" height="120">
+    </header>
+
+    <main id="vista-inicio">
+      <section class="tarjeta" aria-labelledby="titulo-sobre-mi">
+        <h2 id="titulo-sobre-mi">Sobre mí</h2>
+        <!-- Texto provisional: edítalo con tus propias palabras. -->
+        <p>
+          Me dedico a la gestión de sitios de e-commerce: cuido que las tiendas en línea
+          funcionen bien, que el catálogo esté al día y que comprar sea sencillo.
+        </p>
+        <p>
+          También programo y me interesa la inteligencia artificial, sobre todo como
+          herramienta para automatizar tareas y construir cosas útiles más rápido.
+        </p>
+      </section>
+
+      <section class="tarjeta" id="gaming" aria-labelledby="titulo-gaming">
+        <h2 id="titulo-gaming" tabindex="-1">Gaming</h2>
+        <p>Mis mejores partidas. Elige un juego para ver sus videos.</p>
+        <ul class="juegos" id="juegos"></ul>
+      </section>
+
+      <section class="tarjeta" aria-labelledby="titulo-tareas">
+        <h2 id="titulo-tareas">Lista de tareas</h2>
+        <p>Se guarda en este navegador, así que sigue aquí cuando vuelvas.</p>
+
+        <form class="formulario" id="formulario" autocomplete="off">
+          <label class="solo-lectores" for="nueva-tarea">Nueva tarea</label>
+          <input type="text" id="nueva-tarea" placeholder="¿Qué hay que hacer?" maxlength="200">
+          <button type="submit" class="boton-principal">Agregar</button>
+        </form>
+
+        <div class="filtros" id="filtros" role="group" aria-label="Filtrar tareas">
+          <button type="button" data-filtro="todas" aria-pressed="true">Todas</button>
+          <button type="button" data-filtro="pendientes" aria-pressed="false">Pendientes</button>
+          <button type="button" data-filtro="completadas" aria-pressed="false">Completadas</button>
+        </div>
+
+        <ul class="lista" id="lista"></ul>
+        <p class="vacio" id="vacio" hidden></p>
+
+        <div class="pie-tareas">
+          <span id="contador" aria-live="polite"></span>
+          <button type="button" class="boton-texto" id="borrar-completadas" hidden>Borrar completadas</button>
+        </div>
+      </section>
+    </main>
+
+    <main id="vista-juego" hidden>
+      <a class="volver" href="#gaming">← Volver a Gaming</a>
+
+      <section class="tarjeta" aria-labelledby="titulo-juego">
+        <h2 id="titulo-juego" tabindex="-1"></h2>
+        <p id="aviso-juego"></p>
+
+        <div class="reproductor" id="reproductor" hidden>
+          <div id="marco"></div>
+          <p class="reproductor-titulo">
+            <span id="video-titulo" aria-live="polite"></span> ·
+            <a id="video-enlace" href="https://www.youtube.com/" target="_blank" rel="noopener">Ver en YouTube</a>
+          </p>
+        </div>
+
+        <ol class="videos" id="videos"></ol>
+      </section>
+    </main>
+
+    <footer>
+      © <span id="anio">2026</span> José Pablo López
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // Videos por juego, alojados en YouTube. Cada video: { titulo: 'Nombre visible', youtube: 'ID del video' }
+      // El ID es lo que va después de "v=" en el enlace: https://www.youtube.com/watch?v=ID
+      // Para agregar un juego: añade aquí otra entrada con su id, nombre y videos.
+      var JUEGOS = [
+        {
+          id: 'sekiro',
+          nombre: 'Sekiro',
+          videos: [
+            { titulo: 'ISSHIN: JEFE FINAL - NO HIT (RECUERDO DE FUERZA)', youtube: 'clfXQU7W5jQ' },
+            { titulo: 'PADRE INTERIOR (BUHO) - NO HIT (RECUERDO DE FUERZA)', youtube: 'cV6uGKEgM8A' }
+          ]
+        }
+      ];
+
+      var TITULO = document.title;
+
+      var contenedor = document.querySelector('.contenedor');
+      var vistaInicio = document.getElementById('vista-inicio');
+      var vistaJuego = document.getElementById('vista-juego');
+      var menuJuegos = document.getElementById('juegos');
+      var tituloJuego = document.getElementById('titulo-juego');
+      var avisoJuego = document.getElementById('aviso-juego');
+      var reproductor = document.getElementById('reproductor');
+      var marco = document.getElementById('marco');
+      var videoTitulo = document.getElementById('video-titulo');
+      var videoEnlace = document.getElementById('video-enlace');
+      var menuVideos = document.getElementById('videos');
+
+      var juegoActual = null;
+      var enJuego = false;
+
+      function idDeJuego(hash) {
+        var partes = /^#\/gaming\/([^\/?#]+)\/?$/.exec(hash || '');
+        if (!partes) return null;
+        try {
+          return decodeURIComponent(partes[1]);
+        } catch (error) {
+          return partes[1];
+        }
+      }
+
+      function buscarJuego(id) {
+        for (var i = 0; i < JUEGOS.length; i++) {
+          if (JUEGOS[i].id === id) return JUEGOS[i];
+        }
+        return null;
+      }
+
+      function cuenta(n) {
+        if (n === 0) return 'Sin videos';
+        return n === 1 ? '1 video' : n + ' videos';
+      }
+
+      function pintarJuegos() {
+        menuJuegos.textContent = '';
+        JUEGOS.forEach(function (juego) {
+          var li = document.createElement('li');
+          var enlace = document.createElement('a');
+          enlace.href = '#/gaming/' + encodeURIComponent(juego.id);
+
+          var nombre = document.createElement('span');
+          nombre.className = 'juego-nombre';
+          nombre.textContent = juego.nombre;
+
+          var total = document.createElement('span');
+          total.className = 'juego-cuenta';
+          total.textContent = cuenta(juego.videos.length);
+
+          enlace.appendChild(nombre);
+          enlace.appendChild(total);
+          li.appendChild(enlace);
+          menuJuegos.appendChild(li);
+        });
+      }
+
+      function detenerVideo() {
+        // Quitar el iframe detiene la reproducción.
+        marco.textContent = '';
+        reproductor.hidden = true;
+        videoTitulo.textContent = '';
+      }
+
+      function reproducir(indice) {
+        var datos = juegoActual.videos[indice];
+        var id = encodeURIComponent(datos.youtube);
+
+        marco.textContent = '';
+        if (location.protocol === 'file:') {
+          // Abierta desde el disco, YouTube rechaza el reproductor incrustado (error 153):
+          // en su lugar se muestra la miniatura con enlace al video.
+          var enlace = document.createElement('a');
+          enlace.className = 'miniatura';
+          enlace.href = 'https://www.youtube.com/watch?v=' + id;
+          enlace.target = '_blank';
+          enlace.rel = 'noopener';
+
+          var imagen = document.createElement('img');
+          imagen.alt = datos.titulo;
+          imagen.src = 'https://i.ytimg.com/vi/' + id + '/maxresdefault.jpg';
+          imagen.onerror = function () {
+            imagen.onerror = null;
+            imagen.src = 'https://i.ytimg.com/vi/' + id + '/mqdefault.jpg';
+          };
+
+          var nota = document.createElement('span');
+          nota.textContent = 'Abierta desde tu disco, la página no puede reproducir el video aquí. ' +
+            'Haz clic para verlo en YouTube; ya publicada en internet se reproduce en este recuadro.';
+
+          enlace.appendChild(imagen);
+          enlace.appendChild(nota);
+          marco.appendChild(enlace);
+        } else {
+          // Se crea un iframe nuevo cada vez: cambiarle el src a uno existente ensucia el historial
+          // y el botón Atrás dejaría de regresar a la página anterior.
+          var iframe = document.createElement('iframe');
+          iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+          iframe.title = datos.titulo;
+          iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+          iframe.allowFullscreen = true;
+          iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+          marco.appendChild(iframe);
+        }
+
+        reproductor.hidden = false;
+        videoTitulo.textContent = datos.titulo;
+        videoEnlace.href = 'https://www.youtube.com/watch?v=' + id;
+
+        Array.prototype.forEach.call(menuVideos.querySelectorAll('button'), function (boton) {
+          if (Number(boton.dataset.indice) === indice) {
+            boton.setAttribute('aria-current', 'true');
+          } else {
+            boton.removeAttribute('aria-current');
+          }
+        });
+
+        reproductor.scrollIntoView({ block: 'nearest' });
+      }
+
+      function pintarJuego(juego) {
+        juegoActual = juego;
+        menuVideos.textContent = '';
+
+        if (!juego) {
+          tituloJuego.textContent = 'Juego no encontrado';
+          avisoJuego.textContent = 'No hay ninguna página para esta dirección.';
+          return;
+        }
+
+        tituloJuego.textContent = juego.nombre;
+
+        if (juego.videos.length === 0) {
+          avisoJuego.textContent = 'Aún no hay videos para este juego. Próximamente.';
+          return;
+        }
+
+        avisoJuego.textContent = 'Elige un video para reproducirlo.';
+        juego.videos.forEach(function (datos, indice) {
+          var li = document.createElement('li');
+          var boton = document.createElement('button');
+          boton.type = 'button';
+          boton.dataset.indice = indice;
+
+          var numero = document.createElement('span');
+          numero.className = 'video-num';
+          numero.textContent = (indice < 9 ? '0' : '') + (indice + 1);
+
+          var nombre = document.createElement('span');
+          nombre.className = 'video-nombre';
+          nombre.textContent = datos.titulo;
+
+          boton.appendChild(numero);
+          boton.appendChild(nombre);
+          li.appendChild(boton);
+          menuVideos.appendChild(li);
+        });
+      }
+
+      function enrutar() {
+        var id = idDeJuego(location.hash);
+        detenerVideo();
+
+        if (id === null) {
+          vistaJuego.hidden = true;
+          vistaInicio.hidden = false;
+          contenedor.classList.remove('ancho');
+          document.title = TITULO;
+          if (enJuego) {
+            // Al volver de un juego, la sección destino estaba oculta: hay que ir a ella a mano.
+            var destino = document.getElementById(location.hash.slice(1));
+            if (destino) {
+              destino.scrollIntoView();
+              var encabezado = destino.querySelector('h2');
+              if (encabezado) encabezado.focus({ preventScroll: true });
+            } else {
+              window.scrollTo(0, 0);
+            }
+          }
+          enJuego = false;
+          return;
+        }
+
+        var juego = buscarJuego(id);
+        pintarJuego(juego);
+        vistaInicio.hidden = true;
+        vistaJuego.hidden = false;
+        contenedor.classList.add('ancho');
+        document.title = (juego ? juego.nombre : 'Juego no encontrado') + ' · ' + TITULO;
+        window.scrollTo(0, 0);
+        tituloJuego.focus({ preventScroll: true });
+        enJuego = true;
+      }
+
+      menuVideos.addEventListener('click', function (evento) {
+        var boton = evento.target.closest('button[data-indice]');
+        if (!boton) return;
+        reproducir(Number(boton.dataset.indice));
+      });
+
+      window.addEventListener('hashchange', enrutar);
+      pintarJuegos();
+      enrutar();
+    })();
+  </script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var CLAVE = 'jpl-tareas';
+
+      var formulario = document.getElementById('formulario');
+      var campo = document.getElementById('nueva-tarea');
+      var filtros = document.getElementById('filtros');
+      var lista = document.getElementById('lista');
+      var vacio = document.getElementById('vacio');
+      var contador = document.getElementById('contador');
+      var borrarCompletadas = document.getElementById('borrar-completadas');
+
+      var tareas = cargar();
+      var filtro = 'todas';
+
+      function cargar() {
+        try {
+          var datos = JSON.parse(localStorage.getItem(CLAVE));
+          if (!Array.isArray(datos)) return [];
+          return datos
+            .filter(function (t) {
+              return t && typeof t.texto === 'string' && t.texto.trim() !== '';
+            })
+            .map(function (t) {
+              return {
+                id: String(t.id || crearId()),
+                texto: t.texto,
+                completada: Boolean(t.completada)
+              };
+            });
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function guardar() {
+        try {
+          localStorage.setItem(CLAVE, JSON.stringify(tareas));
+        } catch (error) {
+          // Sin almacenamiento disponible: la lista sigue funcionando en esta sesión.
+        }
+      }
+
+      function crearId() {
+        return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+      }
+
+      function visibles() {
+        if (filtro === 'pendientes') {
+          return tareas.filter(function (t) { return !t.completada; });
+        }
+        if (filtro === 'completadas') {
+          return tareas.filter(function (t) { return t.completada; });
+        }
+        return tareas;
+      }
+
+      function crearElemento(tarea) {
+        var li = document.createElement('li');
+        li.className = tarea.completada ? 'tarea completada' : 'tarea';
+        li.dataset.id = tarea.id;
+
+        var etiqueta = document.createElement('label');
+
+        var casilla = document.createElement('input');
+        casilla.type = 'checkbox';
+        casilla.checked = tarea.completada;
+
+        var texto = document.createElement('span');
+        texto.textContent = tarea.texto;
+
+        etiqueta.appendChild(casilla);
+        etiqueta.appendChild(texto);
+
+        var eliminar = document.createElement('button');
+        eliminar.type = 'button';
+        eliminar.className = 'eliminar';
+        eliminar.setAttribute('aria-label', 'Eliminar tarea: ' + tarea.texto);
+        eliminar.textContent = '×';
+
+        li.appendChild(etiqueta);
+        li.appendChild(eliminar);
+        return li;
+      }
+
+      function mensajeVacio() {
+        if (tareas.length === 0) return 'Aún no hay tareas. Agrega la primera.';
+        if (filtro === 'pendientes') return 'No tienes tareas pendientes.';
+        return 'Todavía no has completado ninguna tarea.';
+      }
+
+      function pintar() {
+        var mostradas = visibles();
+
+        lista.textContent = '';
+        mostradas.forEach(function (tarea) {
+          lista.appendChild(crearElemento(tarea));
+        });
+
+        vacio.hidden = mostradas.length > 0;
+        vacio.textContent = mostradas.length > 0 ? '' : mensajeVacio();
+
+        var pendientes = tareas.filter(function (t) { return !t.completada; }).length;
+        contador.textContent = tareas.length === 0
+          ? ''
+          : pendientes === 1
+            ? '1 tarea pendiente'
+            : pendientes + ' tareas pendientes';
+
+        borrarCompletadas.hidden = pendientes === tareas.length;
+
+        Array.prototype.forEach.call(filtros.querySelectorAll('button'), function (boton) {
+          boton.setAttribute('aria-pressed', String(boton.dataset.filtro === filtro));
+        });
+      }
+
+      function actualizar() {
+        guardar();
+        pintar();
+      }
+
+      formulario.addEventListener('submit', function (evento) {
+        evento.preventDefault();
+        var texto = campo.value.trim();
+        if (texto === '') return;
+        tareas.push({ id: crearId(), texto: texto, completada: false });
+        campo.value = '';
+        campo.focus();
+        actualizar();
+      });
+
+      lista.addEventListener('change', function (evento) {
+        if (evento.target.type !== 'checkbox') return;
+        var id = evento.target.closest('.tarea').dataset.id;
+        tareas.forEach(function (t) {
+          if (t.id === id) t.completada = evento.target.checked;
+        });
+        actualizar();
+      });
+
+      lista.addEventListener('click', function (evento) {
+        var boton = evento.target.closest('.eliminar');
+        if (!boton) return;
+        var id = boton.closest('.tarea').dataset.id;
+        tareas = tareas.filter(function (t) { return t.id !== id; });
+        actualizar();
+        campo.focus();
+      });
+
+      filtros.addEventListener('click', function (evento) {
+        var boton = evento.target.closest('button[data-filtro]');
+        if (!boton) return;
+        filtro = boton.dataset.filtro;
+        pintar();
+      });
+
+      borrarCompletadas.addEventListener('click', function () {
+        tareas = tareas.filter(function (t) { return !t.completada; });
+        actualizar();
+      });
+
+      document.getElementById('anio').textContent = new Date().getFullYear();
+      pintar();
+    })();
+  </script>
+</body>
+</html>
