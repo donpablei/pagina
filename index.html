@@ -44,15 +44,46 @@
       background-color: var(--fondo);
       background-image:
         radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255, 42, 109, 0.16), transparent),
-        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(0, 240, 255, 0.1), transparent),
-        linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
-      background-size: auto, auto, 40px 40px, 40px 40px;
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(0, 240, 255, 0.1), transparent);
       background-attachment: fixed;
       color: var(--texto);
       font-family: var(--mono);
       font-size: 0.95rem;
       line-height: 1.7;
+    }
+
+    /* Fondo, de atrás hacia adelante: ciudad con sol (difuminada), cuadrícula y contenido */
+    .decorado {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: -2;
+      height: 62vh;
+      min-height: 320px;
+      opacity: 0.5;
+      filter: blur(2.5px);
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(to top, #000 50%, transparent);
+      mask-image: linear-gradient(to top, #000 50%, transparent);
+    }
+
+    .decorado svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-image:
+        linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
     }
 
     /* Líneas de escaneo tipo monitor CRT */
@@ -586,6 +617,86 @@
       white-space: nowrap;
     }
 
+    /* Música */
+    #musica {
+      scroll-margin-top: 16px;
+    }
+
+    .enlace-artista {
+      display: inline-block;
+      margin-top: 4px;
+      text-decoration: none;
+    }
+
+    .canciones {
+      display: grid;
+      gap: 16px;
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .cancion {
+      padding: 16px;
+      border: 1px solid var(--borde);
+      border-left: 3px solid var(--magenta);
+      background: rgba(0, 0, 0, 0.35);
+    }
+
+    .cancion h3 {
+      margin: 0 0 12px;
+      color: var(--texto);
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .spotify {
+      display: block;
+      width: 100%;
+      height: 152px;
+      border: 0;
+      border-radius: 12px;
+    }
+
+    .cancion-acciones {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 18px;
+      margin-top: 12px;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .cancion-acciones a {
+      color: var(--cian);
+      text-underline-offset: 3px;
+    }
+
+    .cancion-acciones a:hover {
+      color: var(--amarillo);
+    }
+
+    .boton-video {
+      padding: 7px 14px;
+      border: 1px solid var(--cian);
+      border-radius: 0;
+      background: transparent;
+      color: var(--cian);
+      font-size: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      transition: background-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .boton-video:hover,
+    .boton-video[aria-expanded="true"] {
+      background: rgba(0, 240, 255, 0.1);
+      box-shadow: var(--brillo-cian);
+    }
+
     @media (max-width: 480px) {
       header {
         gap: 16px;
@@ -622,6 +733,115 @@
   </style>
 </head>
 <body>
+  <!-- Decorado del fondo: ciudad de neón con sol de atardecer (ilustración propia) -->
+  <div class="decorado" aria-hidden="true">
+    <svg viewBox="0 0 1600 600" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="resplandor" cx="50%" cy="100%" r="75%">
+          <stop offset="0" stop-color="#b14cff" stop-opacity="0.75"/>
+          <stop offset="0.5" stop-color="#5a2bd6" stop-opacity="0.35"/>
+          <stop offset="1" stop-color="#5a2bd6" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="sol" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffd166"/>
+          <stop offset="0.45" stop-color="#ff7a3d"/>
+          <stop offset="1" stop-color="#ff2a6d"/>
+        </linearGradient>
+        <mask id="rayas">
+          <rect width="1600" height="600" fill="#fff"/>
+          <g fill="#000">
+            <rect y="330" width="1600" height="6"/>
+            <rect y="366" width="1600" height="10"/>
+            <rect y="404" width="1600" height="14"/>
+            <rect y="444" width="1600" height="18"/>
+            <rect y="486" width="1600" height="22"/>
+            <rect y="530" width="1600" height="26"/>
+          </g>
+        </mask>
+        <pattern id="ventanas-cian" width="36" height="44" patternUnits="userSpaceOnUse">
+          <rect x="6" y="8" width="7" height="10" fill="#00f0ff"/>
+          <rect x="22" y="8" width="7" height="10" fill="#00f0ff" opacity="0.35"/>
+          <rect x="22" y="28" width="7" height="10" fill="#00f0ff"/>
+        </pattern>
+        <pattern id="ventanas-magenta" width="32" height="40" patternUnits="userSpaceOnUse">
+          <rect x="5" y="6" width="6" height="9" fill="#ff5fa2"/>
+          <rect x="19" y="24" width="6" height="9" fill="#ff5fa2"/>
+          <rect x="5" y="24" width="6" height="9" fill="#ffd166" opacity="0.7"/>
+        </pattern>
+      </defs>
+
+      <rect width="1600" height="600" fill="url(#resplandor)"/>
+      <!-- El sol va a la derecha para que no lo tape la columna de contenido -->
+      <circle cx="1290" cy="390" r="205" fill="url(#sol)" mask="url(#rayas)"/>
+
+      <!-- Edificios lejanos -->
+      <g fill="#3b2382">
+        <rect x="0" y="330" width="100" height="270"/>
+        <rect x="110" y="260" width="70" height="340"/>
+        <rect x="190" y="300" width="120" height="300"/>
+        <rect x="320" y="200" width="60" height="400"/>
+        <rect x="390" y="350" width="110" height="250"/>
+        <rect x="510" y="400" width="90" height="200"/>
+        <rect x="610" y="440" width="100" height="160"/>
+        <rect x="720" y="470" width="80" height="130"/>
+        <rect x="810" y="450" width="90" height="150"/>
+        <rect x="910" y="430" width="110" height="170"/>
+        <rect x="1030" y="390" width="90" height="210"/>
+        <rect x="1130" y="340" width="110" height="260"/>
+        <rect x="1250" y="210" width="60" height="390"/>
+        <rect x="1320" y="290" width="120" height="310"/>
+        <rect x="1450" y="250" width="70" height="350"/>
+        <rect x="1530" y="320" width="70" height="280"/>
+      </g>
+
+      <!-- Edificios cercanos -->
+      <g fill="#150b33">
+        <rect x="0" y="420" width="70" height="180"/>
+        <rect x="60" y="360" width="110" height="240"/>
+        <rect x="180" y="440" width="80" height="160"/>
+        <rect x="250" y="300" width="60" height="300"/>
+        <rect x="330" y="470" width="130" height="130"/>
+        <rect x="470" y="500" width="90" height="100"/>
+        <rect x="570" y="520" width="120" height="80"/>
+        <rect x="700" y="540" width="100" height="60"/>
+        <rect x="810" y="525" width="110" height="75"/>
+        <rect x="930" y="505" width="90" height="95"/>
+        <rect x="1030" y="480" width="120" height="120"/>
+        <rect x="1160" y="320" width="70" height="280"/>
+        <rect x="1240" y="450" width="110" height="150"/>
+        <rect x="1360" y="380" width="90" height="220"/>
+        <rect x="1460" y="430" width="140" height="170"/>
+      </g>
+      <g fill="url(#ventanas-cian)">
+        <rect x="60" y="360" width="110" height="240"/>
+        <rect x="250" y="300" width="60" height="300"/>
+        <rect x="570" y="520" width="120" height="80"/>
+        <rect x="930" y="505" width="90" height="95"/>
+        <rect x="1160" y="320" width="70" height="280"/>
+        <rect x="1460" y="430" width="140" height="170"/>
+      </g>
+      <g fill="url(#ventanas-magenta)">
+        <rect x="0" y="420" width="70" height="180"/>
+        <rect x="180" y="440" width="80" height="160"/>
+        <rect x="330" y="470" width="130" height="130"/>
+        <rect x="810" y="525" width="110" height="75"/>
+        <rect x="1030" y="480" width="120" height="120"/>
+        <rect x="1240" y="450" width="110" height="150"/>
+        <rect x="1360" y="380" width="90" height="220"/>
+      </g>
+
+      <!-- Antenas y letreros de neón -->
+      <g stroke="#150b33" stroke-width="4">
+        <line x1="280" y1="300" x2="280" y2="240"/>
+        <line x1="1195" y1="320" x2="1195" y2="250"/>
+      </g>
+      <rect x="150" y="380" width="12" height="90" fill="#ff2a6d"/>
+      <rect x="1338" y="470" width="12" height="80" fill="#00f0ff"/>
+      <rect x="352" y="486" width="86" height="16" fill="#00f0ff"/>
+      <rect x="1052" y="496" width="76" height="14" fill="#ff2a6d"/>
+    </svg>
+  </div>
+
   <div class="contenedor">
     <header>
       <div>
@@ -653,6 +873,13 @@
         <h2 id="titulo-gaming" tabindex="-1">Gaming</h2>
         <p>Mis mejores partidas. Elige un juego para ver sus videos.</p>
         <ul class="juegos" id="juegos"></ul>
+      </section>
+
+      <section class="tarjeta" id="musica" aria-labelledby="titulo-musica">
+        <h2 id="titulo-musica">Música original</h2>
+        <p>Mis canciones como Pablei. Escúchalas aquí mismo, mira sus videos o ábrelas en Spotify.</p>
+        <a class="boton-principal enlace-artista" href="https://open.spotify.com/artist/5CWfvQCAdNwCMFklTBER5y" target="_blank" rel="noopener">Mi perfil de artista en Spotify ↗</a>
+        <ul class="canciones" id="canciones"></ul>
       </section>
 
       <section class="tarjeta" aria-labelledby="titulo-tareas">
@@ -723,6 +950,13 @@
         }
       ];
 
+      // Canciones. youtube y spotify son los ID de cada enlace:
+      // https://www.youtube.com/watch?v=ID  y  https://open.spotify.com/track/ID
+      var CANCIONES = [
+        { titulo: 'Ojos Venenosos', youtube: 'Yyd0n4J6Fis', spotify: '6RPmM3DrYHC9Qf1IRyetuV' },
+        { titulo: 'Dos 3', youtube: '_ioJDG3rivY', spotify: '7AgzGGSI05iTPSP3lYJa2s' }
+      ];
+
       var TITULO = document.title;
 
       var contenedor = document.querySelector('.contenedor');
@@ -736,6 +970,7 @@
       var videoTitulo = document.getElementById('video-titulo');
       var videoEnlace = document.getElementById('video-enlace');
       var menuVideos = document.getElementById('videos');
+      var listaCanciones = document.getElementById('canciones');
 
       var juegoActual = null;
       var enJuego = false;
@@ -791,11 +1026,8 @@
         videoTitulo.textContent = '';
       }
 
-      function reproducir(indice) {
-        var datos = juegoActual.videos[indice];
-        var id = encodeURIComponent(datos.youtube);
-
-        marco.textContent = '';
+      // Devuelve el reproductor de YouTube de un video, listo para insertar en la página.
+      function crearVideoYouTube(id, titulo) {
         if (location.protocol === 'file:') {
           // Abierta desde el disco, YouTube rechaza el reproductor incrustado (error 153):
           // en su lugar se muestra la miniatura con enlace al video.
@@ -806,7 +1038,7 @@
           enlace.rel = 'noopener';
 
           var imagen = document.createElement('img');
-          imagen.alt = datos.titulo;
+          imagen.alt = titulo;
           imagen.src = 'https://i.ytimg.com/vi/' + id + '/maxresdefault.jpg';
           imagen.onerror = function () {
             imagen.onerror = null;
@@ -819,18 +1051,92 @@
 
           enlace.appendChild(imagen);
           enlace.appendChild(nota);
-          marco.appendChild(enlace);
-        } else {
-          // Se crea un iframe nuevo cada vez: cambiarle el src a uno existente ensucia el historial
-          // y el botón Atrás dejaría de regresar a la página anterior.
-          var iframe = document.createElement('iframe');
-          iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
-          iframe.title = datos.titulo;
-          iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
-          iframe.allowFullscreen = true;
-          iframe.referrerPolicy = 'strict-origin-when-cross-origin';
-          marco.appendChild(iframe);
+          return enlace;
         }
+
+        // Se crea un iframe nuevo cada vez: cambiarle el src a uno existente ensucia el historial
+        // y el botón Atrás dejaría de regresar a la página anterior.
+        var iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+        iframe.title = titulo;
+        iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        return iframe;
+      }
+
+      function enlaceExterno(texto, direccion) {
+        var enlace = document.createElement('a');
+        enlace.textContent = texto;
+        enlace.href = direccion;
+        enlace.target = '_blank';
+        enlace.rel = 'noopener';
+        return enlace;
+      }
+
+      function pintarCanciones() {
+        listaCanciones.textContent = '';
+        CANCIONES.forEach(function (cancion) {
+          var youtube = encodeURIComponent(cancion.youtube);
+          var spotify = encodeURIComponent(cancion.spotify);
+
+          var li = document.createElement('li');
+          li.className = 'cancion';
+
+          var titulo = document.createElement('h3');
+          titulo.textContent = cancion.titulo;
+
+          var audio = document.createElement('iframe');
+          audio.className = 'spotify';
+          audio.src = 'https://open.spotify.com/embed/track/' + spotify + '?theme=0';
+          audio.title = cancion.titulo + ' en Spotify';
+          audio.loading = 'lazy';
+          audio.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+
+          var acciones = document.createElement('div');
+          acciones.className = 'cancion-acciones';
+
+          var boton = document.createElement('button');
+          boton.type = 'button';
+          boton.className = 'boton-video';
+          boton.textContent = 'Ver el video';
+          boton.setAttribute('aria-expanded', 'false');
+          boton.dataset.youtube = youtube;
+          boton.dataset.titulo = cancion.titulo;
+
+          acciones.appendChild(boton);
+          acciones.appendChild(enlaceExterno('Abrir en Spotify', 'https://open.spotify.com/track/' + spotify));
+          acciones.appendChild(enlaceExterno('Ver en YouTube', 'https://www.youtube.com/watch?v=' + youtube));
+
+          var video = document.createElement('div');
+          video.className = 'reproductor cancion-video';
+          video.hidden = true;
+
+          li.appendChild(titulo);
+          li.appendChild(audio);
+          li.appendChild(acciones);
+          li.appendChild(video);
+          listaCanciones.appendChild(li);
+        });
+      }
+
+      function cerrarVideosDeCanciones() {
+        Array.prototype.forEach.call(listaCanciones.querySelectorAll('.cancion'), function (li) {
+          var video = li.querySelector('.cancion-video');
+          var boton = li.querySelector('.boton-video');
+          video.textContent = '';
+          video.hidden = true;
+          boton.textContent = 'Ver el video';
+          boton.setAttribute('aria-expanded', 'false');
+        });
+      }
+
+      function reproducir(indice) {
+        var datos = juegoActual.videos[indice];
+        var id = encodeURIComponent(datos.youtube);
+
+        marco.textContent = '';
+        marco.appendChild(crearVideoYouTube(id, datos.titulo));
 
         reproductor.hidden = false;
         videoTitulo.textContent = datos.titulo;
@@ -889,6 +1195,7 @@
       function enrutar() {
         var id = idDeJuego(location.hash);
         detenerVideo();
+        cerrarVideosDeCanciones();
 
         if (id === null) {
           vistaJuego.hidden = true;
@@ -927,8 +1234,24 @@
         reproducir(Number(boton.dataset.indice));
       });
 
+      listaCanciones.addEventListener('click', function (evento) {
+        var boton = evento.target.closest('.boton-video');
+        if (!boton) return;
+        var abierto = boton.getAttribute('aria-expanded') === 'true';
+        cerrarVideosDeCanciones();
+        if (abierto) return;
+
+        var video = boton.closest('.cancion').querySelector('.cancion-video');
+        video.appendChild(crearVideoYouTube(boton.dataset.youtube, boton.dataset.titulo));
+        video.hidden = false;
+        boton.textContent = 'Cerrar el video';
+        boton.setAttribute('aria-expanded', 'true');
+        video.scrollIntoView({ block: 'nearest' });
+      });
+
       window.addEventListener('hashchange', enrutar);
       pintarJuegos();
+      pintarCanciones();
       enrutar();
     })();
   </script>
