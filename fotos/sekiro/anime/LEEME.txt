@@ -1,0 +1,22 @@
+Imágenes del bloque «Sekiro: No Defeat» de la página de Sekiro
+================================================================
+
+Archivos que usa la página hoy:
+
+  fondo.jpg   Imagen de fondo del encabezado (se muestra difuminada y tenue).
+  01.jpg      Fotograma 1 de la galería.
+  07.jpg      Fotograma 2 de la galería.
+  03.jpg      Fotograma 3 de la galería.
+  09.avif     Fotograma 4 de la galería (AVIF original, sin convertir).
+
+Los demás archivos de esta carpeta no aparecen en la página.
+
+Formato recomendado: JPG o AVIF, alrededor de 1600 px de ancho o más, y menos de 400 KB si es posible.
+
+Notas:
+- Qué fotos se muestran y en qué orden se decide en index.html, en la lista
+  "imagenes" de la propiedad "anime" de Sekiro (dentro de JUEGOS).
+- Para cambiar una imagen, reemplaza el archivo conservando el nombre, o cambia el nombre en esa lista.
+- Si falta fondo.jpg, el encabezado usa la miniatura oficial del tráiler.
+- Si un fotograma no carga, su celda se oculta; si no carga ninguno, se oculta la galería.
+- Crédito de las imágenes: © KADOKAWA / Sekiro: No Defeat PARTNERS

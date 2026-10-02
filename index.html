@@ -7,6 +7,10 @@
   <meta name="color-scheme" content="dark">
   <title>José Pablo López (Pablei)</title>
   <link rel="icon" type="image/png" href="logo/icono.png">
+  <!-- Tipografía del bloque «Sekiro: No Defeat» (solo las dos variantes que usa) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;800&display=swap">
   <style>
     :root {
       --fondo: #07070d;
@@ -567,6 +571,13 @@
       text-shadow: var(--brillo-cian);
     }
 
+    /* Enlaces sobre la tarjeta del juego: volver y atajos a sus secciones */
+    .navegacion-juego {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 28px;
+    }
+
     .reproductor {
       margin-top: 16px;
     }
@@ -946,6 +957,440 @@
       border-top: 2px solid var(--magenta);
     }
 
+    /* Bloque del anime «Sekiro: No Defeat»: acuarela japonesa sobre papel washi.
+       Tema propio: tinta sumi, bermellón, naranja caqui, sakura y oro susuki; sombras suaves, sin neón. */
+    .filtros-svg {
+      position: absolute;
+      width: 0;
+      height: 0;
+    }
+
+    [data-tema="no-defeat"] {
+      --papel: #f4ede1;
+      --sakura: #f2c4c8;
+      --susuki: #c9a46a;
+      --cian: #1f1a17;
+      --magenta: #c8381e;
+      --amarillo: #e8833a;
+      --borde: rgba(31, 26, 23, 0.22);
+      --texto: #1f1a17;
+      --texto-suave: #5b4d43;
+      --brillo-cian: 0 3px 14px rgba(31, 26, 23, 0.2);
+      --brillo-magenta: 0 3px 14px rgba(200, 56, 30, 0.28);
+    }
+
+    .anime {
+      position: relative;
+      z-index: 11;            /* por encima de las líneas de escaneo de la página */
+      isolation: isolate;
+      padding: 14px 28px 30px;
+      color: var(--texto);
+      font-family: "Shippori Mincho B1", var(--japones);
+      font-size: 1.04rem;
+      line-height: 1.85;
+    }
+
+    /* Hoja de papel con borde irregular, grano y manchas de acuarela */
+    .anime::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-color: var(--papel);
+      background-image:
+        radial-gradient(ellipse 46% 30% at 4% 6%, rgba(242, 196, 200, 0.75), transparent 70%),
+        radial-gradient(ellipse 40% 26% at 100% 38%, rgba(232, 131, 58, 0.2), transparent 70%),
+        radial-gradient(ellipse 50% 22% at 14% 100%, rgba(201, 164, 106, 0.32), transparent 70%),
+        radial-gradient(ellipse 30% 16% at 92% 96%, rgba(200, 56, 30, 0.16), transparent 70%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.27 0 0 0 0 0.2 0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23g)'/%3E%3C/svg%3E");
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+      filter: url(#acuarela);
+    }
+
+    .anime p {
+      margin: 0 0 18px;
+      font-size: 1.15em;
+    }
+
+    .anime a {
+      color: #a52c16;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .anime a:hover {
+      color: var(--texto);
+    }
+
+    .anime :focus-visible {
+      outline: 3px solid var(--magenta);
+      outline-offset: 3px;
+    }
+
+    /* Encabezado: fotograma difuminado al fondo y velo de papel para que el título se lea */
+    .anime-cabecera {
+      position: relative;
+      margin: 0 -14px 26px;
+      padding: 64px 22px 26px;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .anime-fondo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.35;
+      filter: blur(6px);
+      transform: scale(1.08);   /* esconde el borde transparente que deja el desenfoque */
+    }
+
+    .anime-cabecera::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(244, 237, 225, 0.15), rgba(244, 237, 225, 0.82) 78%, var(--papel));
+    }
+
+    .anime-rotulo,
+    .anime-pincel,
+    .anime-subtitulo {
+      position: relative;
+      z-index: 2;
+    }
+
+    .anime-rotulo {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .anime h2 {
+      margin: 0;
+      color: var(--texto);
+      font-size: clamp(1.7rem, 5.2vw, 2.9rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .anime h2::before {
+      content: none;
+    }
+
+    .anime h2:focus {
+      outline: none;
+    }
+
+    /* Sello tipo hanko: bermellón macizo con los caracteres en color papel */
+    [data-tema="no-defeat"] .sello {
+      position: static;
+      flex-shrink: 0;
+      padding: 7px 4px;
+      border: 0;
+      border-radius: 4px;
+      background: var(--magenta);
+      color: var(--papel);
+      font-size: 1.15rem;
+      text-shadow: none;
+      box-shadow: 0 2px 6px rgba(200, 56, 30, 0.35);
+      transform: rotate(-3deg);
+    }
+
+    [data-tema="no-defeat"] .sello-chico {
+      padding: 4px 3px;
+      font-size: 0.85rem;
+      transform: none;
+    }
+
+    /* Trazo de pincel bajo el título */
+    .anime-pincel {
+      display: block;
+      width: min(240px, 60%);
+      height: 7px;
+      margin: 14px 0 12px;
+      border-radius: 60% 40% 70% 30%;
+      background: linear-gradient(90deg, var(--magenta), var(--amarillo) 70%, transparent);
+      filter: url(#acuarela);
+    }
+
+    .anime p.anime-subtitulo {
+      margin: 0;
+      color: #8f2a14;
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+    }
+
+    /* Pétalos de sakura cayendo en el encabezado */
+    .anime-petalos {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .petalo {
+      position: absolute;
+      top: -8%;
+      width: 12px;
+      height: 9px;
+      border-radius: 80% 0 80% 0;
+      background: var(--sakura);
+      box-shadow: inset -1px -1px 0 rgba(200, 56, 30, 0.18);
+      opacity: 0.9;
+      animation: petalo-cae 11s linear infinite;
+    }
+
+    .petalo:nth-child(1) { left: 8%; animation-duration: 12s; animation-delay: -2s; }
+    .petalo:nth-child(2) { left: 24%; width: 9px; height: 7px; animation-duration: 15s; animation-delay: -9s; }
+    .petalo:nth-child(3) { left: 43%; animation-duration: 10s; animation-delay: -5s; }
+    .petalo:nth-child(4) { left: 61%; width: 14px; height: 10px; animation-duration: 14s; animation-delay: -12s; }
+    .petalo:nth-child(5) { left: 78%; width: 10px; height: 8px; animation-duration: 11s; animation-delay: -7s; }
+    .petalo:nth-child(6) { left: 92%; animation-duration: 16s; animation-delay: -3s; }
+
+    @keyframes petalo-cae {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-28px, 150px) rotate(160deg); }
+      100% { transform: translate(18px, 320px) rotate(330deg); }
+    }
+
+    /* Tráiler: marco de papel, sin neón */
+    .anime-trailer {
+      margin: 6px 0 0;
+      padding: 8px;
+      background: #fffaf1;
+      box-shadow: var(--brillo-cian);
+    }
+
+    .anime-trailer iframe,
+    .anime-trailer .miniatura {
+      border: 0;
+      box-shadow: none;
+    }
+
+    .anime .miniatura span {
+      background: rgba(244, 237, 225, 0.93);
+    }
+
+    .anime-fachada {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      padding: 0;
+      border: 0;
+      background: #1f1a17;
+      overflow: hidden;
+    }
+
+    .anime-fachada img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease, opacity 0.2s ease;
+    }
+
+    .anime-fachada:hover img {
+      opacity: 0.88;
+      transform: scale(1.03);
+    }
+
+    .anime-play {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      background: var(--magenta);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+      transform: translate(-50%, -50%);
+    }
+
+    .anime-play::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 54%;
+      border-top: 15px solid transparent;
+      border-bottom: 15px solid transparent;
+      border-left: 24px solid var(--papel);
+      transform: translate(-50%, -50%);
+    }
+
+    .anime p.anime-enlace {
+      margin: 10px 0 22px;
+      font-size: 0.9rem;
+    }
+
+    /* Fuentes y galería */
+    .anime h3 {
+      margin: 0 0 8px;
+      color: #8f2a14;
+      font-size: 0.86rem;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .anime-fuentes {
+      margin: 8px 0 28px;
+      padding-top: 16px;
+      border-top: 1px solid var(--borde);
+      font-size: 0.86rem;
+      line-height: 1.6;
+    }
+
+    .anime-fuentes ul {
+      margin: 0 0 10px;
+      padding-left: 18px;
+    }
+
+    .anime-fuentes li {
+      margin-bottom: 4px;
+      overflow-wrap: anywhere;
+    }
+
+    .anime-fuentes li::marker {
+      color: var(--magenta);
+    }
+
+    .anime p.anime-credito {
+      font-size: 1em;
+      margin: 0;
+      color: var(--texto-suave);
+    }
+
+    .anime-fotos {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .anime-fotos li {
+      position: relative;
+    }
+
+    /* Mancha de acuarela que asoma detrás de cada fotograma */
+    .anime-fotos li::before {
+      content: "";
+      position: absolute;
+      inset: -7px;
+      background: linear-gradient(135deg, rgba(242, 196, 200, 0.95), rgba(232, 131, 58, 0.4) 55%, rgba(201, 164, 106, 0.6));
+      filter: url(#acuarela);
+    }
+
+    .anime-fotos li:nth-child(odd) {
+      transform: rotate(-0.5deg);
+    }
+
+    .anime-fotos li:nth-child(even) {
+      transform: rotate(0.6deg);
+    }
+
+    .anime-fotos button {
+      position: relative;
+      display: block;
+      width: 100%;
+      padding: 7px;
+      border: 0;
+      background: #fffaf1;
+      box-shadow: var(--brillo-cian);
+      cursor: zoom-in;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .anime-fotos button:hover {
+      box-shadow: 0 8px 22px rgba(31, 26, 23, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .anime-fotos img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    /* El visor adopta el papel mientras muestra los fotogramas del anime */
+    .visor[data-tema="no-defeat"] {
+      background: var(--papel);
+      font-family: "Shippori Mincho B1", var(--japones);
+    }
+
+    .visor[data-tema="no-defeat"]::backdrop {
+      background: #f4ede1;
+    }
+
+    .visor[data-tema="no-defeat"] .visor-marco img {
+      padding: 8px;
+      border: 0;
+      background: #fffaf1;
+    }
+
+    .visor[data-tema="no-defeat"] .visor-boton {
+      border-color: var(--borde);
+      background: rgba(255, 250, 241, 0.9);
+    }
+
+    .visor[data-tema="no-defeat"] :focus-visible {
+      outline: 3px solid var(--magenta);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 800px) {
+      .anime {
+        padding: 12px 20px 24px;
+      }
+
+      .anime-cabecera {
+        padding-top: 48px;
+      }
+
+      .anime-fotos {
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .anime {
+        padding: 10px 16px 22px;
+        font-size: 1rem;
+      }
+
+      .anime-cabecera {
+        margin: 0 -8px 20px;
+        padding: 40px 14px 20px;
+      }
+
+      .anime h2 {
+        letter-spacing: 0.1em;
+      }
+
+      .anime-fotos {
+        grid-template-columns: 1fr;
+      }
+
+      .anime-play {
+        width: 60px;
+        height: 60px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .anime-petalos {
+        display: none;
+      }
+    }
+
     @media (max-width: 800px) {
       .fotos {
         grid-template-columns: repeat(3, 1fr);
@@ -1138,6 +1583,14 @@
     </svg>
   </div>
 
+  <!-- Filtro que deforma los bordes como una mancha de acuarela (lo usa el bloque del anime) -->
+  <svg class="filtros-svg" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="acuarela" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="3" seed="7" result="ruido"/>
+      <feDisplacementMap in="SourceGraphic" in2="ruido" scale="16" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
   <div class="contenedor">
     <header>
       <div>
@@ -1205,7 +1658,10 @@
     </main>
 
     <main id="vista-juego" hidden>
-      <a class="volver" href="#gaming">← Volver al inicio</a>
+      <nav class="navegacion-juego" aria-label="Navegación del juego">
+        <a class="volver" href="#gaming">← Volver al inicio</a>
+        <a class="volver" id="ir-anime" href="#anime" hidden></a>
+      </nav>
 
       <section class="tarjeta" aria-labelledby="titulo-juego">
         <span class="sello" id="sello" lang="ja" aria-hidden="true" hidden></span>
@@ -1228,6 +1684,9 @@
           <ul class="fotos" id="fotos"></ul>
         </div>
       </section>
+
+      <!-- Bloque del anime: se pinta desde JUEGOS solo si el juego tiene la propiedad "anime" -->
+      <section class="anime" id="anime" data-tema="no-defeat" aria-labelledby="anime-titulo" hidden></section>
     </main>
 
     <footer>
@@ -1268,7 +1727,62 @@
           videos: [
             { titulo: 'ISSHIN: JEFE FINAL - NO HIT (RECUERDO DE FUERZA)', youtube: 'clfXQU7W5jQ' },
             { titulo: 'PADRE INTERIOR (BUHO) - NO HIT (RECUERDO DE FUERZA)', youtube: 'cV6uGKEgM8A' }
-          ]
+          ],
+          // Bloque sobre el anime, debajo de la galería. Debe ir después de "fotos" del juego.
+          // En los párrafos, un trozo ['em', texto] va en cursiva y ['strong', texto] en negrita.
+          anime: {
+            titulo: 'Sekiro: No Defeat',
+            subtitulo: 'Información relevante y lanzamiento en México (Crunchyroll)',
+            sello: '隻狼',
+            carpeta: 'fotos/sekiro/anime/',
+            fondo: 'fondo.jpg',
+            enlace: 'Anime de Sekiro',
+            imagenes: ['01.jpg', '07.jpg', '03.jpg', '09.avif'],
+            trailer: {
+              youtube: 'IanqpvZsp_s',
+              titulo: 'Sekiro: No Defeat | Official Trailer 2 | Crunchyroll',
+              extra: 'cc_load_policy=1&cc_lang_pref=es-419&hl=es-419'
+            },
+            parrafos: [
+              [
+                ['em', 'Sekiro: No Defeat'],
+                ' adapta el videojuego de FromSoftware en una animación dibujada íntegramente a mano por el estudio Qzil.la, con dirección de Kenichi Kutsuna. El reparto japonés del juego retoma sus papeles: Daisuke Namikawa como Lobo, Miyuki Satō como Kuro y Kenjirō Tsuda, que vuelve a dar voz a Genichiro Ashina. También regresan Takaya Hashi como Búho y Tetsuo Kanao como Isshin Ashina.'
+              ],
+              [
+                'En Japón se estrenó en cines el 4 de septiembre de 2026 como película condensada; fuera de ese país llegará como serie de ocho episodios semanales, con escenas que no estuvieron en la versión de cine. El póster del anuncio de septiembre muestra además a enemigos como el Demonio del Odio. En México se estrena en exclusiva en Crunchyroll en ',
+                ['strong', 'enero de 2027'],
+                '; al 2 de octubre de 2026 aún no hay día confirmado.'
+              ]
+            ],
+            fuentes: [
+              {
+                nombre: 'Sitio oficial del anime (KADOKAWA)',
+                url: 'https://sekiro-anime.jp/',
+                nota: 'animación a mano, reparto, estreno en cines.'
+              },
+              {
+                nombre: 'Anime News Network, 3 sep 2026',
+                url: 'https://www.animenewsnetwork.com/news/2026-09-03/sekiro-no-defeat-anime-film-clip-shows-wolf-genichiro-ashina-duel/.241289',
+                nota: 'reparto del juego que repite papel.'
+              },
+              {
+                nombre: 'Infobae, 29 sep 2026',
+                url: 'https://www.infobae.com/malditos-nerds/2026/09/29/fromsoftware-llevara-sekiro-no-defeat-a-crunchyroll-en-enero-de-2027/',
+                nota: 'serie de 8 episodios en Crunchyroll, enero de 2027.'
+              },
+              {
+                nombre: 'SensaCine',
+                url: 'https://www.sensacine.com/noticias/series/noticia-1000224579/',
+                nota: 'póster con el Demonio del Odio.'
+              },
+              {
+                nombre: 'Crunchyroll en YouTube',
+                url: 'https://www.youtube.com/watch?v=IanqpvZsp_s',
+                nota: 'tráiler.'
+              }
+            ],
+            credito: 'Imágenes: © KADOKAWA / Sekiro: No Defeat PARTNERS'
+          }
         }
       ];
 
@@ -1300,7 +1814,20 @@
       var visorImagen = document.getElementById('visor-imagen');
       var visorContador = document.getElementById('visor-contador');
       var visorSello = document.getElementById('visor-sello');
+      var bloqueAnime = document.getElementById('anime');
       var fotoActual = 0;
+      var coleccionJuego = null;    // fotos de la galería del juego
+      var coleccionVisor = null;    // fotos que está mostrando el visor
+      var restaurarTrailer = null;  // devuelve el tráiler del anime a su miniatura (lo detiene)
+      var irAnime = document.getElementById('ir-anime');
+
+      // Baja al bloque del anime sin cambiar la dirección: el hash se usa para las rutas.
+      irAnime.addEventListener('click', function (evento) {
+        evento.preventDefault();
+        bloqueAnime.scrollIntoView({ block: 'start' });
+        var titulo = document.getElementById('anime-titulo');
+        if (titulo) titulo.focus({ preventScroll: true });
+      });
 
       var juegoActual = null;
       var enJuego = false;
@@ -1362,7 +1889,8 @@
       }
 
       // Devuelve el reproductor de YouTube de un video, listo para insertar en la página.
-      function crearVideoYouTube(id, titulo) {
+      // extra (opcional): más parámetros para el reproductor, por ejemplo 'cc_load_policy=1'.
+      function crearVideoYouTube(id, titulo, extra) {
         if (location.protocol === 'file:') {
           // Abierta desde el disco, YouTube rechaza el reproductor incrustado (error 153):
           // en su lugar se muestra la miniatura con enlace al video.
@@ -1392,7 +1920,7 @@
         // Se crea un iframe nuevo cada vez: cambiarle el src a uno existente ensucia el historial
         // y el botón Atrás dejaría de regresar a la página anterior.
         var iframe = document.createElement('iframe');
-        iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+        iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0' + (extra ? '&' + extra : '');
         iframe.title = titulo;
         iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
         iframe.allowFullscreen = true;
@@ -1470,6 +1998,7 @@
         var datos = juegoActual.videos[indice];
         var id = encodeURIComponent(datos.youtube);
 
+        if (restaurarTrailer) restaurarTrailer();
         marco.textContent = '';
         marco.appendChild(crearVideoYouTube(id, datos.titulo));
 
@@ -1504,19 +2033,24 @@
       // Estética propia del juego (colores y sello) y su galería de fotos.
       function pintarAmbiente(juego) {
         var tema = juego && juego.tema;
-        [vistaJuego, visor].forEach(function (elemento) {
-          if (tema) elemento.dataset.tema = tema;
-          else delete elemento.dataset.tema;
-        });
-        [sello, visorSello].forEach(function (elemento) {
-          elemento.textContent = (juego && juego.sello) || '';
-          elemento.hidden = !(juego && juego.sello);
-        });
+        if (tema) vistaJuego.dataset.tema = tema;
+        else delete vistaJuego.dataset.tema;
+        sello.textContent = (juego && juego.sello) || '';
+        sello.hidden = !(juego && juego.sello);
 
         listaFotos.textContent = '';
         var total = (juego && juego.fotos) || 0;
         galeria.hidden = total === 0;
+        coleccionJuego = {
+          rutas: [],
+          lista: listaFotos,
+          tema: tema,
+          sello: juego && juego.sello,
+          texto: textoFoto
+        };
         for (var i = 0; i < total; i++) {
+          coleccionJuego.rutas.push(rutaFoto(i, false));
+
           var li = document.createElement('li');
           var boton = document.createElement('button');
           boton.type = 'button';
@@ -1535,20 +2069,29 @@
         }
       }
 
+      // El visor sirve para cualquier colección de fotos:
+      // { rutas, lista (el <ul> de miniaturas), texto(indice, total), tema, sello }.
       function mostrarFoto(indice) {
-        var total = juegoActual.fotos;
+        var rutas = coleccionVisor.rutas;
+        var total = rutas.length;
         fotoActual = (indice + total) % total;
-        visorImagen.src = rutaFoto(fotoActual, false);
-        visorImagen.alt = textoFoto(fotoActual);
+        visorImagen.src = rutas[fotoActual];
+        visorImagen.alt = coleccionVisor.texto(fotoActual, total);
         visorContador.textContent = dosCifras(fotoActual + 1) + ' / ' + dosCifras(total);
 
         // Se adelanta la carga de las vecinas para que el paso sea inmediato.
         [fotoActual - 1, fotoActual + 1].forEach(function (vecina) {
-          new Image().src = rutaFoto((vecina + total) % total, false);
+          new Image().src = rutas[(vecina + total) % total];
         });
       }
 
-      function abrirVisor(indice) {
+      function abrirVisor(coleccion, indice) {
+        coleccionVisor = coleccion;
+        if (coleccion.tema) visor.dataset.tema = coleccion.tema;
+        else delete visor.dataset.tema;
+        visorSello.textContent = coleccion.sello || '';
+        visorSello.hidden = !coleccion.sello;
+
         mostrarFoto(indice);
         if (!visor.open) {
           document.documentElement.style.overflow = 'hidden';
@@ -1560,10 +2103,182 @@
         if (visor.open) visor.close();
       }
 
+      function crear(etiqueta, clase, texto) {
+        var elemento = document.createElement(etiqueta);
+        if (clase) elemento.className = clase;
+        if (texto) elemento.textContent = texto;
+        return elemento;
+      }
+
+      // Un párrafo es una lista de trozos: texto simple o [etiqueta, texto] para cursiva o negrita.
+      function crearParrafo(trozos) {
+        var p = document.createElement('p');
+        trozos.forEach(function (trozo) {
+          if (typeof trozo === 'string') p.appendChild(document.createTextNode(trozo));
+          else p.appendChild(crear(trozo[0] === 'strong' ? 'strong' : 'em', '', trozo[1]));
+        });
+        return p;
+      }
+
+      // Bloque del anime bajo la galería. Solo se pinta si el juego tiene la propiedad "anime".
+      function pintarAnime(juego) {
+        var anime = juego && juego.anime;
+        bloqueAnime.textContent = '';
+        bloqueAnime.hidden = !anime;
+        irAnime.hidden = !anime;
+        irAnime.textContent = anime ? anime.enlace : '';
+        restaurarTrailer = null;
+        if (!anime) return;
+
+        var idTrailer = encodeURIComponent(anime.trailer.youtube);
+
+        // 1 y 2. Encabezado: imagen de fondo difuminada, pétalos, título con sello y subtítulo.
+        var cabecera = crear('div', 'anime-cabecera');
+        var fondo = crear('img', 'anime-fondo');
+        fondo.alt = '';
+        fondo.onerror = function () {
+          fondo.onerror = null;
+          fondo.src = 'https://i.ytimg.com/vi/' + idTrailer + '/hqdefault.jpg';
+        };
+        fondo.src = anime.carpeta + anime.fondo;
+        cabecera.appendChild(fondo);
+
+        var petalos = crear('div', 'anime-petalos');
+        petalos.setAttribute('aria-hidden', 'true');
+        for (var n = 0; n < 6; n++) petalos.appendChild(crear('span', 'petalo'));
+        cabecera.appendChild(petalos);
+
+        var rotulo = crear('div', 'anime-rotulo');
+        var titulo = crear('h2', '', anime.titulo);
+        titulo.id = 'anime-titulo';
+        titulo.tabIndex = -1;
+        var selloAnime = crear('span', 'sello', anime.sello);
+        selloAnime.lang = 'ja';
+        selloAnime.setAttribute('aria-hidden', 'true');
+        rotulo.appendChild(titulo);
+        rotulo.appendChild(selloAnime);
+        cabecera.appendChild(rotulo);
+        cabecera.appendChild(crear('span', 'anime-pincel'));
+        cabecera.appendChild(crear('p', 'anime-subtitulo', anime.subtitulo));
+        bloqueAnime.appendChild(cabecera);
+
+        // 3. Párrafo 1.
+        bloqueAnime.appendChild(crearParrafo(anime.parrafos[0]));
+
+        // 4. Tráiler: miniatura con botón; el reproductor de YouTube se crea al hacer clic.
+        var trailer = crear('div', 'reproductor anime-trailer');
+        function ponerFachada() {
+          var fachada = crear('button', 'anime-fachada');
+          fachada.type = 'button';
+          fachada.setAttribute('aria-label', 'Reproducir el tráiler: ' + anime.trailer.titulo);
+
+          var miniatura = document.createElement('img');
+          miniatura.alt = '';
+          miniatura.loading = 'lazy';
+          miniatura.onerror = function () {
+            miniatura.onerror = null;
+            miniatura.src = 'https://i.ytimg.com/vi/' + idTrailer + '/hqdefault.jpg';
+          };
+          miniatura.src = 'https://i.ytimg.com/vi/' + idTrailer + '/maxresdefault.jpg';
+
+          fachada.appendChild(miniatura);
+          fachada.appendChild(crear('span', 'anime-play'));
+          fachada.addEventListener('click', function () {
+            detenerVideo();
+            trailer.textContent = '';
+            trailer.appendChild(crearVideoYouTube(idTrailer, anime.trailer.titulo, anime.trailer.extra));
+          });
+
+          trailer.textContent = '';
+          trailer.appendChild(fachada);
+        }
+        ponerFachada();
+        restaurarTrailer = ponerFachada;
+        bloqueAnime.appendChild(trailer);
+
+        var bajoTrailer = crear('p', 'anime-enlace');
+        bajoTrailer.appendChild(enlaceExterno('Ver en YouTube', 'https://www.youtube.com/watch?v=' + idTrailer));
+        bloqueAnime.appendChild(bajoTrailer);
+
+        // 5. Párrafo 2.
+        bloqueAnime.appendChild(crearParrafo(anime.parrafos[1]));
+
+        // 6. Fuentes.
+        var fuentes = crear('div', 'anime-fuentes');
+        fuentes.appendChild(crear('h3', '', 'Fuentes'));
+        var listaFuentes = document.createElement('ul');
+        anime.fuentes.forEach(function (fuente) {
+          var li = document.createElement('li');
+          li.appendChild(enlaceExterno(fuente.nombre, fuente.url));
+          li.appendChild(document.createTextNode(' — ' + fuente.nota));
+          listaFuentes.appendChild(li);
+        });
+        fuentes.appendChild(listaFuentes);
+        fuentes.appendChild(crear('p', 'anime-credito', anime.credito));
+        bloqueAnime.appendChild(fuentes);
+
+        // 7. Galería de fotogramas, que se abre en el mismo visor que las fotos del juego.
+        var galeriaAnime = crear('div', 'anime-galeria');
+        galeriaAnime.appendChild(crear('h3', '', 'Fotogramas'));
+        var listaAnime = crear('ul', 'anime-fotos');
+        var coleccion = {
+          rutas: [],
+          lista: listaAnime,
+          tema: bloqueAnime.dataset.tema,
+          sello: anime.sello,
+          texto: function (indice, total) {
+            return 'Fotograma oficial de ' + anime.titulo + ', ' + (indice + 1) + ' de ' + total;
+          }
+        };
+
+        // Vuelve a numerar las celdas que quedan; sin ninguna, la galería se oculta.
+        function renumerar() {
+          var botones = listaAnime.querySelectorAll('button');
+          coleccion.rutas = [];
+          Array.prototype.forEach.call(botones, function (boton, indice) {
+            boton.dataset.indice = indice;
+            coleccion.rutas.push(boton.dataset.ruta);
+          });
+          galeriaAnime.hidden = botones.length === 0;
+        }
+
+        function crearCelda(numero) {
+          var li = document.createElement('li');
+          var boton = document.createElement('button');
+          boton.type = 'button';
+          boton.dataset.ruta = anime.carpeta + anime.imagenes[numero - 1];
+
+          var imagen = document.createElement('img');
+          imagen.alt = 'Fotograma oficial de ' + anime.titulo + ', ' + numero + ' de ' + anime.imagenes.length;
+          imagen.loading = 'lazy';
+          imagen.onerror = function () {
+            li.remove();
+            renumerar();
+          };
+          imagen.src = boton.dataset.ruta;
+
+          boton.appendChild(imagen);
+          li.appendChild(boton);
+          return li;
+        }
+
+        for (var numero = 1; numero <= anime.imagenes.length; numero++) listaAnime.appendChild(crearCelda(numero));
+        renumerar();
+
+        listaAnime.addEventListener('click', function (evento) {
+          var boton = evento.target.closest('button[data-indice]');
+          if (boton) abrirVisor(coleccion, Number(boton.dataset.indice));
+        });
+
+        galeriaAnime.appendChild(listaAnime);
+        bloqueAnime.appendChild(galeriaAnime);
+      }
+
       function pintarJuego(juego) {
         juegoActual = juego;
         menuVideos.textContent = '';
         pintarAmbiente(juego);
+        pintarAnime(juego);
 
         if (!juego) {
           tituloJuego.textContent = 'Juego no encontrado';
@@ -1605,6 +2320,7 @@
         detenerVideo();
         cerrarVideosDeCanciones();
         cerrarVisor();
+        if (restaurarTrailer) restaurarTrailer();
 
         if (id === null) {
           vistaJuego.hidden = true;
@@ -1660,7 +2376,7 @@
 
       listaFotos.addEventListener('click', function (evento) {
         var boton = evento.target.closest('button[data-indice]');
-        if (boton) abrirVisor(Number(boton.dataset.indice));
+        if (boton) abrirVisor(coleccionJuego, Number(boton.dataset.indice));
       });
 
       document.getElementById('visor-anterior').addEventListener('click', function () {
@@ -1699,7 +2415,8 @@
       visor.addEventListener('close', function () {
         document.documentElement.style.overflow = '';
         visorImagen.removeAttribute('src');
-        var miniatura = listaFotos.querySelector('button[data-indice="' + fotoActual + '"]');
+        var miniatura = coleccionVisor &&
+          coleccionVisor.lista.querySelector('button[data-indice="' + fotoActual + '"]');
         if (miniatura && !vistaJuego.hidden) miniatura.focus();
       });
 
