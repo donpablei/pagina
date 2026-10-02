@@ -20,6 +20,7 @@
       --amarillo: #fcee0a;
       --brillo-cian: 0 0 6px rgba(0, 240, 255, 0.55), 0 0 22px rgba(0, 240, 255, 0.25);
       --brillo-magenta: 0 0 6px rgba(255, 42, 109, 0.55), 0 0 22px rgba(255, 42, 109, 0.25);
+      --japones: "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", "Noto Serif CJK JP", "Noto Serif JP", "MS PMincho", serif;
       --mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, Menlo, "DejaVu Sans Mono", monospace;
     }
 
@@ -697,6 +698,301 @@
       box-shadow: var(--brillo-cian);
     }
 
+    /* Galería de fotos */
+    .galeria {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px dashed var(--borde);
+    }
+
+    .galeria-titulo {
+      margin: 0 0 8px;
+      color: var(--amarillo);
+      font-size: 0.95rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .galeria-titulo span {
+      color: var(--magenta);
+      font-family: var(--japones);
+      letter-spacing: 0.1em;
+    }
+
+    .fotos {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .fotos button {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      padding: 0;
+      border: 1px solid var(--cian);
+      border-radius: 0;
+      background: #000000;
+      overflow: hidden;
+      cursor: zoom-in;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .fotos img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.88;
+      transition: transform 0.3s ease, opacity 0.2s ease;
+    }
+
+    /* Esquinas marcadas, como en las tarjetas */
+    .fotos button::before,
+    .fotos button::after {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      width: 12px;
+      height: 12px;
+      pointer-events: none;
+    }
+
+    .fotos button::before {
+      top: 3px;
+      left: 3px;
+      border-top: 2px solid var(--magenta);
+      border-left: 2px solid var(--magenta);
+    }
+
+    .fotos button::after {
+      right: 3px;
+      bottom: 3px;
+      border-right: 2px solid var(--magenta);
+      border-bottom: 2px solid var(--magenta);
+    }
+
+    .fotos button:hover,
+    .fotos button:focus-visible {
+      box-shadow: var(--brillo-cian);
+    }
+
+    .fotos button:hover img,
+    .fotos button:focus-visible img {
+      opacity: 1;
+      transform: scale(1.06);
+    }
+
+    /* Visor de fotos a pantalla completa */
+    .visor {
+      width: 100vw;
+      max-width: none;
+      height: 100vh;
+      height: 100dvh;
+      max-height: none;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: rgba(6, 5, 8, 0.97);
+      color: var(--texto);
+      overflow: hidden;
+    }
+
+    .visor[open] {
+      display: grid;
+      place-items: center;
+    }
+
+    .visor::backdrop {
+      background: #000000;
+    }
+
+    .visor-marco {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      max-width: calc(100vw - 200px);
+      margin: 0;
+    }
+
+    .visor-marco img {
+      display: block;
+      max-width: 100%;
+      max-height: calc(100vh - 130px);
+      max-height: calc(100dvh - 130px);
+      border: 1px solid var(--cian);
+      background: #000000;
+      box-shadow: var(--brillo-cian);
+    }
+
+    .visor-marco figcaption {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--cian);
+      font-size: 0.9rem;
+      letter-spacing: 0.24em;
+    }
+
+    .visor-boton {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      padding: 0 0 6px;
+      border: 1px solid var(--cian);
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.55);
+      color: var(--cian);
+      font-family: system-ui, sans-serif;
+      line-height: 1;
+      transition: box-shadow 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .visor-boton:hover {
+      border-color: var(--magenta);
+      color: var(--magenta);
+      box-shadow: var(--brillo-magenta);
+    }
+
+    .visor-flecha {
+      top: 50%;
+      width: 56px;
+      height: 96px;
+      font-size: 3rem;
+      transform: translateY(-50%);
+    }
+
+    .visor-anterior {
+      left: 24px;
+    }
+
+    .visor-siguiente {
+      right: 24px;
+    }
+
+    .visor-cerrar {
+      top: 18px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      font-size: 1.8rem;
+    }
+
+    /* Sello: como los sellos rojos de las pinturas japonesas, en versión neón */
+    .sello {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      padding: 8px 5px;
+      border: 2px solid var(--magenta);
+      border-radius: 5px;
+      background: rgba(229, 56, 44, 0.14);
+      color: var(--magenta);
+      font-family: var(--japones);
+      font-size: 1.45rem;
+      font-weight: 700;
+      line-height: 1.15;
+      text-shadow: 0 0 8px rgba(229, 56, 44, 0.6);
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+      box-shadow: var(--brillo-magenta);
+      transform: rotate(4deg);
+    }
+
+    .sello-chico {
+      position: static;
+      padding: 4px 3px;
+      border-width: 1px;
+      font-size: 0.9rem;
+      letter-spacing: 0;
+      transform: none;
+    }
+
+    /* Tema Sekiro: cyberpunk + Japón del periodo Sengoku. Bermellón, dorado y negro laca
+       sustituyen al cian y al magenta en todo lo que esté dentro del elemento con el tema. */
+    [data-tema="sekiro"] {
+      --cian: #e0b04c;
+      --magenta: #e5382c;
+      --amarillo: #f1dfb0;
+      --borde: #3d2b22;
+      --brillo-cian: 0 0 6px rgba(224, 176, 76, 0.5), 0 0 22px rgba(224, 176, 76, 0.22);
+      --brillo-magenta: 0 0 6px rgba(229, 56, 44, 0.55), 0 0 22px rgba(229, 56, 44, 0.25);
+    }
+
+    /* Fondo de la tarjeta: olas seigaiha en trazo fino dorado sobre negro laca */
+    [data-tema="sekiro"] .tarjeta {
+      background-color: #110c0c;
+      background-image:
+        linear-gradient(160deg, rgba(70, 28, 20, 0.35), rgba(0, 0, 0, 0.45) 65%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='40' viewBox='0 0 80 40'%3E%3Cdefs%3E%3Cg id='o' fill='%23110c0c' stroke='%23e0b04c' stroke-opacity='0.17'%3E%3Ccircle r='40'/%3E%3Ccircle r='30'/%3E%3Ccircle r='20'/%3E%3Ccircle r='10'/%3E%3C/g%3E%3C/defs%3E%3Cuse href='%23o' x='0' y='-20'/%3E%3Cuse href='%23o' x='80' y='-20'/%3E%3Cuse href='%23o' x='40' y='0'/%3E%3Cuse href='%23o' x='0' y='20'/%3E%3Cuse href='%23o' x='80' y='20'/%3E%3Cuse href='%23o' x='40' y='40'/%3E%3Cuse href='%23o' x='0' y='60'/%3E%3Cuse href='%23o' x='80' y='60'/%3E%3C/svg%3E");
+      background-size: auto, 64px 32px;
+    }
+
+    [data-tema="sekiro"] .videos button,
+    [data-tema="sekiro"] .galeria {
+      background-color: rgba(10, 7, 7, 0.82);
+    }
+
+    [data-tema="sekiro"] .galeria {
+      margin-right: -12px;
+      margin-left: -12px;
+      padding: 22px 12px 12px;
+      border: 1px solid var(--borde);
+      border-top: 2px solid var(--magenta);
+    }
+
+    @media (max-width: 800px) {
+      .fotos {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .visor-marco {
+        max-width: calc(100vw - 16px);
+      }
+
+      .visor-marco img {
+        max-height: calc(100vh - 170px);
+        max-height: calc(100dvh - 170px);
+      }
+
+      .visor-flecha {
+        width: 44px;
+        height: 72px;
+        font-size: 2.4rem;
+      }
+
+      .visor-anterior {
+        left: 6px;
+      }
+
+      .visor-siguiente {
+        right: 6px;
+      }
+
+      .visor-cerrar {
+        top: 10px;
+        right: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .fotos {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+
+      .sello {
+        top: 14px;
+        right: 16px;
+        font-size: 1.2rem;
+      }
+    }
+
     @media (max-width: 480px) {
       header {
         gap: 16px;
@@ -912,6 +1208,7 @@
       <a class="volver" href="#gaming">← Volver a Gaming</a>
 
       <section class="tarjeta" aria-labelledby="titulo-juego">
+        <span class="sello" id="sello" lang="ja" aria-hidden="true" hidden></span>
         <h2 id="titulo-juego" tabindex="-1"></h2>
         <p id="aviso-juego"></p>
 
@@ -924,6 +1221,12 @@
         </div>
 
         <ol class="videos" id="videos"></ol>
+
+        <div class="galeria" id="galeria" hidden>
+          <h3 class="galeria-titulo">Galería <span lang="ja" aria-hidden="true">· 写真</span></h3>
+          <p>Fotos tomadas por mí durante el juego. Elige una para verla en grande.</p>
+          <ul class="fotos" id="fotos"></ul>
+        </div>
       </section>
     </main>
 
@@ -932,6 +1235,20 @@
     </footer>
   </div>
 
+  <!-- Visor de fotos a pantalla completa -->
+  <dialog class="visor" id="visor" aria-label="Visor de fotos">
+    <button type="button" class="visor-boton visor-cerrar" id="visor-cerrar" aria-label="Cerrar el visor">×</button>
+    <button type="button" class="visor-boton visor-flecha visor-anterior" id="visor-anterior" aria-label="Foto anterior">‹</button>
+    <figure class="visor-marco">
+      <img id="visor-imagen" alt="">
+      <figcaption>
+        <span class="sello sello-chico" id="visor-sello" lang="ja" aria-hidden="true" hidden></span>
+        <span id="visor-contador" aria-live="polite"></span>
+      </figcaption>
+    </figure>
+    <button type="button" class="visor-boton visor-flecha visor-siguiente" id="visor-siguiente" aria-label="Foto siguiente">›</button>
+  </dialog>
+
   <script>
     (function () {
       'use strict';
@@ -939,10 +1256,15 @@
       // Videos por juego, alojados en YouTube. Cada video: { titulo: 'Nombre visible', youtube: 'ID del video' }
       // El ID es lo que va después de "v=" en el enlace: https://www.youtube.com/watch?v=ID
       // Para agregar un juego: añade aquí otra entrada con su id, nombre y videos.
+      // Opcionales: fotos (cuántas hay en fotos/<id>/, las genera fotos/hacer_galeria.py),
+      // tema (estética propia de su página) y sello (texto del sello decorativo).
       var JUEGOS = [
         {
           id: 'sekiro',
           nombre: 'Sekiro',
+          tema: 'sekiro',
+          sello: '隻狼',
+          fotos: 30,
           videos: [
             { titulo: 'ISSHIN: JEFE FINAL - NO HIT (RECUERDO DE FUERZA)', youtube: 'clfXQU7W5jQ' },
             { titulo: 'PADRE INTERIOR (BUHO) - NO HIT (RECUERDO DE FUERZA)', youtube: 'cV6uGKEgM8A' }
@@ -971,6 +1293,14 @@
       var videoEnlace = document.getElementById('video-enlace');
       var menuVideos = document.getElementById('videos');
       var listaCanciones = document.getElementById('canciones');
+      var sello = document.getElementById('sello');
+      var galeria = document.getElementById('galeria');
+      var listaFotos = document.getElementById('fotos');
+      var visor = document.getElementById('visor');
+      var visorImagen = document.getElementById('visor-imagen');
+      var visorContador = document.getElementById('visor-contador');
+      var visorSello = document.getElementById('visor-sello');
+      var fotoActual = 0;
 
       var juegoActual = null;
       var enJuego = false;
@@ -1153,9 +1483,82 @@
         reproductor.scrollIntoView({ block: 'nearest' });
       }
 
+      function dosCifras(n) {
+        return (n < 10 ? '0' : '') + n;
+      }
+
+      function rutaFoto(indice, mini) {
+        return 'fotos/' + encodeURIComponent(juegoActual.id) + '/' + (mini ? 'mini/' : '') +
+          dosCifras(indice + 1) + '.jpg';
+      }
+
+      function textoFoto(indice) {
+        return juegoActual.nombre + ', foto ' + (indice + 1) + ' de ' + juegoActual.fotos;
+      }
+
+      // Estética propia del juego (colores y sello) y su galería de fotos.
+      function pintarAmbiente(juego) {
+        var tema = juego && juego.tema;
+        [vistaJuego, visor].forEach(function (elemento) {
+          if (tema) elemento.dataset.tema = tema;
+          else delete elemento.dataset.tema;
+        });
+        [sello, visorSello].forEach(function (elemento) {
+          elemento.textContent = (juego && juego.sello) || '';
+          elemento.hidden = !(juego && juego.sello);
+        });
+
+        listaFotos.textContent = '';
+        var total = (juego && juego.fotos) || 0;
+        galeria.hidden = total === 0;
+        for (var i = 0; i < total; i++) {
+          var li = document.createElement('li');
+          var boton = document.createElement('button');
+          boton.type = 'button';
+          boton.dataset.indice = i;
+
+          var imagen = document.createElement('img');
+          imagen.src = rutaFoto(i, true);
+          imagen.alt = textoFoto(i);
+          imagen.loading = 'lazy';
+          imagen.width = 480;
+          imagen.height = 270;
+
+          boton.appendChild(imagen);
+          li.appendChild(boton);
+          listaFotos.appendChild(li);
+        }
+      }
+
+      function mostrarFoto(indice) {
+        var total = juegoActual.fotos;
+        fotoActual = (indice + total) % total;
+        visorImagen.src = rutaFoto(fotoActual, false);
+        visorImagen.alt = textoFoto(fotoActual);
+        visorContador.textContent = dosCifras(fotoActual + 1) + ' / ' + dosCifras(total);
+
+        // Se adelanta la carga de las vecinas para que el paso sea inmediato.
+        [fotoActual - 1, fotoActual + 1].forEach(function (vecina) {
+          new Image().src = rutaFoto((vecina + total) % total, false);
+        });
+      }
+
+      function abrirVisor(indice) {
+        mostrarFoto(indice);
+        if (!visor.open) {
+          document.documentElement.style.overflow = 'hidden';
+          visor.showModal();
+        }
+      }
+
+      function cerrarVisor() {
+        if (visor.open) visor.close();
+      }
+
       function pintarJuego(juego) {
         juegoActual = juego;
         menuVideos.textContent = '';
+        pintarAmbiente(juego);
 
         if (!juego) {
           tituloJuego.textContent = 'Juego no encontrado';
@@ -1196,6 +1599,7 @@
         var id = idDeJuego(location.hash);
         detenerVideo();
         cerrarVideosDeCanciones();
+        cerrarVisor();
 
         if (id === null) {
           vistaJuego.hidden = true;
@@ -1247,6 +1651,51 @@
         boton.textContent = 'Cerrar el video';
         boton.setAttribute('aria-expanded', 'true');
         video.scrollIntoView({ block: 'nearest' });
+      });
+
+      listaFotos.addEventListener('click', function (evento) {
+        var boton = evento.target.closest('button[data-indice]');
+        if (boton) abrirVisor(Number(boton.dataset.indice));
+      });
+
+      document.getElementById('visor-anterior').addEventListener('click', function () {
+        mostrarFoto(fotoActual - 1);
+      });
+
+      document.getElementById('visor-siguiente').addEventListener('click', function () {
+        mostrarFoto(fotoActual + 1);
+      });
+
+      document.getElementById('visor-cerrar').addEventListener('click', cerrarVisor);
+
+      visor.addEventListener('keydown', function (evento) {
+        if (evento.key === 'ArrowLeft') mostrarFoto(fotoActual - 1);
+        if (evento.key === 'ArrowRight') mostrarFoto(fotoActual + 1);
+      });
+
+      // Clic en el fondo oscuro, fuera de la foto y de los botones.
+      visor.addEventListener('click', function (evento) {
+        if (evento.target === visor) cerrarVisor();
+      });
+
+      // En pantallas táctiles: deslizar a los lados cambia de foto.
+      var toqueX = null;
+      visor.addEventListener('touchstart', function (evento) {
+        toqueX = evento.touches.length === 1 ? evento.touches[0].clientX : null;
+      }, { passive: true });
+      visor.addEventListener('touchend', function (evento) {
+        if (toqueX === null) return;
+        var avance = evento.changedTouches[0].clientX - toqueX;
+        toqueX = null;
+        if (Math.abs(avance) > 50) mostrarFoto(fotoActual + (avance < 0 ? 1 : -1));
+      });
+
+      // También se dispara al cerrar con Esc.
+      visor.addEventListener('close', function () {
+        document.documentElement.style.overflow = '';
+        visorImagen.removeAttribute('src');
+        var miniatura = listaFotos.querySelector('button[data-indice="' + fotoActual + '"]');
+        if (miniatura && !vistaJuego.hidden) miniatura.focus();
       });
 
       window.addEventListener('hashchange', enrutar);
