@@ -1167,7 +1167,7 @@
 
       <section class="tarjeta" id="gaming" aria-labelledby="titulo-gaming">
         <h2 id="titulo-gaming" tabindex="-1">Gaming</h2>
-        <p>Mis mejores partidas. Elige un juego para ver sus videos.</p>
+        <p>Mis mejores partidas. Elige un juego para ver sus videos y fotos.</p>
         <ul class="juegos" id="juegos"></ul>
       </section>
 
@@ -1205,7 +1205,7 @@
     </main>
 
     <main id="vista-juego" hidden>
-      <a class="volver" href="#gaming">← Volver a Gaming</a>
+      <a class="volver" href="#gaming">← Volver al inicio</a>
 
       <section class="tarjeta" aria-labelledby="titulo-juego">
         <span class="sello" id="sello" lang="ja" aria-hidden="true" hidden></span>
@@ -1322,9 +1322,14 @@
         return null;
       }
 
-      function cuenta(n) {
-        if (n === 0) return 'Sin videos';
-        return n === 1 ? '1 video' : n + ' videos';
+      // Resumen de lo que hay dentro de un juego: "2 videos · 30 fotos".
+      function cuenta(juego) {
+        var partes = [];
+        var videos = juego.videos.length;
+        var fotos = juego.fotos || 0;
+        if (videos > 0) partes.push(videos === 1 ? '1 video' : videos + ' videos');
+        if (fotos > 0) partes.push(fotos === 1 ? '1 foto' : fotos + ' fotos');
+        return partes.length ? partes.join(' · ') : 'Próximamente';
       }
 
       function pintarJuegos() {
@@ -1340,7 +1345,7 @@
 
           var total = document.createElement('span');
           total.className = 'juego-cuenta';
-          total.textContent = cuenta(juego.videos.length);
+          total.textContent = cuenta(juego);
 
           enlace.appendChild(nombre);
           enlace.appendChild(total);
