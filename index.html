@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;800&display=swap">
   <!-- Tipografías del tema Holograma: marca y títulos (Michroma), texto (Outfit) -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@300;400;600&display=swap">
+  <!-- Tipografía de la galería de Elden Ring (solo los dos pesos que usa) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap">
   <style>
     :root {
       --fondo: #07070d;
@@ -1916,6 +1918,471 @@
       }
     }
 
+    /* Página del juego con galería aparte: subtítulo de los videos y portal a la galería */
+    #vista-juego > .tarjeta .subtitulo-videos {
+      margin: 28px 0 6px;
+      color: var(--texto);
+      font-family: var(--futura);
+      font-size: 1.35rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: none;
+    }
+
+    .ir-galeria {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      min-height: 148px;
+      margin-top: 40px;
+      padding: 24px;
+      border: 1px solid rgba(200, 164, 92, 0.7);
+      border-radius: 14px;
+      background-color: #0c0a07;
+      background-position: center 38%;
+      background-size: cover;
+      color: #f0dfa8;
+      font-family: var(--er-serif);
+      text-align: center;
+      text-decoration: none;
+      overflow: hidden;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    /* Vela oscura sobre la foto para que el rótulo se lea */
+    .ir-galeria::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(12, 10, 7, 0.5), rgba(12, 10, 7, 0.86) 30%, rgba(12, 10, 7, 0.86) 70%, rgba(12, 10, 7, 0.5));
+      transition: opacity 0.2s ease;
+    }
+
+    .ir-galeria span {
+      position: relative;
+    }
+
+    .ir-galeria-rotulo {
+      font-size: 2rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      line-height: 1.2;
+    }
+
+    .ir-galeria-cuenta {
+      color: #d8cfb8;
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    .ir-galeria:hover,
+    .ir-galeria:focus-visible {
+      border-color: #f0dfa8;
+      box-shadow: 0 0 28px rgba(240, 223, 168, 0.28);
+    }
+
+    .ir-galeria:hover::before,
+    .ir-galeria:focus-visible::before {
+      opacity: 0.82;
+    }
+
+    /* Galería de Elden Ring: vista a pantalla completa con su propio mundo. Mientras está abierta
+       se ocultan la cabecera, la aurora y el pie del tema Holograma. Sus tokens (--er-*) son
+       nuevos: no cambia ninguno de los que hereda el bloque del anime. */
+    :root {
+      --er-noche: #0c0a07;
+      --er-oro: #c8a45c;
+      --er-gracia: #f0dfa8;
+      --er-musgo: #56604a;
+      --er-ceniza: #d8cfb8;
+      --er-serif: "Cormorant Garamond", "Garamond", "EB Garamond", Georgia, "Times New Roman", serif;
+    }
+
+    body.en-galeria {
+      background-color: var(--er-noche);
+    }
+
+    body.en-galeria .contenedor,
+    body.en-galeria .aurora {
+      display: none;
+    }
+
+    #vista-galeria {
+      display: block;
+      min-height: 100vh;
+      padding: 0 0 72px;
+      background: var(--er-noche);
+      color: var(--er-ceniza);
+      font-family: var(--er-serif);
+      font-size: 1.2rem;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    #vista-galeria ::selection {
+      background: var(--er-oro);
+      color: #000000;
+    }
+
+    #vista-galeria :focus-visible {
+      outline: 2px solid var(--er-gracia);
+      outline-offset: 3px;
+    }
+
+    /* Portada: el Árbol Áureo es la única fuente de luz */
+    .tierras-portada {
+      position: relative;
+      display: grid;
+      justify-items: center;
+      padding: 20px 20px 56px;
+      background:
+        radial-gradient(ellipse 46% 44% at 50% 30%, rgba(240, 223, 168, 0.2), rgba(200, 164, 92, 0.07) 55%, rgba(12, 10, 7, 0) 100%),
+        linear-gradient(180deg, #14170f 0%, #10110b 46%, var(--er-noche) 100%);
+      overflow: hidden;
+    }
+
+    .tierras-volver {
+      position: relative;
+      z-index: 2;
+      justify-self: start;
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      color: var(--er-gracia);
+      font-size: 1.15rem;
+      text-decoration: none;
+    }
+
+    .tierras-volver:hover {
+      color: #ffffff;
+      text-decoration: underline;
+      text-underline-offset: 5px;
+    }
+
+    .tierras-arbol {
+      display: block;
+      width: min(100%, 760px);
+      height: auto;
+      margin-top: -34px;
+      fill: none;
+      stroke: var(--er-gracia);
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 6px rgba(240, 223, 168, 0.75)) drop-shadow(0 0 30px rgba(200, 164, 92, 0.55));
+    }
+
+    /* El árbol se dibuja del tronco a la copa una sola vez, al entrar */
+    .tierras-arbol path {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 0;
+      animation: arbol-crece 1.5s ease-out both;
+    }
+
+    .tierras-arbol .arbol-n1 { animation-delay: 0.35s; }
+    .tierras-arbol .arbol-n2 { animation-delay: 0.6s; }
+    .tierras-arbol .arbol-n3 { animation-delay: 0.85s; }
+    .tierras-arbol .arbol-n4 { animation-delay: 1.1s; }
+    .tierras-arbol .arbol-n5 { animation-delay: 1.35s; }
+    .tierras-arbol .arbol-n6 { animation-delay: 1.6s; }
+    .tierras-arbol .arbol-n7 { animation-delay: 1.85s; }
+    .tierras-arbol .arbol-n8 { animation-delay: 2.1s; }
+
+    @keyframes arbol-crece {
+      from { stroke-dashoffset: 1; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* Motas de luz que suben desde el suelo de la portada */
+    .tierras-motas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .tierras-motas span {
+      position: absolute;
+      bottom: -8px;
+      left: var(--x);
+      width: var(--t, 3px);
+      height: var(--t, 3px);
+      border-radius: 50%;
+      background: var(--er-gracia);
+      box-shadow: 0 0 8px 2px rgba(240, 223, 168, 0.6);
+      opacity: 0;
+      animation: mota-sube var(--d, 14s) linear var(--r, 0s) infinite;
+    }
+
+    @keyframes mota-sube {
+      0% { transform: translate(0, 0); opacity: 0; }
+      12% { opacity: 0.85; }
+      80% { opacity: 0.5; }
+      100% { transform: translate(var(--dx, 30px), -620px); opacity: 0; }
+    }
+
+    /* Rótulo como los nombres de región del juego: texto claro sobre una franja que se desvanece */
+    .tierras-rotulo {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 860px);
+      margin-top: -6px;
+      padding: 18px 16px 20px;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.62) 22%, rgba(0, 0, 0, 0.62) 78%, rgba(0, 0, 0, 0));
+      text-align: center;
+    }
+
+    .tierras-rotulo::before,
+    .tierras-rotulo::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(200, 164, 92, 0), rgba(200, 164, 92, 0.75) 30%, rgba(200, 164, 92, 0.75) 70%, rgba(200, 164, 92, 0));
+    }
+
+    .tierras-rotulo::before { top: 0; }
+    .tierras-rotulo::after { bottom: 0; }
+
+    #vista-galeria .tierras-titulo {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      color: var(--er-gracia);
+      font-family: var(--er-serif);
+      font-size: clamp(2.4rem, 7.4vw, 5rem);
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      line-height: 1.05;
+      text-indent: 0.2em;
+      text-shadow: 0 0 34px rgba(200, 164, 92, 0.5);
+      text-transform: uppercase;
+    }
+
+    /* Sin las barras que llevan los títulos del resto de la página */
+    #vista-galeria .tierras-titulo::before {
+      content: none;
+    }
+
+    #vista-galeria .tierras-titulo:focus {
+      outline: none;
+    }
+
+    #vista-galeria .tierras-sub {
+      margin: 6px 0 0;
+      color: #ffffff;
+      font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+    }
+
+    #vista-galeria .tierras-nota {
+      position: relative;
+      z-index: 1;
+      max-width: 34em;
+      margin: 26px 0 0;
+      color: var(--er-ceniza);
+      text-align: center;
+    }
+
+    /* Cuadrícula: grupos de nueve, con una foto grande que alterna de lado */
+    .tierras-fotos {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-flow: dense;
+      gap: 14px;
+      max-width: 1560px;
+      margin: 0 auto;
+      padding: 0 clamp(14px, 3.5vw, 56px);
+      list-style: none;
+    }
+
+    .tierras-fotos li {
+      display: flex;
+      min-width: 0;
+    }
+
+    .tierras-fotos .destacada {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    .tierras-fotos .destacada.derecha {
+      grid-column: 3 / span 2;
+    }
+
+    .tierras-fotos button {
+      position: relative;
+      display: block;
+      flex: 1;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      margin: 0;
+      padding: 0;
+      border: 1px solid rgba(200, 164, 92, 0.38);
+      border-radius: 0;
+      background: #000000;
+      color: var(--er-gracia);
+      font-family: var(--er-serif);
+      overflow: hidden;
+      cursor: zoom-in;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .tierras-fotos .destacada button {
+      aspect-ratio: auto;
+    }
+
+    .tierras-fotos img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.9;
+      transition: opacity 0.2s ease, transform 0.5s ease;
+    }
+
+    /* Número de la foto, en romanos */
+    .tierras-num {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      padding: 14px 22px 5px 10px;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0));
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      line-height: 1;
+    }
+
+    .tierras-fotos .destacada .tierras-num {
+      padding: 20px 34px 9px 14px;
+      font-size: 1.3rem;
+    }
+
+    .tierras-fotos button:hover,
+    .tierras-fotos button:focus-visible {
+      border-color: var(--er-gracia);
+      box-shadow: 0 0 22px rgba(240, 223, 168, 0.3);
+    }
+
+    .tierras-fotos button:hover img,
+    .tierras-fotos button:focus-visible img {
+      opacity: 1;
+      transform: scale(1.03);
+    }
+
+    .tierras-pie {
+      display: flex;
+      justify-content: center;
+      margin-top: 56px;
+      padding: 0 20px;
+    }
+
+    /* Visor con el marco de Elden Ring: filete dorado, franja de noche y un segundo filete tenue */
+    .visor[data-tema="elden-ring"] {
+      background: rgba(8, 7, 5, 0.97);
+      color: var(--er-ceniza);
+      font-family: var(--er-serif);
+    }
+
+    .visor[data-tema="elden-ring"] .visor-marco img {
+      border-color: var(--er-oro);
+      border-radius: 0;
+      box-shadow: 0 0 0 6px #0c0a07, 0 0 0 7px rgba(200, 164, 92, 0.45), 0 0 44px rgba(200, 164, 92, 0.28);
+    }
+
+    .visor[data-tema="elden-ring"] .visor-marco figcaption {
+      padding: 6px 44px;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7) 25%, rgba(0, 0, 0, 0.7) 75%, rgba(0, 0, 0, 0));
+      color: var(--er-gracia);
+      font-family: var(--er-serif);
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+    }
+
+    .visor[data-tema="elden-ring"] .visor-boton {
+      border-color: rgba(200, 164, 92, 0.7);
+      border-radius: 0;
+      color: var(--er-gracia);
+    }
+
+    .visor[data-tema="elden-ring"] .visor-boton:hover {
+      border-color: var(--er-gracia);
+      color: #ffffff;
+      box-shadow: 0 0 18px rgba(240, 223, 168, 0.35);
+    }
+
+    .visor[data-tema="elden-ring"] :focus-visible {
+      outline: 2px solid var(--er-gracia);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 800px) {
+      .tierras-fotos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .tierras-fotos .destacada,
+      .tierras-fotos .destacada.derecha {
+        grid-column: 1 / -1;
+        grid-row: auto;
+      }
+
+      .tierras-fotos .destacada button {
+        aspect-ratio: 16 / 9;
+      }
+
+      .tierras-arbol {
+        margin-top: -14px;
+      }
+
+      .ir-galeria-rotulo {
+        font-size: 1.7rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #vista-galeria {
+        font-size: 1.1rem;
+      }
+
+      .tierras-portada {
+        padding: 12px 14px 40px;
+      }
+
+      .tierras-fotos {
+        gap: 8px;
+      }
+
+      .tierras-num {
+        font-size: 0.85rem;
+      }
+
+      .ir-galeria {
+        min-height: 124px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tierras-arbol path {
+        animation: none;
+      }
+
+      .tierras-motas {
+        display: none;
+      }
+
+      .tierras-fotos button:hover img,
+      .tierras-fotos button:focus-visible img {
+        transform: none;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       * {
         transition: none !important;
@@ -2013,6 +2480,7 @@
       <section class="tarjeta" data-tema="holograma" aria-labelledby="titulo-juego">
         <span class="sello" id="sello" lang="ja" aria-hidden="true" hidden></span>
         <h2 id="titulo-juego" tabindex="-1"></h2>
+        <h3 class="subtitulo-videos" id="subtitulo-videos" hidden>Videos</h3>
         <p id="aviso-juego"></p>
 
         <div class="reproductor" id="reproductor" hidden>
@@ -2024,6 +2492,12 @@
         </div>
 
         <ol class="videos" id="videos"></ol>
+
+        <!-- Solo en los juegos con galeriaAparte: lleva a su galería a pantalla completa -->
+        <a class="ir-galeria" id="ir-galeria" href="#gaming" hidden>
+          <span class="ir-galeria-rotulo">Ir a Galería</span>
+          <span class="ir-galeria-cuenta" id="ir-galeria-cuenta"></span>
+        </a>
 
         <div class="galeria" id="galeria" hidden>
           <h3 class="galeria-titulo">Galería <span lang="ja" aria-hidden="true">写真</span></h3>
@@ -2040,6 +2514,48 @@
       © <span id="anio">2026</span> José Pablo López
     </footer>
   </div>
+
+  <!-- Galería de Elden Ring: vista a pantalla completa, fuera del contenedor del tema Holograma -->
+  <main id="vista-galeria" data-tema="elden-ring" hidden>
+    <div class="tierras-portada">
+      <div class="tierras-motas" aria-hidden="true">
+      <span style="--x: 6%; --t: 3px; --d: 15s; --r: 0s; --dx: 26px"></span>
+      <span style="--x: 13%; --t: 2px; --d: 19s; --r: -7s; --dx: -18px"></span>
+      <span style="--x: 21%; --t: 4px; --d: 13s; --r: -3s; --dx: 34px"></span>
+      <span style="--x: 29%; --t: 2px; --d: 17s; --r: -11s; --dx: 12px"></span>
+      <span style="--x: 37%; --t: 3px; --d: 21s; --r: -5s; --dx: -30px"></span>
+      <span style="--x: 45%; --t: 2px; --d: 14s; --r: -9s; --dx: 22px"></span>
+      <span style="--x: 53%; --t: 4px; --d: 18s; --r: -1s; --dx: -14px"></span>
+      <span style="--x: 61%; --t: 2px; --d: 16s; --r: -13s; --dx: 30px"></span>
+      <span style="--x: 69%; --t: 3px; --d: 20s; --r: -6s; --dx: -24px"></span>
+      <span style="--x: 77%; --t: 2px; --d: 13s; --r: -10s; --dx: 16px"></span>
+      <span style="--x: 85%; --t: 3px; --d: 17s; --r: -2s; --dx: -32px"></span>
+      <span style="--x: 93%; --t: 2px; --d: 22s; --r: -8s; --dx: 20px"></span>
+      </div>
+      <a class="tierras-volver" id="tierras-volver" href="#gaming">← Volver</a>
+      <svg class="tierras-arbol" viewBox="0 0 1000 760" aria-hidden="true" focusable="false">
+          <path class="arbol-n0" pathLength="1" stroke-width="19" d="M500 760C497 700 496 640 500 575"/>
+          <path class="arbol-n0" pathLength="1" stroke-width="7" d="M489 760C470 742 440 752 408 760M511 760C532 742 560 752 594 760M494 700C480 730 462 744 440 748M506 700C520 730 538 744 562 748"/>
+          <path class="arbol-n1" pathLength="1" stroke-width="18" d="M500 575Q492 500 500 425"/>
+          <path class="arbol-n2" pathLength="1" stroke-width="11" d="M500 425Q481 370 456 316M500 425Q525 374 561 331M500 425Q477 366 502 307"/>
+          <path class="arbol-n3" pathLength="1" stroke-width="6.5" d="M456 316Q428 277 384 260M456 316Q473 274 465 230M456 316Q429 278 428 231M561 331Q553 287 569 245M561 331Q592 305 630 292M561 331Q599 305 610 261M502 307Q470 273 462 226M502 307Q519 263 550 227M502 307Q489 266 501 224"/>
+          <path class="arbol-n4" pathLength="1" stroke-width="4.2" d="M384 260Q353 247 319 247M384 260Q367 230 349 201M465 230Q456 198 444 168M465 230Q486 204 494 171M428 231Q406 205 384 179M428 231Q435 198 446 166M569 245Q560 216 541 191M569 245Q577 209 605 185M630 292Q639 262 660 238M630 292Q662 291 694 291M610 261Q606 226 621 194M610 261Q643 251 667 225M462 226Q431 215 407 193M462 226Q463 194 465 162M550 227Q564 192 551 157M550 227Q590 221 618 193M501 224Q482 201 469 174M501 224Q519 198 531 169"/>
+          <path class="arbol-n5" pathLength="1" stroke-width="2.8" d="M319 247Q297 264 269 260M319 247Q298 236 284 217M319 247Q293 247 268 242M349 201Q336 178 311 169M349 201Q358 175 348 149M444 168Q425 151 409 133M444 168Q445 142 456 118M444 168Q442 142 429 120M494 171Q490 146 498 122M494 171Q517 162 532 141M494 171Q513 151 520 125M384 179Q363 161 336 160M384 179Q384 153 371 129M384 179Q375 155 353 140M446 166Q447 138 438 112M446 166Q457 144 477 129M446 166Q457 142 465 117M541 191Q517 186 500 167M541 191Q543 170 544 149M605 185Q608 159 606 133M605 185Q633 174 650 150M605 185Q624 167 636 144M660 238Q667 215 668 190M660 238Q680 224 700 209M660 238Q665 213 687 199M694 291Q716 285 734 269M694 291Q713 305 737 302M694 291Q717 293 740 287M621 194Q605 173 606 148M621 194Q643 179 651 153M621 194Q619 166 622 139M667 225Q669 197 690 179M667 225Q693 223 719 218M667 225Q691 219 710 201M407 193Q382 195 358 188M407 193Q399 168 383 148M407 193Q386 184 369 170M465 162Q443 145 440 117M465 162Q487 148 492 123M465 162Q466 137 472 113M551 157Q530 139 529 111M551 157Q558 131 578 115M618 193Q645 179 654 151M618 193Q647 189 674 200M469 174Q452 162 434 152M469 174Q455 152 460 127M469 174Q463 153 448 137M531 169Q529 146 531 123M531 169Q550 154 574 147M531 169Q544 146 555 123"/>
+          <path class="arbol-n6" pathLength="1" stroke-width="1.9" d="M269 260Q249 261 232 269M269 260Q251 247 229 247M284 217Q266 217 250 209M284 217Q280 200 268 187M268 242Q248 244 229 252M268 242Q254 224 232 219M311 169Q293 162 274 160M311 169Q312 148 299 131M348 149Q344 129 327 117M348 149Q363 135 366 114M409 133Q391 124 372 124M409 133Q404 114 394 97M456 118Q450 99 445 80M456 118Q474 106 485 88M429 120Q419 103 402 93M429 120Q425 100 433 82M498 122Q486 105 479 87M498 122Q503 105 516 92M532 141Q547 127 547 107M532 141Q552 145 570 134M520 125Q514 103 524 82M520 125Q537 112 556 103M336 160Q317 171 295 168M336 160Q329 143 314 131M371 129Q356 119 346 103M371 129Q374 111 375 92M353 140Q337 132 321 125M353 140Q342 125 345 106M438 112Q421 100 412 81M438 112Q448 92 449 70M477 129Q473 110 481 93M477 129Q496 127 512 115M465 117Q471 97 463 77M465 117Q480 101 499 90M500 167Q482 164 463 162M500 167Q490 154 485 138M544 149Q534 135 534 118M544 149Q555 136 558 120M606 133Q591 118 584 99M606 133Q620 118 622 97M650 150Q658 131 671 116M650 150Q670 147 690 141M636 144Q643 125 640 105M636 144Q655 138 670 125M668 190Q662 172 658 154M668 190Q684 180 690 162M700 209Q708 191 721 177M700 209Q719 213 737 205M687 199Q697 183 693 165M687 199Q702 184 722 183M734 269Q743 254 751 239M734 269Q750 264 767 269M737 302Q753 298 770 294M737 302Q756 300 772 311M740 287Q753 276 767 266M740 287Q758 285 772 295M606 148Q597 134 585 121M606 148Q600 130 609 113M651 153Q651 134 658 117M651 153Q672 151 686 136M622 139Q607 123 602 101M622 139Q630 120 644 105M690 179Q688 161 685 144M690 179Q706 170 718 157M719 218Q735 204 756 198M719 218Q741 219 761 228M710 201Q724 189 734 173M710 201Q726 194 743 201M358 188Q339 191 322 197M358 188Q339 182 325 167M383 148Q366 136 350 122M383 148Q386 128 383 108M369 170Q350 170 332 168M369 170Q363 152 349 140M440 117Q429 101 412 93M440 117Q445 97 443 78M492 123Q499 106 500 89M492 123Q511 121 523 107M472 113Q476 92 463 74M472 113Q489 103 493 83M529 111Q513 101 497 91M529 111Q525 92 531 73M578 115Q585 97 582 78M578 115Q593 105 610 101M654 151Q665 132 664 111M654 151Q669 135 691 133M674 200Q695 189 717 184M674 200Q696 201 715 210M434 152Q419 149 403 150M434 152Q423 139 418 123M460 127Q451 111 439 97M460 127Q471 113 474 95M448 137Q435 126 419 118M448 137Q448 120 449 103M531 123Q516 112 514 93M531 123Q544 109 545 89M574 147Q580 128 597 117M574 147Q592 152 611 150M555 123Q564 103 558 82M555 123Q575 116 586 99"/>
+          <path class="arbol-n7" pathLength="1" stroke-width="1.3" d="M232 269Q219 278 203 277M232 269Q217 267 203 266M229 247Q214 256 197 254M229 247Q214 240 205 228M250 209Q236 212 223 216M250 209Q236 206 228 194M268 187Q257 179 246 173M268 187Q265 173 266 159M229 252Q215 260 199 259M229 252Q216 245 200 245M232 219Q216 211 198 217M232 219Q231 201 219 189M274 160Q260 163 247 163M274 160Q264 149 250 142M299 131Q287 121 276 111M299 131Q297 114 305 100M327 117Q315 112 305 103M327 117Q323 102 328 88M366 114Q369 99 366 85M366 114Q380 111 391 100M372 124Q359 124 346 127M372 124Q363 113 349 108M394 97Q388 82 372 75M394 97Q391 82 398 67M445 80Q430 73 421 59M445 80Q443 62 454 49M485 88Q491 72 494 56M485 88Q502 86 518 80M402 93Q389 84 374 83M402 93Q404 79 396 67M433 82Q431 67 426 53M433 82Q437 66 448 55M479 87Q463 84 452 73M479 87Q480 72 478 58M516 92Q515 80 516 67M516 92Q524 80 539 76M547 107Q541 92 546 77M547 107Q561 101 569 89M570 134Q581 124 595 118M570 134Q583 138 596 141M524 82Q520 65 510 51M524 82Q528 67 540 57M556 103Q566 92 573 79M556 103Q572 105 587 98M295 168Q280 171 265 175M295 168Q277 171 263 160M314 131Q305 120 291 116M314 131Q310 118 308 104M346 103Q333 100 321 95M346 103Q339 91 336 77M375 92Q376 75 364 63M375 92Q385 80 395 68M321 125Q309 118 296 122M321 125Q316 111 304 102M345 106Q332 99 327 86M345 106Q354 94 353 80M412 81Q395 82 383 70M412 81Q417 65 408 51M449 70Q443 55 439 39M449 70Q455 54 469 45M481 93Q472 83 470 69M481 93Q489 81 496 68M512 115Q515 100 527 91M512 115Q525 118 539 117M463 77Q452 66 445 52M463 77Q466 61 479 50M499 90Q508 76 508 60M499 90Q513 83 529 81M463 162Q450 171 434 169M463 162Q455 149 441 145M485 138Q476 130 466 123M485 138Q485 125 483 112M534 118Q529 107 520 99M534 118Q542 107 541 94M558 120Q555 108 559 96M558 120Q567 113 576 105M584 99Q571 88 555 85M584 99Q583 84 582 69M622 97Q622 82 618 68M622 97Q635 91 644 80M671 116Q669 99 675 83M671 116Q683 107 694 98M690 141Q700 129 713 122M690 141Q705 145 720 148M640 105Q636 89 627 75M640 105Q652 95 656 80M670 125Q676 111 686 100M670 125Q684 122 698 121M658 154Q650 142 640 131M658 154Q664 140 663 124M690 162Q685 149 691 137M690 162Q702 156 714 148M721 177Q718 161 724 146M721 177Q736 171 746 159M737 205Q747 193 762 191M737 205Q751 204 763 211M693 165Q687 154 684 142M693 165Q702 157 709 147M722 183Q733 172 742 159M722 183Q737 182 752 182M751 239Q755 226 754 213M751 239Q765 234 775 224M767 269Q778 263 790 260M767 269Q778 276 791 275M770 294Q780 286 788 274M770 294Q782 296 793 299M772 311Q785 307 798 304M772 311Q786 313 799 318M767 266Q774 254 778 242M767 266Q781 269 793 261M772 295Q784 292 796 287M772 295Q785 299 799 302M585 121Q576 113 564 109M585 121Q589 106 581 93M609 113Q599 103 598 88M609 113Q616 101 624 91M658 117Q654 105 653 92M658 117Q670 108 676 96M686 136Q692 122 705 114M686 136Q701 139 715 137M602 101Q586 96 572 86M602 101Q604 86 600 71M644 105Q639 89 647 74M644 105Q655 95 669 88M685 144Q677 133 670 123M685 144Q689 130 694 118M718 157Q726 147 731 134M718 157Q733 159 744 150M756 198Q766 185 774 170M756 198Q771 198 786 200M761 228Q777 228 793 225M761 228Q775 235 790 236M734 173Q741 161 738 147M734 173Q747 164 763 162M743 201Q753 190 767 189M743 201Q757 201 768 207M322 197Q308 204 294 205M322 197Q308 192 293 192M325 167Q309 162 293 168M325 167Q316 156 310 143M350 122Q335 120 320 118M350 122Q344 107 338 92M383 108Q378 94 367 84M383 108Q386 93 396 82M332 168Q319 170 306 175M332 168Q322 158 308 157M349 140Q338 133 326 129M349 140Q350 126 346 113M412 93Q398 89 384 87M412 93Q405 80 399 68M443 78Q434 65 434 49M443 78Q453 67 455 53M500 89Q491 77 491 62M500 89Q510 80 518 68M523 107Q534 98 540 87M523 107Q537 109 551 106M463 74Q451 64 443 50M463 74Q465 59 470 45M493 83Q496 71 495 57M493 83Q506 78 519 73M497 91Q482 92 469 86M497 91Q486 80 485 65M531 73Q527 58 520 45M531 73Q539 59 544 44M582 78Q573 67 575 53M582 78Q590 68 594 56M610 101Q617 90 627 82M610 101Q622 105 635 103M664 111Q658 96 653 80M664 111Q672 95 688 87M691 133Q699 120 708 108M691 133Q706 141 724 137M717 184Q735 177 742 160M717 184Q733 189 749 183M715 210Q730 201 747 205M715 210Q731 217 748 218M403 150Q392 149 382 155M403 150Q392 145 385 135M418 123Q407 116 398 107M418 123Q416 110 421 99M439 97Q429 87 415 82M439 97Q434 83 431 69M474 95Q467 83 470 68M474 95Q484 86 495 78M419 118Q407 116 395 113M419 118Q414 106 409 95M449 103Q442 91 435 79M449 103Q454 90 462 80M514 93Q502 88 492 81M514 93Q514 79 516 66M545 89Q541 76 542 63M545 89Q552 78 564 71M597 117Q601 104 603 90M597 117Q611 113 623 106M611 150Q624 145 636 138M611 150Q625 149 637 157M558 82Q549 67 543 52M558 82Q565 67 573 54M586 99Q591 85 597 72M586 99Q603 99 618 93"/>
+          <path class="arbol-n8" pathLength="1" stroke-width="0.9" d="M203 277Q193 284 180 282M203 277Q193 270 180 270M203 266Q193 269 182 271M203 266Q193 259 182 255M197 254Q184 256 172 261M197 254Q186 249 173 248M205 228Q192 228 180 224M205 228Q197 219 194 206M223 216Q212 215 202 222M223 216Q212 212 201 211M228 194Q218 191 207 192M228 194Q223 184 217 175M246 173Q236 175 226 169M246 173Q241 163 234 156M266 159Q258 151 255 140M266 159Q265 148 272 139M199 259Q186 259 175 266M199 259Q186 261 176 254M200 245Q189 243 179 247M200 245Q194 235 183 231M198 217Q185 222 172 224M198 217Q187 209 176 201M219 189Q209 180 200 171M219 189Q218 175 222 162M247 163Q237 165 227 168M247 163Q237 158 226 156M250 142Q238 138 226 140M250 142Q244 132 242 121M276 111Q266 103 253 104M276 111Q278 99 270 90M305 100Q298 90 296 77M305 100Q308 87 318 79M305 103Q295 103 286 103M305 103Q300 94 296 85M328 88Q324 77 321 67M328 88Q332 77 338 68M366 85Q361 74 354 64M366 85Q368 73 377 65M391 100Q400 92 401 80M391 100Q402 103 412 98M346 127Q337 134 326 132M346 127Q336 125 328 120M349 108Q340 105 330 106M349 108Q345 98 340 89M372 75Q360 75 349 69M372 75Q372 63 364 55M398 67Q393 57 389 47M398 67Q406 57 412 47M421 59Q408 56 396 52M421 59Q414 48 412 36M454 49Q449 37 448 23M454 49Q467 44 472 32M494 56Q487 44 491 30M494 56Q500 44 510 34M518 80Q532 75 540 63M518 80Q530 87 544 86M374 83Q362 85 351 85M374 83Q367 74 360 65M396 67Q386 61 381 52M396 67Q397 57 402 49M426 53Q417 46 410 37M426 53Q433 43 431 30M448 55Q446 43 449 32M448 55Q457 47 468 41M452 73Q440 70 429 74M452 73Q448 61 437 55M478 58Q473 49 467 41M478 58Q481 48 486 38M516 67Q509 60 507 49M516 67Q520 59 526 52M539 76Q546 68 550 58M539 76Q549 79 558 75M546 77Q543 65 534 56M546 77Q554 67 553 55M569 89Q576 80 577 70M569 89Q580 88 590 83M595 118Q600 108 607 99M595 118Q606 118 617 116M596 141Q606 139 616 134M596 141Q607 144 617 146M510 51Q499 44 490 35M510 51Q509 39 508 27M540 57Q535 46 540 35M540 57Q551 51 561 44M573 79Q578 67 577 55M573 79Q582 70 594 68M587 98Q595 90 605 84M587 98Q598 100 608 104M265 175Q254 182 242 181M265 175Q252 175 241 170M263 160Q251 164 239 166M263 160Q253 150 242 143M291 116Q281 114 271 111M291 116Q285 107 282 97M308 104Q302 96 295 89M308 104Q314 96 314 86M321 95Q312 98 302 96M321 95Q314 88 307 80M336 77Q328 71 321 63M336 77Q336 66 338 56M364 63Q357 54 349 46M364 63Q371 52 368 39M395 68Q396 57 401 47M395 68Q406 64 415 57M296 122Q287 127 276 127M296 122Q289 113 278 112M304 102Q295 96 285 95M304 102Q303 92 303 82M327 86Q319 80 308 81M327 86Q322 77 322 67M353 80Q356 69 351 59M353 80Q362 73 367 63M383 70Q371 70 359 75M383 70Q371 63 367 51M408 51Q400 43 394 33M408 51Q409 39 414 29M439 39Q433 27 421 20M439 39Q442 27 442 15M469 45Q468 32 472 20M469 45Q479 38 491 37M470 69Q463 62 455 57M470 69Q469 59 468 49M496 68Q494 57 495 46M496 68Q503 62 513 59M527 91Q529 80 529 69M527 91Q536 82 547 78M539 117Q547 111 557 108M539 117Q548 120 557 122M445 52Q437 43 426 40M445 52Q444 40 443 29M479 50Q476 39 477 28M479 50Q486 39 498 35M508 60Q508 47 504 35M508 60Q519 54 526 42M529 81Q538 72 545 63M529 81Q540 87 553 84M434 169Q422 170 412 175M434 169Q423 166 412 164M441 145Q432 141 422 141M441 145Q437 134 429 126M466 123Q457 120 448 119M466 123Q464 114 458 107M483 112Q476 105 475 95M483 112Q483 101 491 93M520 99Q511 99 505 93M520 99Q516 91 518 82M541 94Q542 85 538 77M541 94Q547 88 552 80M559 96Q553 89 553 79M559 96Q567 91 568 81M576 105Q578 96 585 89M576 105Q586 104 595 101M555 85Q544 85 533 85M555 85Q548 75 541 65M582 69Q574 61 571 50M582 69Q590 61 592 50M618 68Q615 56 607 48M618 68Q621 57 624 45M644 80Q649 70 651 59M644 80Q654 74 666 75M675 83Q668 72 668 60M675 83Q681 72 686 61M694 98Q697 87 705 78M694 98Q705 98 715 92M713 122Q717 112 721 102M713 122Q724 120 735 117M720 148Q733 150 743 142M720 148Q731 152 743 154M627 75Q617 68 607 60M627 75Q623 63 628 52M656 80Q659 70 657 59M656 80Q664 71 676 67M686 100Q684 88 689 77M686 100Q696 97 703 89M698 121Q703 110 714 107M698 121Q707 127 718 126M640 131Q629 127 619 121M640 131Q640 120 633 110M663 124Q659 112 653 102M663 124Q666 114 674 105M691 137Q690 127 685 119M691 137Q696 128 700 118M714 148Q718 139 723 130M714 148Q724 144 733 148M724 146Q725 133 717 122M724 146Q734 140 738 129M746 159Q754 151 757 139M746 159Q758 155 770 154M762 191Q771 184 776 175M762 191Q773 189 784 188M763 211Q773 208 783 209M763 211Q774 210 783 216M684 142Q677 134 670 127M684 142Q685 132 687 123M709 147Q710 139 712 131M709 147Q717 143 725 139M742 159Q744 147 750 136M742 159Q753 155 762 148M752 182Q764 181 773 173M752 182Q763 189 776 188M754 213Q746 205 746 194M754 213Q755 202 764 195M775 224Q781 215 785 204M775 224Q786 220 797 224M790 260Q799 253 805 245M790 260Q800 263 811 263M791 275Q800 274 808 271M791 275Q799 278 808 279M788 274Q794 266 793 256M788 274Q798 273 807 267M793 299Q803 298 812 295M793 299Q803 302 812 304M798 304Q809 300 814 290M798 304Q809 304 819 308M799 318Q810 315 822 313M799 318Q810 323 822 324M778 242Q780 232 779 222M778 242Q783 233 792 229M793 261Q803 258 807 248M793 261Q803 263 812 266M796 287Q798 278 806 274M796 287Q805 288 814 288M799 302Q809 298 820 296M799 302Q808 309 820 307M564 109Q555 111 546 110M564 109Q560 101 553 96M581 93Q574 85 567 77M581 93Q586 83 590 73M598 88Q591 81 584 75M598 88Q594 77 599 66M624 91Q627 81 626 71M624 91Q631 82 641 80M653 92Q647 84 641 77M653 92Q652 81 658 72M676 96Q675 84 682 74M676 96Q684 88 696 87M705 114Q708 104 708 93M705 114Q717 111 726 104M715 137Q724 132 734 130M715 137Q726 137 736 142M572 86Q559 87 546 86M572 86Q566 74 559 63M600 71Q597 60 589 51M600 71Q608 63 610 51M647 74Q644 63 640 52M647 74Q650 63 658 53M669 88Q676 79 680 68M669 88Q680 93 691 88M670 123Q661 117 653 112M670 123Q671 112 665 103M694 118Q695 107 693 97M694 118Q698 109 706 103M731 134Q728 125 732 115M731 134Q737 127 745 123M744 150Q748 141 757 136M744 150Q753 154 763 154M774 170Q772 158 777 147M774 170Q786 166 796 159M786 200Q795 194 806 193M786 200Q798 200 808 206M793 225Q806 220 813 207M793 225Q804 232 817 231M790 236Q802 234 814 230M790 236Q801 240 813 242M738 147Q729 139 729 128M738 147Q741 136 750 130M763 162Q771 153 780 144M763 162Q774 166 786 164M767 189Q776 183 779 173M767 189Q778 188 789 187M768 207Q777 205 786 202M768 207Q777 211 786 212M294 205Q284 211 272 210M294 205Q283 206 273 201M293 192Q282 196 271 196M293 192Q285 184 274 180M293 168Q282 175 268 174M293 168Q283 158 270 157M310 143Q302 137 291 134M310 143Q309 133 307 122M320 118Q308 120 296 124M320 118Q312 111 302 106M338 92Q328 84 319 75M338 92Q339 81 340 70M367 84Q356 81 346 75M367 84Q366 73 363 63M396 82Q397 71 399 60M396 82Q407 78 412 68M306 175Q296 177 286 180M306 175Q297 170 286 168M308 157Q298 156 289 156M308 157Q305 148 298 141M326 129Q317 127 308 128M326 129Q319 123 316 113M346 113Q339 105 335 96M346 113Q349 103 353 93M384 87Q374 92 363 91M384 87Q377 78 369 71M399 68Q392 60 382 57M399 68Q399 57 397 47M434 49Q424 43 417 35M434 49Q439 38 436 25M455 53Q455 42 455 31M455 53Q465 47 473 40M491 62Q484 54 475 47M491 62Q497 53 496 42M518 68Q520 58 524 49M518 68Q529 67 538 60M540 87Q543 78 543 68M540 87Q548 82 557 79M551 106Q559 98 571 98M551 106Q560 113 572 112M443 50Q431 45 421 38M443 50Q438 38 434 26M470 45Q468 33 464 23M470 45Q472 33 481 26M495 57Q492 47 485 39M495 57Q498 47 506 40M519 73Q524 63 531 56M519 73Q530 76 541 74M469 86Q459 93 448 91M469 86Q460 80 452 72M485 65Q477 57 469 50M485 65Q481 54 487 43M520 45Q511 36 500 31M520 45Q521 34 520 23M544 44Q539 32 541 20M544 44Q555 39 561 28M575 53Q568 45 562 37M575 53Q578 44 577 34M594 56Q595 46 597 36M594 56Q602 49 609 42M627 82Q627 73 632 65M627 82Q634 77 643 75M635 103Q643 97 653 97M635 103Q644 106 653 108M653 80Q645 68 632 63M653 80Q660 68 659 55M688 87Q688 73 695 61M688 87Q699 82 710 78M708 108Q704 97 709 86M708 108Q716 99 728 98M724 137Q733 128 745 127M724 137Q735 143 748 143M742 160Q744 147 750 134M742 160Q756 159 768 150M749 183Q757 175 769 173M749 183Q762 182 772 189M747 205Q757 197 767 188M747 205Q759 208 770 211M748 218Q759 213 772 216M748 218Q761 219 774 225M382 155Q375 159 366 159M382 155Q373 155 366 150M385 135Q377 131 368 130M385 135Q380 128 377 120M398 107Q390 103 380 103M398 107Q392 99 388 89M421 99Q418 90 415 82M421 99Q428 94 431 86M415 82Q404 82 394 78M415 82Q413 72 405 65M431 69Q423 62 418 52M431 69Q428 58 433 47M470 68Q464 61 458 53M470 68Q477 60 475 49M495 78Q499 67 505 58M495 78Q505 75 514 73M395 113Q386 117 377 117M395 113Q385 109 379 101M409 95Q403 88 396 82M409 95Q414 84 410 74M435 79Q426 72 416 69M435 79Q435 68 433 57M462 80Q459 70 462 59M462 80Q469 71 480 70M492 81Q482 81 471 81M492 81Q487 73 480 67M516 66Q509 57 506 47M516 66Q524 59 527 48M542 63Q535 56 532 47M542 63Q542 51 551 43M564 71Q566 60 569 50M564 71Q574 70 584 66M603 90Q598 81 600 70M603 90Q613 84 616 72M623 106Q627 96 637 90M623 106Q634 110 645 105M636 138Q639 126 648 118M636 138Q647 136 658 136M637 157Q646 155 656 152M637 157Q645 161 655 162M543 52Q534 42 523 34M543 52Q548 39 544 26M573 54Q574 42 571 30M573 54Q583 48 593 43M597 72Q599 61 595 51M597 72Q607 65 614 55M618 93Q631 90 639 78M618 93Q628 99 640 99"/>
+      </svg>
+      <div class="tierras-rotulo">
+        <h2 class="tierras-titulo" id="titulo-galeria" tabindex="-1"></h2>
+        <p class="tierras-sub">Galería</p>
+      </div>
+      <p class="tierras-nota" id="tierras-nota"></p>
+    </div>
+    <ul class="tierras-fotos" id="tierras-fotos"></ul>
+    <div class="tierras-pie">
+      <a class="tierras-volver" id="tierras-volver-pie" href="#gaming">← Volver</a>
+    </div>
+  </main>
 
   <!-- Visor de fotos a pantalla completa -->
   <dialog class="visor" id="visor" aria-label="Visor de fotos">
@@ -2065,6 +2581,7 @@
       // Opcionales: fotos (cuántas hay en fotos/<id>/, las genera fotos/hacer_galeria.py),
       // tema (marcos de las fotos de su galería y del visor) y sello (texto del sello decorativo).
       // sonido (archivo de sonidos/ que suena al elegir el juego en el inicio; cada video admite el suyo).
+      // galeriaAparte (true: las fotos no van bajo los videos, sino en #/gaming/<id>/galeria, a pantalla completa).
       var JUEGOS = [
         {
           id: 'sekiro',
@@ -2136,6 +2653,10 @@
         {
           id: 'elden-ring',
           nombre: 'Elden Ring',
+          tema: 'elden-ring',
+          sonido: 'sonidos/eldenring-frasco.mp3',
+          fotos: 68,
+          galeriaAparte: true,
           videos: [
             { titulo: 'LA PRIMERA VEZ QUE LE GANÉ A MALENIA SIN INVOCAR (NG+1) - ¡FINAL INESPERADO!', youtube: 'ztnuwnkDWuU', sonido: 'sonidos/eldenring-malenia.mp3' }
           ]
@@ -2176,6 +2697,14 @@
       var coleccionVisor = null;    // fotos que está mostrando el visor
       var restaurarTrailer = null;  // devuelve el tráiler del anime a su miniatura (lo detiene)
       var irAnime = document.getElementById('ir-anime');
+      var vistaGaleria = document.getElementById('vista-galeria');
+      var tituloGaleria = document.getElementById('titulo-galeria');
+      var notaGaleria = document.getElementById('tierras-nota');
+      var fotosGaleria = document.getElementById('tierras-fotos');
+      var subtituloVideos = document.getElementById('subtitulo-videos');
+      var irGaleria = document.getElementById('ir-galeria');
+      var irGaleriaCuenta = document.getElementById('ir-galeria-cuenta');
+      var galeriaPintada = null;    // id del juego cuya galería aparte ya está en la página
 
       // Baja al bloque del anime sin cambiar la dirección: el hash se usa para las rutas.
       irAnime.addEventListener('click', function (evento) {
@@ -2188,8 +2717,13 @@
       var juegoActual = null;
       var enJuego = false;
 
+      // true si la dirección es la galería aparte de un juego: #/gaming/<id>/galeria
+      function esRutaDeGaleria(hash) {
+        return /^#\/gaming\/[^\/?#]+\/galeria\/?$/.test(hash || '');
+      }
+
       function idDeJuego(hash) {
-        var partes = /^#\/gaming\/([^\/?#]+)\/?$/.exec(hash || '');
+        var partes = /^#\/gaming\/([^\/?#]+)(?:\/galeria)?\/?$/.exec(hash || '');
         if (!partes) return null;
         try {
           return decodeURIComponent(partes[1]);
@@ -2420,7 +2954,8 @@
         sello.hidden = !(juego && juego.sello);
 
         listaFotos.textContent = '';
-        var total = (juego && juego.fotos) || 0;
+        // Con galería aparte, las fotos no se pintan aquí: van en su propia vista.
+        var total = (juego && !juego.galeriaAparte && juego.fotos) || 0;
         galeria.hidden = total === 0;
         coleccionJuego = {
           rutas: [],
@@ -2450,15 +2985,87 @@
         }
       }
 
+      // Números romanos para la galería de Elden Ring (1 a 3999).
+      function romano(n) {
+        var pares = [[1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'],
+          [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
+        var texto = '';
+        pares.forEach(function (par) {
+          while (n >= par[0]) {
+            texto += par[1];
+            n -= par[0];
+          }
+        });
+        return texto;
+      }
+
+      // Galería aparte de un juego: cuadrícula en grupos de nueve, con la primera de cada grupo en grande.
+      var coleccionGaleria = null;
+      function pintarGaleria(juego) {
+        var volver = '#/gaming/' + encodeURIComponent(juego.id);
+        document.getElementById('tierras-volver').href = volver;
+        document.getElementById('tierras-volver').textContent = '← Volver a ' + juego.nombre;
+        document.getElementById('tierras-volver-pie').href = volver;
+        document.getElementById('tierras-volver-pie').textContent = '← Volver a ' + juego.nombre;
+        tituloGaleria.textContent = juego.nombre;
+        notaGaleria.textContent = juego.fotos + ' capturas tomadas por mí durante el viaje. Elige una para verla en grande.';
+        if (galeriaPintada === juego.id) return;
+        galeriaPintada = juego.id;
+
+        fotosGaleria.textContent = '';
+        coleccionGaleria = {
+          rutas: [],
+          lista: fotosGaleria,
+          tema: juego.tema,
+          texto: textoFoto,
+          contador: function (indice, total) { return romano(indice + 1) + ' / ' + romano(total); }
+        };
+        for (var i = 0; i < juego.fotos; i++) {
+          coleccionGaleria.rutas.push(rutaFoto(i, false));
+          var destacada = i % 9 === 0;
+
+          var li = document.createElement('li');
+          if (destacada) li.className = Math.floor(i / 9) % 2 ? 'destacada derecha' : 'destacada';
+          var boton = document.createElement('button');
+          boton.type = 'button';
+          boton.dataset.indice = i;
+
+          var imagen = document.createElement('img');
+          // La foto grande de cada grupo usa la copia completa: la miniatura se vería borrosa.
+          imagen.src = rutaFoto(i, !destacada);
+          imagen.alt = textoFoto(i);
+          imagen.loading = 'lazy';
+          imagen.width = destacada ? 1920 : 480;
+          imagen.height = destacada ? 1080 : 270;
+
+          var numero = document.createElement('span');
+          numero.className = 'tierras-num';
+          numero.setAttribute('aria-hidden', 'true');
+          numero.textContent = romano(i + 1);
+
+          boton.appendChild(imagen);
+          boton.appendChild(numero);
+          li.appendChild(boton);
+          fotosGaleria.appendChild(li);
+        }
+      }
+
+      fotosGaleria.addEventListener('click', function (evento) {
+        var boton = evento.target.closest('button[data-indice]');
+        if (boton) abrirVisor(coleccionGaleria, Number(boton.dataset.indice));
+      });
+
       // El visor sirve para cualquier colección de fotos:
-      // { rutas, lista (el <ul> de miniaturas), texto(indice, total), tema, sello }.
+      // { rutas, lista (el <ul> de miniaturas), texto(indice, total), tema, sello, contador(indice, total) }.
       function mostrarFoto(indice) {
         var rutas = coleccionVisor.rutas;
         var total = rutas.length;
         fotoActual = (indice + total) % total;
         visorImagen.src = rutas[fotoActual];
         visorImagen.alt = coleccionVisor.texto(fotoActual, total);
-        visorContador.textContent = dosCifras(fotoActual + 1) + ' / ' + dosCifras(total);
+        visorContador.textContent = coleccionVisor.contador
+          ? coleccionVisor.contador(fotoActual, total)
+          : dosCifras(fotoActual + 1) + ' / ' + dosCifras(total);
 
         // Se adelanta la carga de las vecinas para que el paso sea inmediato.
         [fotoActual - 1, fotoActual + 1].forEach(function (vecina) {
@@ -2661,6 +3268,15 @@
         pintarAmbiente(juego);
         pintarAnime(juego);
 
+        var aparte = !!(juego && juego.galeriaAparte && juego.fotos);
+        subtituloVideos.hidden = !aparte;
+        irGaleria.hidden = !aparte;
+        if (aparte) {
+          irGaleria.href = '#/gaming/' + encodeURIComponent(juego.id) + '/galeria';
+          irGaleria.style.backgroundImage = 'url("' + rutaFoto(0, true) + '")';
+          irGaleriaCuenta.textContent = juego.fotos + ' fotos';
+        }
+
         if (!juego) {
           tituloJuego.textContent = 'Juego no encontrado';
           avisoJuego.textContent = 'No hay ninguna página para esta dirección.';
@@ -2703,6 +3319,9 @@
         cerrarVisor();
         if (restaurarTrailer) restaurarTrailer();
 
+        vistaGaleria.hidden = true;
+        document.body.classList.remove('en-galeria');
+
         if (id === null) {
           vistaJuego.hidden = true;
           vistaInicio.hidden = false;
@@ -2724,8 +3343,25 @@
         }
 
         var juego = buscarJuego(id);
+        var enGaleria = esRutaDeGaleria(location.hash);
+        // La ruta /galeria solo existe en los juegos con galería aparte.
+        if (enGaleria && !(juego && juego.galeriaAparte && juego.fotos)) {
+          juego = null;
+          enGaleria = false;
+        }
         pintarJuego(juego);
         vistaInicio.hidden = true;
+        if (enGaleria) {
+          pintarGaleria(juego);
+          vistaJuego.hidden = true;
+          vistaGaleria.hidden = false;
+          document.body.classList.add('en-galeria');
+          document.title = 'Galería de ' + juego.nombre + ' · ' + TITULO;
+          window.scrollTo(0, 0);
+          tituloGaleria.focus({ preventScroll: true });
+          enJuego = true;
+          return;
+        }
         vistaJuego.hidden = false;
         contenedor.classList.add('ancho');
         document.title = (juego ? juego.nombre : 'Juego no encontrado') + ' · ' + TITULO;
@@ -2800,7 +3436,7 @@
         visorImagen.removeAttribute('src');
         var miniatura = coleccionVisor &&
           coleccionVisor.lista.querySelector('button[data-indice="' + fotoActual + '"]');
-        if (miniatura && !vistaJuego.hidden) miniatura.focus();
+        if (miniatura && miniatura.offsetParent) miniatura.focus();
       });
 
       window.addEventListener('hashchange', enrutar);
