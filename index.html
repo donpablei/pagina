@@ -2055,14 +2055,17 @@
       animation: arbol-crece 1.5s ease-out both;
     }
 
-    .tierras-arbol .arbol-n1 { animation-delay: 0.35s; }
-    .tierras-arbol .arbol-n2 { animation-delay: 0.6s; }
-    .tierras-arbol .arbol-n3 { animation-delay: 0.85s; }
-    .tierras-arbol .arbol-n4 { animation-delay: 1.1s; }
-    .tierras-arbol .arbol-n5 { animation-delay: 1.35s; }
-    .tierras-arbol .arbol-n6 { animation-delay: 1.6s; }
-    .tierras-arbol .arbol-n7 { animation-delay: 1.85s; }
-    .tierras-arbol .arbol-n8 { animation-delay: 2.1s; }
+    /* Cada nivel termina de dibujarse antes de que arranque el siguiente; si no, las ramas
+       aparecen sueltas en el aire mientras el tronco aún sube. */
+    .tierras-arbol .arbol-n0 { animation-duration: 0.4s; }
+    .tierras-arbol .arbol-n1 { animation-delay: 0.35s; animation-duration: 0.3s; }
+    .tierras-arbol .arbol-n2 { animation-delay: 0.6s; animation-duration: 0.3s; }
+    .tierras-arbol .arbol-n3 { animation-delay: 0.85s; animation-duration: 0.35s; }
+    .tierras-arbol .arbol-n4 { animation-delay: 1.1s; animation-duration: 0.45s; }
+    .tierras-arbol .arbol-n5 { animation-delay: 1.35s; animation-duration: 0.6s; }
+    .tierras-arbol .arbol-n6 { animation-delay: 1.6s; animation-duration: 0.8s; }
+    .tierras-arbol .arbol-n7 { animation-delay: 1.85s; animation-duration: 1s; }
+    .tierras-arbol .arbol-n8 { animation-delay: 2.1s; animation-duration: 1.2s; }
 
     @keyframes arbol-crece {
       from { stroke-dashoffset: 1; }
