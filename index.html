@@ -2657,7 +2657,7 @@
           tema: 'elden-ring',
           sonido: 'sonidos/eldenring-frasco.mp3',
           sonidoGaleria: 'sonidos/eldenring-galeria.mp3',
-          fotos: 68,
+          fotos: 67,
           galeriaAparte: true,
           videos: [
             { titulo: 'LA PRIMERA VEZ QUE LE GANÉ A MALENIA SIN INVOCAR (NG+1) - ¡FINAL INESPERADO!', youtube: 'ztnuwnkDWuU', sonido: 'sonidos/eldenring-malenia.mp3' }
@@ -3024,7 +3024,8 @@
         };
         for (var i = 0; i < juego.fotos; i++) {
           coleccionGaleria.rutas.push(rutaFoto(i, false));
-          var destacada = i % 9 === 0;
+          // Un último grupo de menos de cinco fotos va sin foto grande, para no dejar huecos.
+          var destacada = i % 9 === 0 && juego.fotos - i >= 5;
 
           var li = document.createElement('li');
           if (destacada) li.className = Math.floor(i / 9) % 2 ? 'destacada derecha' : 'destacada';
