@@ -11,6 +11,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;800&display=swap">
+  <!-- Tipografías del tema Holograma: marca y títulos (Michroma), texto (Outfit) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@300;400;600&display=swap">
   <style>
     :root {
       --fondo: #07070d;
@@ -26,6 +28,11 @@
       --brillo-magenta: 0 0 6px rgba(255, 42, 109, 0.55), 0 0 22px rgba(255, 42, 109, 0.25);
       --japones: "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", "Noto Serif CJK JP", "Noto Serif JP", "MS PMincho", serif;
       --mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, Menlo, "DejaVu Sans Mono", monospace;
+      --vacio: #050308;
+      --linea: rgba(255, 255, 255, 0.14);
+      --holo: linear-gradient(90deg, #5ef2ff 0%, #a394ff 34%, #ff6ad5 66%, #ffd36a 100%);
+      --futura: "Michroma", "Eurostile", "Trebuchet MS", sans-serif;
+      --cuerpo: "Outfit", "Segoe UI", system-ui, sans-serif;
     }
 
     *,
@@ -46,155 +53,150 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background-color: var(--fondo);
-      background-image:
-        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255, 42, 109, 0.16), transparent),
-        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(0, 240, 255, 0.1), transparent);
-      background-attachment: fixed;
+      background-color: var(--vacio);
       color: var(--texto);
       font-family: var(--mono);
       font-size: 0.95rem;
       line-height: 1.7;
     }
 
-    /* Fondo, de atrás hacia adelante: ciudad con sol (difuminada), cuadrícula y contenido */
-    .decorado {
-      position: fixed;
+    /* Fondo: luz iridiscente que sube desde la base del holograma, con una trama fina de líneas.
+       Va detrás de todo (z-index negativo), así que no alcanza al bloque del anime. */
+    .aurora {
+      position: absolute;
+      top: 0;
       right: 0;
-      bottom: 0;
       left: 0;
-      z-index: -2;
-      height: 62vh;
-      min-height: 320px;
-      opacity: 0.5;
-      filter: blur(2.5px);
-      pointer-events: none;
-      -webkit-mask-image: linear-gradient(to top, #000 50%, transparent);
-      mask-image: linear-gradient(to top, #000 50%, transparent);
-    }
-
-    .decorado svg {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
       z-index: -1;
-      background-image:
-        linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
-      background-size: 40px 40px;
+      height: 900px;
+      background:
+        radial-gradient(ellipse 38% 46% at 50% 62%, rgba(140, 110, 255, 0.34), transparent 70%),
+        radial-gradient(ellipse 30% 30% at 30% 70%, rgba(0, 240, 255, 0.2), transparent 70%),
+        radial-gradient(ellipse 30% 30% at 72% 68%, rgba(255, 90, 200, 0.2), transparent 70%);
       pointer-events: none;
     }
 
-    /* Líneas de escaneo tipo monitor CRT */
-    body::before {
+    .aurora::after {
       content: "";
-      position: fixed;
-      inset: 0;
-      z-index: 10;
-      background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 3px);
-      pointer-events: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 700px;
+      background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 5px);
+      -webkit-mask-image: radial-gradient(ellipse 50% 60% at 50% 55%, #000, transparent 75%);
+      mask-image: radial-gradient(ellipse 50% 60% at 50% 55%, #000, transparent 75%);
     }
 
     .contenedor {
-      max-width: 720px;
+      max-width: 1040px;
       margin: 0 auto;
       padding: 0 16px;
     }
 
-    /* Cabecera */
+    /* Cabecera: retrato dentro de dos anillos y la marca proyectada como un holograma.
+       --emblema y --marca fijan el tamaño; la página de cada juego usa una versión reducida. */
     header {
+      --emblema: 250px;
+      --marca: clamp(2.6rem, 10.4vw, 8.25rem);
       display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 24px;
-      padding: 72px 0 40px;
+      flex-direction: column;
+      align-items: center;
+      padding: 72px 0 96px;
+      text-align: center;
     }
 
-    .logo {
-      flex-shrink: 0;
-      width: 120px;
-      height: 120px;
-      margin-top: -10px;
+    .contenedor.ancho header {
+      --emblema: 150px;
+      --marca: clamp(1.8rem, 6vw, 3.4rem);
+      padding: 40px 0 44px;
     }
 
-    h1 {
+    .emblema {
       position: relative;
-      margin: 0 0 20px;
-      color: var(--texto);
-      font-size: clamp(1.75rem, 7vw, 3.1rem);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      text-shadow: 0 0 8px rgba(0, 240, 255, 0.6), 0 0 32px rgba(0, 240, 255, 0.3);
-      text-wrap: balance;
+      display: grid;
+      place-items: center;
+      width: var(--emblema);
+      height: var(--emblema);
     }
 
-    /* Efecto glitch: dos copias desplazadas que aparecen por instantes */
-    .glitch::before,
-    .glitch::after {
-      content: attr(data-text);
-      content: attr(data-text) / "";
+    .emblema::before,
+    .emblema::after {
+      content: "";
       position: absolute;
-      inset: 0;
-      clip-path: inset(0 0 100% 0);
-      text-shadow: none;
+      border-radius: 50%;
       pointer-events: none;
     }
 
-    .glitch::before {
-      left: -3px;
-      color: var(--magenta);
-      animation: glitch-a 5s steps(1) infinite;
+    .emblema::before {
+      inset: 0;
+      border: 1px solid rgba(143, 233, 255, 0.22);
     }
 
-    .glitch::after {
-      left: 3px;
-      color: var(--cian);
-      animation: glitch-b 5s steps(1) infinite;
+    .emblema::after {
+      inset: 8%;
+      border: 1px dashed rgba(190, 150, 255, 0.4);
     }
 
-    @keyframes glitch-a {
-      0%, 91% { clip-path: inset(0 0 100% 0); }
-      92% { clip-path: inset(12% 0 62% 0); }
-      94% { clip-path: inset(58% 0 18% 0); }
-      96% { clip-path: inset(30% 0 48% 0); }
-      98%, 100% { clip-path: inset(0 0 100% 0); }
+    .logo {
+      position: relative;
+      width: 72%;
+      height: auto;
+      border-radius: 50%;
+      box-shadow: 0 0 60px rgba(150, 120, 255, 0.55);
     }
 
-    @keyframes glitch-b {
-      0%, 92% { clip-path: inset(0 0 100% 0); }
-      93% { clip-path: inset(66% 0 8% 0); }
-      95% { clip-path: inset(20% 0 55% 0); }
-      97% { clip-path: inset(44% 0 30% 0); }
-      99%, 100% { clip-path: inset(0 0 100% 0); }
+    h1,
+    .marca-reflejo {
+      padding-left: 0.2em;    /* compensa el espaciado que queda tras la última letra */
+      background: var(--holo);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-family: var(--futura);
+      font-size: var(--marca);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    h1 {
+      margin: 36px 0 0;
+    }
+
+    .marca-reflejo {
+      height: calc(var(--marca) * 0.47);
+      margin-top: calc(var(--marca) * -0.045);
+      overflow: hidden;
+      opacity: 0.3;
+      transform: scaleY(-1);
+      -webkit-mask-image: linear-gradient(0deg, #000, transparent 85%);
+      mask-image: linear-gradient(0deg, #000, transparent 85%);
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .marca-base {
+      width: min(100%, 760px);
+      height: 1px;
+      margin-top: calc(var(--marca) * -0.47);
+      background: linear-gradient(90deg, transparent, #8fe9ff 25%, #ff6ad5 75%, transparent);
+      box-shadow: 0 0 22px rgba(160, 140, 255, 0.9);
     }
 
     .chips {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin: 0;
+      justify-content: center;
+      gap: 6px 40px;
+      margin: calc(var(--marca) * 0.73) 0 0;
       padding: 0;
       list-style: none;
-    }
-
-    .chips li {
-      padding: 3px 12px;
-      border: 1px solid rgba(0, 240, 255, 0.45);
-      border-left: 3px solid var(--cian);
-      background: rgba(0, 240, 255, 0.07);
-      color: var(--cian);
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      color: #d9d0ee;
+      font-size: 1.19rem;
+      font-weight: 400;
     }
 
     /* Tarjetas tipo panel HUD */
@@ -467,10 +469,8 @@
     footer {
       padding: 40px 0 56px;
       color: var(--texto-suave);
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
+      font-size: 0.94rem;
       text-align: center;
-      text-transform: uppercase;
     }
 
     /* Gaming */
@@ -924,37 +924,486 @@
       transform: none;
     }
 
-    /* Tema Sekiro: cyberpunk + Japón del periodo Sengoku. Bermellón, dorado y negro laca
-       sustituyen al cian y al magenta en todo lo que esté dentro del elemento con el tema. */
-    [data-tema="sekiro"] {
+    /* Tema Holograma: cabecera, inicio, página de cada juego, visor de sus fotos y pie.
+       Luz iridiscente sobre negro, sin tarjetas ni neón duro. Redefine las variables solo dentro
+       de esos elementos; el bloque del anime y su visor conservan las suyas. */
+    [data-tema="holograma"],
+    .visor:not([data-tema="no-defeat"]) {
+      --cian: #8fe9ff;
+      --magenta: #ff6ad5;
+      --amarillo: #ffd36a;
+      --borde: rgba(255, 255, 255, 0.2);
+      --texto: #f1ecfb;
+      --texto-suave: #b9afd2;
+      --brillo-cian: 0 0 18px rgba(143, 233, 255, 0.28);
+      --brillo-magenta: 0 0 18px rgba(255, 106, 213, 0.28);
+      color: var(--texto);
+      font-family: var(--cuerpo);
+      font-size: 1.125rem;
+      font-weight: 300;
+      line-height: 1.65;
+    }
+
+    /* Cada sección es una fila: título a la izquierda, contenido a la derecha, separadas por una línea fina */
+    #vista-inicio {
+      gap: 0;
+      border-top: 1px solid var(--linea);
+    }
+
+    #vista-inicio .tarjeta {
+      display: grid;
+      grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+      column-gap: 48px;
+      padding: 48px 0;
+      border: 0;
+      border-bottom: 1px solid var(--linea);
+      background: none;
+      box-shadow: none;
+    }
+
+    #vista-inicio .tarjeta::before,
+    #vista-inicio .tarjeta::after {
+      content: none;
+    }
+
+    #vista-inicio .tarjeta > * {
+      grid-column: 2;
+    }
+
+    #vista-inicio .tarjeta > h2 {
+      grid-column: 1;
+      grid-row: 1 / span 12;
+      margin: 0;
+      color: var(--texto);
+      font-family: var(--futura);
+      font-size: 1.06rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: none;
+    }
+
+    #vista-inicio h2::before {
+      content: none;
+    }
+
+    #vista-inicio .tarjeta p {
+      margin-bottom: 20px;
+    }
+
+    #vista-inicio .tarjeta p:last-child {
+      margin-bottom: 0;
+    }
+
+    #titulo-sobre-mi ~ p:first-of-type {
+      margin-bottom: 14px;
+      color: var(--texto);
+      font-size: 1.5rem;
+      line-height: 1.45;
+    }
+
+    #vista-inicio .juegos {
+      margin-top: 0;
+    }
+
+    #vista-inicio .juegos a {
+      flex-wrap: wrap;
+      gap: 6px 20px;
+      padding: 20px 24px;
+      border: 1px solid rgba(190, 150, 255, 0.45);
+      border-radius: 14px;
+      background: rgba(140, 110, 255, 0.1);
+    }
+
+    #vista-inicio .juegos a:hover {
+      border-color: var(--cian);
+      color: #ffffff;
+    }
+
+    #vista-inicio .juego-nombre {
+      font-family: var(--futura);
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: none;
+    }
+
+    #vista-inicio .juego-cuenta {
+      color: #d9d0ee;
+      font-size: 1rem;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    #vista-inicio .boton-principal {
+      padding: 13px 26px;
+      border-radius: 999px;
+      background: var(--texto);
+      color: #0b0616;
+      font-weight: 600;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    #vista-inicio .boton-principal:hover {
+      background: #ffffff;
+    }
+
+    #vista-inicio .enlace-artista,
+    #vista-inicio .enlace-artista:hover {
+      justify-self: start;
+      margin-top: 0;
+      background: linear-gradient(90deg, #5ef2ff, #a394ff 50%, #ff6ad5);
+    }
+
+    #vista-inicio .canciones {
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      align-items: start;
+      gap: 20px;
+      margin-top: 28px;
+    }
+
+    #vista-inicio .cancion {
+      padding: 0;
+      border: 0;
+      background: none;
+    }
+
+    /* La canción con el video abierto ocupa todo el ancho para que el reproductor se vea grande */
+    #vista-inicio .cancion:has(.cancion-video:not([hidden])) {
+      grid-column: 1 / -1;
+    }
+
+    #vista-inicio .cancion h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    #vista-inicio .cancion-acciones {
+      font-size: 1rem;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    #vista-inicio .boton-video {
+      padding: 7px 18px;
+      border-radius: 999px;
+    }
+
+    #vista-inicio .reproductor iframe,
+    #vista-inicio .miniatura,
+    #vista-juego > .tarjeta .reproductor iframe,
+    #vista-juego > .tarjeta .miniatura {
+      border: 1px solid var(--linea);
+      border-radius: 14px;
+      box-shadow: none;
+    }
+
+    #vista-inicio .formulario {
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 0;
+    }
+
+    #vista-inicio .formulario input {
+      flex: 1 1 240px;
+      padding: 13px 20px;
+      border-color: rgba(255, 255, 255, 0.22);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      color: #ffffff;
+    }
+
+    #vista-inicio .formulario input:focus {
+      border-color: var(--cian);
+    }
+
+    #vista-inicio .filtros {
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    #vista-inicio .filtros button {
+      min-height: 44px;
+      padding: 5px 18px;
+      border-radius: 999px;
+      color: #d9d0ee;
+      font-size: 1rem;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    #vista-inicio .filtros button[aria-pressed="true"] {
+      border-color: var(--cian);
+      background: rgba(143, 233, 255, 0.12);
+      color: var(--cian);
+      box-shadow: none;
+    }
+
+    #vista-inicio .tarea input[type="checkbox"],
+    #vista-inicio .eliminar {
+      border-radius: 50%;
+    }
+
+    #vista-inicio .tarea input[type="checkbox"]:checked {
+      box-shadow: inset 0 0 0 3px var(--vacio), 0 0 10px rgba(143, 233, 255, 0.6);
+    }
+
+    #vista-inicio .vacio {
+      padding: 24px 0 0;
+      text-align: left;
+    }
+
+    #vista-inicio .pie-tareas {
+      font-size: 0.94rem;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    /* Página de cada juego: sin tarjeta, con una línea fina arriba y a todo el ancho para que el
+       reproductor se vea grande. Los selectores parten de la tarjeta del juego para no alcanzar
+       al bloque del anime, que es su hermano. */
+    .navegacion-juego {
+      gap: 4px 32px;
+    }
+
+    .navegacion-juego .volver {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      font-size: 1rem;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .navegacion-juego .volver:hover {
+      color: #ffffff;
+      text-shadow: none;
+    }
+
+    #vista-juego > .tarjeta {
+      padding: 40px 0 20px;
+      border: 0;
+      border-top: 1px solid var(--linea);
+      background: none;
+      box-shadow: none;
+    }
+
+    #vista-juego > .tarjeta::before,
+    #vista-juego > .tarjeta::after {
+      content: none;
+    }
+
+    #vista-juego > .tarjeta > h2 {
+      margin: 0 0 10px;
+      padding-right: 64px;    /* deja libre el sitio del sello */
+      color: var(--texto);
+      font-family: var(--futura);
+      font-size: clamp(1.5rem, 4vw, 2.1rem);
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: 0.1em;
+      text-transform: none;
+      overflow-wrap: anywhere;
+    }
+
+    #vista-juego > .tarjeta > h2::before {
+      content: none;
+    }
+
+    /* El sello conserva su rojo, como los de las pinturas japonesas */
+    #vista-juego > .tarjeta > .sello,
+    .visor:not([data-tema="no-defeat"]) .sello {
+      border-color: #e5382c;
+      border-radius: 8px;
+      color: #ff7a6e;
+      box-shadow: 0 0 18px rgba(229, 56, 44, 0.35);
+    }
+
+    #vista-juego > .tarjeta > .sello {
+      top: 34px;
+      right: 4px;
+    }
+
+    #vista-juego > .tarjeta .reproductor {
+      margin-top: 24px;
+    }
+
+    #vista-juego > .tarjeta p.reproductor-titulo {
+      margin-top: 14px;
+      color: var(--texto);
+      font-size: 1rem;
+    }
+
+    #vista-juego > .tarjeta .reproductor-titulo a {
+      color: var(--cian);
+    }
+
+    #vista-juego > .tarjeta .videos {
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    #vista-juego > .tarjeta .videos button {
+      gap: 16px;
+      padding: 16px 22px;
+      border: 1px solid rgba(190, 150, 255, 0.45);
+      border-radius: 14px;
+      background: rgba(140, 110, 255, 0.1);
+    }
+
+    #vista-juego > .tarjeta .videos button:hover {
+      border-color: var(--cian);
+      color: #ffffff;
+    }
+
+    #vista-juego > .tarjeta .videos button[aria-current="true"] {
+      border-color: var(--cian);
+      background: rgba(143, 233, 255, 0.12);
+      color: var(--cian);
+      box-shadow: none;
+    }
+
+    #vista-juego > .tarjeta .video-num {
+      color: var(--texto-suave);
+      font-family: var(--futura);
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+    }
+
+    #vista-juego > .tarjeta .galeria {
+      margin-top: 48px;
+      padding-top: 40px;
+      border-top: 1px solid var(--linea);
+    }
+
+    #vista-juego > .tarjeta .galeria-titulo {
+      margin-bottom: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 14px;
+      color: var(--texto);
+      font-family: var(--futura);
+      font-size: 1.35rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: none;
+    }
+
+    /* Kanji del subtítulo: mismo rojo de neón que el sello del juego */
+    #vista-juego > .tarjeta .galeria-titulo span {
+      padding: 1px 7px 2px;
+      border: 1px solid #e5382c;
+      border-radius: 6px;
+      background: rgba(229, 56, 44, 0.14);
+      color: #ff7a6e;
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.3;
+      text-shadow: 0 0 8px rgba(229, 56, 44, 0.6);
+      box-shadow: 0 0 18px rgba(229, 56, 44, 0.35);
+    }
+
+    #vista-juego > .tarjeta .fotos {
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    #vista-juego > .tarjeta .fotos button {
+      border-color: var(--linea);
+      border-radius: 12px;
+    }
+
+    #vista-juego > .tarjeta .fotos button:hover,
+    #vista-juego > .tarjeta .fotos button:focus-visible {
+      border-color: var(--cian);
+    }
+
+    #vista-juego > .tarjeta .fotos button::before,
+    #vista-juego > .tarjeta .fotos button::after {
+      content: none;
+    }
+
+    /* Visor de las fotos de los juegos; el del anime tiene su propio tema */
+    .visor:not([data-tema="no-defeat"]) .visor-marco img {
+      border-color: var(--linea);
+      border-radius: 14px;
+      box-shadow: 0 0 60px rgba(150, 120, 255, 0.3);
+    }
+
+    .visor:not([data-tema="no-defeat"]) .visor-marco figcaption {
+      color: var(--texto-suave);
+      letter-spacing: 0.08em;
+    }
+
+    .visor:not([data-tema="no-defeat"]) .visor-boton {
+      border-color: rgba(255, 255, 255, 0.22);
+      border-radius: 999px;
+      color: var(--texto);
+    }
+
+    .visor:not([data-tema="no-defeat"]) .visor-boton:hover {
+      border-color: var(--cian);
+      color: var(--cian);
+    }
+
+    /* Tema Sekiro: dorado, bermellón y negro laca, como en la laca japonesa. Solo enmarca las fotos
+       del juego: las miniaturas de su galería y el visor que las muestra en grande. */
+    [data-tema="sekiro"] > .tarjeta .fotos,
+    .visor[data-tema="sekiro"] {
       --cian: #e0b04c;
       --magenta: #e5382c;
       --amarillo: #f1dfb0;
-      --borde: #3d2b22;
       --brillo-cian: 0 0 6px rgba(224, 176, 76, 0.5), 0 0 22px rgba(224, 176, 76, 0.22);
       --brillo-magenta: 0 0 6px rgba(229, 56, 44, 0.55), 0 0 22px rgba(229, 56, 44, 0.25);
     }
 
-    /* Fondo de la tarjeta: olas seigaiha en trazo fino dorado sobre negro laca */
-    [data-tema="sekiro"] .tarjeta {
-      background-color: #110c0c;
-      background-image:
-        linear-gradient(160deg, rgba(70, 28, 20, 0.35), rgba(0, 0, 0, 0.45) 65%),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='40' viewBox='0 0 80 40'%3E%3Cdefs%3E%3Cg id='o' fill='%23110c0c' stroke='%23e0b04c' stroke-opacity='0.17'%3E%3Ccircle r='40'/%3E%3Ccircle r='30'/%3E%3Ccircle r='20'/%3E%3Ccircle r='10'/%3E%3C/g%3E%3C/defs%3E%3Cuse href='%23o' x='0' y='-20'/%3E%3Cuse href='%23o' x='80' y='-20'/%3E%3Cuse href='%23o' x='40' y='0'/%3E%3Cuse href='%23o' x='0' y='20'/%3E%3Cuse href='%23o' x='80' y='20'/%3E%3Cuse href='%23o' x='40' y='40'/%3E%3Cuse href='%23o' x='0' y='60'/%3E%3Cuse href='%23o' x='80' y='60'/%3E%3C/svg%3E");
-      background-size: auto, 64px 32px;
+    #vista-juego[data-tema="sekiro"] > .tarjeta .fotos button {
+      border-color: var(--cian);
+      border-radius: 0;
     }
 
-    [data-tema="sekiro"] .videos button,
-    [data-tema="sekiro"] .galeria {
-      background-color: rgba(10, 7, 7, 0.82);
+    /* Recupera las esquinas marcadas en bermellón */
+    #vista-juego[data-tema="sekiro"] > .tarjeta .fotos button::before,
+    #vista-juego[data-tema="sekiro"] > .tarjeta .fotos button::after {
+      content: "";
     }
 
-    [data-tema="sekiro"] .galeria {
-      margin-right: -12px;
-      margin-left: -12px;
-      padding: 22px 12px 12px;
-      border: 1px solid var(--borde);
-      border-top: 2px solid var(--magenta);
+    /* Marco del visor: filete dorado, franja de laca negra y filete bermellón por fuera */
+    .visor[data-tema="sekiro"] .visor-marco img {
+      border-color: var(--cian);
+      border-radius: 0;
+      box-shadow: 0 0 0 5px #110c0c, 0 0 0 6px var(--magenta), 0 0 34px rgba(224, 176, 76, 0.3);
+    }
+
+    .visor[data-tema="sekiro"] .visor-marco figcaption {
+      color: var(--cian);
+      letter-spacing: 0.24em;
+    }
+
+    .visor[data-tema="sekiro"] .visor-boton {
+      border-color: var(--cian);
+      border-radius: 0;
+      color: var(--cian);
+    }
+
+    .visor[data-tema="sekiro"] .visor-boton:hover {
+      border-color: var(--magenta);
+      color: var(--magenta);
+    }
+
+    @media (max-width: 800px) {
+      #vista-inicio .tarjeta {
+        display: block;
+        padding: 36px 0;
+      }
+
+      #vista-inicio .tarjeta > h2 {
+        margin-bottom: 16px;
+      }
     }
 
     /* Bloque del anime «Sekiro: No Defeat»: acuarela japonesa sobre papel washi.
@@ -1440,14 +1889,21 @@
 
     @media (max-width: 480px) {
       header {
-        gap: 16px;
-        padding: 48px 0 28px;
+        --emblema: 190px;
+        padding: 48px 0 64px;
       }
 
-      .logo {
-        width: 64px;
-        height: 64px;
-        margin-top: 0;
+      .contenedor.ancho header {
+        --emblema: 120px;
+        padding: 32px 0 36px;
+      }
+
+      [data-tema="holograma"] {
+        font-size: 1.06rem;
+      }
+
+      #titulo-sobre-mi ~ p:first-of-type {
+        font-size: 1.25rem;
       }
 
       .tarjeta {
@@ -1464,124 +1920,12 @@
       * {
         transition: none !important;
       }
-
-      .glitch::before,
-      .glitch::after {
-        display: none;
-        animation: none;
-      }
     }
   </style>
 </head>
 <body>
-  <!-- Decorado del fondo: ciudad de neón con sol de atardecer (ilustración propia) -->
-  <div class="decorado" aria-hidden="true">
-    <svg viewBox="0 0 1600 600" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="resplandor" cx="50%" cy="100%" r="75%">
-          <stop offset="0" stop-color="#b14cff" stop-opacity="0.75"/>
-          <stop offset="0.5" stop-color="#5a2bd6" stop-opacity="0.35"/>
-          <stop offset="1" stop-color="#5a2bd6" stop-opacity="0"/>
-        </radialGradient>
-        <linearGradient id="sol" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#ffd166"/>
-          <stop offset="0.45" stop-color="#ff7a3d"/>
-          <stop offset="1" stop-color="#ff2a6d"/>
-        </linearGradient>
-        <mask id="rayas">
-          <rect width="1600" height="600" fill="#fff"/>
-          <g fill="#000">
-            <rect y="330" width="1600" height="6"/>
-            <rect y="366" width="1600" height="10"/>
-            <rect y="404" width="1600" height="14"/>
-            <rect y="444" width="1600" height="18"/>
-            <rect y="486" width="1600" height="22"/>
-            <rect y="530" width="1600" height="26"/>
-          </g>
-        </mask>
-        <pattern id="ventanas-cian" width="36" height="44" patternUnits="userSpaceOnUse">
-          <rect x="6" y="8" width="7" height="10" fill="#00f0ff"/>
-          <rect x="22" y="8" width="7" height="10" fill="#00f0ff" opacity="0.35"/>
-          <rect x="22" y="28" width="7" height="10" fill="#00f0ff"/>
-        </pattern>
-        <pattern id="ventanas-magenta" width="32" height="40" patternUnits="userSpaceOnUse">
-          <rect x="5" y="6" width="6" height="9" fill="#ff5fa2"/>
-          <rect x="19" y="24" width="6" height="9" fill="#ff5fa2"/>
-          <rect x="5" y="24" width="6" height="9" fill="#ffd166" opacity="0.7"/>
-        </pattern>
-      </defs>
-
-      <rect width="1600" height="600" fill="url(#resplandor)"/>
-      <!-- El sol va a la derecha para que no lo tape la columna de contenido -->
-      <circle cx="1290" cy="390" r="205" fill="url(#sol)" mask="url(#rayas)"/>
-
-      <!-- Edificios lejanos -->
-      <g fill="#3b2382">
-        <rect x="0" y="330" width="100" height="270"/>
-        <rect x="110" y="260" width="70" height="340"/>
-        <rect x="190" y="300" width="120" height="300"/>
-        <rect x="320" y="200" width="60" height="400"/>
-        <rect x="390" y="350" width="110" height="250"/>
-        <rect x="510" y="400" width="90" height="200"/>
-        <rect x="610" y="440" width="100" height="160"/>
-        <rect x="720" y="470" width="80" height="130"/>
-        <rect x="810" y="450" width="90" height="150"/>
-        <rect x="910" y="430" width="110" height="170"/>
-        <rect x="1030" y="390" width="90" height="210"/>
-        <rect x="1130" y="340" width="110" height="260"/>
-        <rect x="1250" y="210" width="60" height="390"/>
-        <rect x="1320" y="290" width="120" height="310"/>
-        <rect x="1450" y="250" width="70" height="350"/>
-        <rect x="1530" y="320" width="70" height="280"/>
-      </g>
-
-      <!-- Edificios cercanos -->
-      <g fill="#150b33">
-        <rect x="0" y="420" width="70" height="180"/>
-        <rect x="60" y="360" width="110" height="240"/>
-        <rect x="180" y="440" width="80" height="160"/>
-        <rect x="250" y="300" width="60" height="300"/>
-        <rect x="330" y="470" width="130" height="130"/>
-        <rect x="470" y="500" width="90" height="100"/>
-        <rect x="570" y="520" width="120" height="80"/>
-        <rect x="700" y="540" width="100" height="60"/>
-        <rect x="810" y="525" width="110" height="75"/>
-        <rect x="930" y="505" width="90" height="95"/>
-        <rect x="1030" y="480" width="120" height="120"/>
-        <rect x="1160" y="320" width="70" height="280"/>
-        <rect x="1240" y="450" width="110" height="150"/>
-        <rect x="1360" y="380" width="90" height="220"/>
-        <rect x="1460" y="430" width="140" height="170"/>
-      </g>
-      <g fill="url(#ventanas-cian)">
-        <rect x="60" y="360" width="110" height="240"/>
-        <rect x="250" y="300" width="60" height="300"/>
-        <rect x="570" y="520" width="120" height="80"/>
-        <rect x="930" y="505" width="90" height="95"/>
-        <rect x="1160" y="320" width="70" height="280"/>
-        <rect x="1460" y="430" width="140" height="170"/>
-      </g>
-      <g fill="url(#ventanas-magenta)">
-        <rect x="0" y="420" width="70" height="180"/>
-        <rect x="180" y="440" width="80" height="160"/>
-        <rect x="330" y="470" width="130" height="130"/>
-        <rect x="810" y="525" width="110" height="75"/>
-        <rect x="1030" y="480" width="120" height="120"/>
-        <rect x="1240" y="450" width="110" height="150"/>
-        <rect x="1360" y="380" width="90" height="220"/>
-      </g>
-
-      <!-- Antenas y letreros de neón -->
-      <g stroke="#150b33" stroke-width="4">
-        <line x1="280" y1="300" x2="280" y2="240"/>
-        <line x1="1195" y1="320" x2="1195" y2="250"/>
-      </g>
-      <rect x="150" y="380" width="12" height="90" fill="#ff2a6d"/>
-      <rect x="1338" y="470" width="12" height="80" fill="#00f0ff"/>
-      <rect x="352" y="486" width="86" height="16" fill="#00f0ff"/>
-      <rect x="1052" y="496" width="76" height="14" fill="#ff2a6d"/>
-    </svg>
-  </div>
+  <!-- Fondo: luz iridiscente detrás de la cabecera -->
+  <div class="aurora" aria-hidden="true"></div>
 
   <!-- Filtro que deforma los bordes como una mancha de acuarela (lo usa el bloque del anime) -->
   <svg class="filtros-svg" width="0" height="0" aria-hidden="true" focusable="false">
@@ -1592,19 +1936,22 @@
   </svg>
 
   <div class="contenedor">
-    <header>
-      <div>
-        <h1 class="glitch" data-text="José Pablo López">José Pablo López</h1>
-        <ul class="chips" aria-label="A qué me dedico">
-          <li>Gestión de sitios de e-commerce</li>
-          <li>Programación</li>
-          <li>IA</li>
-        </ul>
+    <header data-tema="holograma">
+      <div class="emblema">
+        <img class="logo" src="logo/logo.png" alt="Retrato de José Pablo López en estilo neón" width="180" height="180">
       </div>
-      <img class="logo" src="logo/logo.png" alt="Retrato de José Pablo López en estilo neón" width="120" height="120">
+      <h1>Pablei</h1>
+      <!-- Reflejo y base del holograma: decorativos -->
+      <div class="marca-reflejo" aria-hidden="true">Pablei</div>
+      <span class="marca-base" aria-hidden="true"></span>
+      <ul class="chips" aria-label="A qué me dedico">
+        <li>Gestión de sitios de e-commerce</li>
+        <li>Programación</li>
+        <li>IA</li>
+      </ul>
     </header>
 
-    <main id="vista-inicio">
+    <main id="vista-inicio" data-tema="holograma">
       <section class="tarjeta" aria-labelledby="titulo-sobre-mi">
         <h2 id="titulo-sobre-mi">Sobre mí</h2>
         <!-- Texto provisional: edítalo con tus propias palabras. -->
@@ -1658,12 +2005,12 @@
     </main>
 
     <main id="vista-juego" hidden>
-      <nav class="navegacion-juego" aria-label="Navegación del juego">
+      <nav class="navegacion-juego" data-tema="holograma" aria-label="Navegación del juego">
         <a class="volver" href="#gaming">← Volver al inicio</a>
         <a class="volver" id="ir-anime" href="#anime" hidden></a>
       </nav>
 
-      <section class="tarjeta" aria-labelledby="titulo-juego">
+      <section class="tarjeta" data-tema="holograma" aria-labelledby="titulo-juego">
         <span class="sello" id="sello" lang="ja" aria-hidden="true" hidden></span>
         <h2 id="titulo-juego" tabindex="-1"></h2>
         <p id="aviso-juego"></p>
@@ -1679,7 +2026,7 @@
         <ol class="videos" id="videos"></ol>
 
         <div class="galeria" id="galeria" hidden>
-          <h3 class="galeria-titulo">Galería <span lang="ja" aria-hidden="true">· 写真</span></h3>
+          <h3 class="galeria-titulo">Galería <span lang="ja" aria-hidden="true">写真</span></h3>
           <p>Fotos tomadas por mí durante el juego. Elige una para verla en grande.</p>
           <ul class="fotos" id="fotos"></ul>
         </div>
@@ -1689,7 +2036,7 @@
       <section class="anime" id="anime" data-tema="no-defeat" aria-labelledby="anime-titulo" hidden></section>
     </main>
 
-    <footer>
+    <footer data-tema="holograma">
       © <span id="anio">2026</span> José Pablo López
     </footer>
   </div>
@@ -1716,17 +2063,19 @@
       // El ID es lo que va después de "v=" en el enlace: https://www.youtube.com/watch?v=ID
       // Para agregar un juego: añade aquí otra entrada con su id, nombre y videos.
       // Opcionales: fotos (cuántas hay en fotos/<id>/, las genera fotos/hacer_galeria.py),
-      // tema (estética propia de su página) y sello (texto del sello decorativo).
+      // tema (marcos de las fotos de su galería y del visor) y sello (texto del sello decorativo).
+      // sonido (archivo de sonidos/ que suena al elegir el juego en el inicio; cada video admite el suyo).
       var JUEGOS = [
         {
           id: 'sekiro',
           nombre: 'Sekiro',
           tema: 'sekiro',
           sello: '隻狼',
+          sonido: 'sonidos/sekiro-choque.mp3',
           fotos: 79,
           videos: [
             { titulo: 'ISSHIN: JEFE FINAL - NO HIT (RECUERDO DE FUERZA)', youtube: 'clfXQU7W5jQ' },
-            { titulo: 'PADRE INTERIOR (BUHO) - NO HIT (RECUERDO DE FUERZA)', youtube: 'cV6uGKEgM8A' }
+            { titulo: 'PADRE INTERIOR (BUHO) - NO HIT (RECUERDO DE FUERZA)', youtube: 'cV6uGKEgM8A', sonido: 'sonidos/sekiro-buho.mp3' }
           ],
           // Bloque sobre el anime, debajo de la galería. Debe ir después de "fotos" del juego.
           // En los párrafos, un trozo ['em', texto] va en cursiva y ['strong', texto] en negrita.
@@ -1859,12 +2208,37 @@
         return partes.length ? partes.join(' · ') : 'Próximamente';
       }
 
+      // Efectos de sonido: cada archivo se carga una sola vez y se reinicia si se vuelve a pedir.
+      var sonidos = {};
+
+      function prepararSonido(ruta) {
+        if (!ruta || sonidos[ruta]) return;
+        var audio = new Audio(ruta);
+        audio.preload = 'auto';
+        audio.volume = 0.7;
+        sonidos[ruta] = audio;
+      }
+
+      function sonar(ruta) {
+        if (!ruta) return;
+        prepararSonido(ruta);
+        var audio = sonidos[ruta];
+        audio.currentTime = 0;
+        var promesa = audio.play();
+        // Si el navegador bloquea el audio o falta el archivo, la página sigue funcionando igual.
+        if (promesa && promesa.catch) promesa.catch(function () {});
+      }
+
       function pintarJuegos() {
         menuJuegos.textContent = '';
         JUEGOS.forEach(function (juego) {
           var li = document.createElement('li');
           var enlace = document.createElement('a');
           enlace.href = '#/gaming/' + encodeURIComponent(juego.id);
+          if (juego.sonido) {
+            prepararSonido(juego.sonido);
+            enlace.addEventListener('click', function () { sonar(juego.sonido); });
+          }
 
           var nombre = document.createElement('span');
           nombre.className = 'juego-nombre';
@@ -2356,7 +2730,9 @@
       menuVideos.addEventListener('click', function (evento) {
         var boton = evento.target.closest('button[data-indice]');
         if (!boton) return;
-        reproducir(Number(boton.dataset.indice));
+        var indice = Number(boton.dataset.indice);
+        sonar(juegoActual.videos[indice].sonido);
+        reproducir(indice);
       });
 
       listaCanciones.addEventListener('click', function (evento) {
