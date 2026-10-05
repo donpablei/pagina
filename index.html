@@ -11,8 +11,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;800&display=swap">
-  <!-- Tipografías del tema Holograma: marca y títulos (Michroma), texto (Outfit) -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@300;400;600&display=swap">
+  <!-- Tipografías del tema Holograma + HUD: títulos y texto (Rajdhani), lecturas HUD (Share Tech Mono) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap">
   <!-- Tipografía de la galería de Elden Ring (solo los dos pesos que usa) -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap">
   <style>
@@ -33,8 +33,14 @@
       --vacio: #050308;
       --linea: rgba(255, 255, 255, 0.14);
       --holo: linear-gradient(90deg, #5ef2ff 0%, #a394ff 34%, #ff6ad5 66%, #ffd36a 100%);
-      --futura: "Michroma", "Eurostile", "Trebuchet MS", sans-serif;
-      --cuerpo: "Outfit", "Segoe UI", system-ui, sans-serif;
+      --futura: "Rajdhani", "Eurostile", "Trebuchet MS", sans-serif;
+      --cuerpo: "Rajdhani", "Segoe UI", system-ui, sans-serif;
+      /* Capa HUD del tema Holograma: acentos de Night City, lecturas y tamaño de la esquina cortada */
+      --nc-amarillo: #fcee0a;
+      --nc-cian: #00f0ff;
+      --nc-rojo: #ff003c;
+      --hud: "Share Tech Mono", ui-monospace, "Cascadia Code", Consolas, Menlo, monospace;
+      --corte: 12px;
     }
 
     *,
@@ -1309,26 +1315,6 @@
       box-shadow: 0 0 18px rgba(229, 56, 44, 0.35);
     }
 
-    #vista-juego > .tarjeta .fotos {
-      gap: 14px;
-      margin-top: 24px;
-    }
-
-    #vista-juego > .tarjeta .fotos button {
-      border-color: var(--linea);
-      border-radius: 12px;
-    }
-
-    #vista-juego > .tarjeta .fotos button:hover,
-    #vista-juego > .tarjeta .fotos button:focus-visible {
-      border-color: var(--cian);
-    }
-
-    #vista-juego > .tarjeta .fotos button::before,
-    #vista-juego > .tarjeta .fotos button::after {
-      content: none;
-    }
-
     /* Visor de las fotos de los juegos; el del anime tiene su propio tema */
     .visor:not([data-tema="no-defeat"]) .visor-marco img {
       border-color: var(--linea);
@@ -1354,24 +1340,12 @@
 
     /* Tema Sekiro: dorado, bermellón y negro laca, como en la laca japonesa. Solo enmarca las fotos
        del juego: las miniaturas de su galería y el visor que las muestra en grande. */
-    [data-tema="sekiro"] > .tarjeta .fotos,
     .visor[data-tema="sekiro"] {
       --cian: #e0b04c;
       --magenta: #e5382c;
       --amarillo: #f1dfb0;
       --brillo-cian: 0 0 6px rgba(224, 176, 76, 0.5), 0 0 22px rgba(224, 176, 76, 0.22);
       --brillo-magenta: 0 0 6px rgba(229, 56, 44, 0.55), 0 0 22px rgba(229, 56, 44, 0.25);
-    }
-
-    #vista-juego[data-tema="sekiro"] > .tarjeta .fotos button {
-      border-color: var(--cian);
-      border-radius: 0;
-    }
-
-    /* Recupera las esquinas marcadas en bermellón */
-    #vista-juego[data-tema="sekiro"] > .tarjeta .fotos button::before,
-    #vista-juego[data-tema="sekiro"] > .tarjeta .fotos button::after {
-      content: "";
     }
 
     /* Marco del visor: filete dorado, franja de laca negra y filete bermellón por fuera */
@@ -2187,91 +2161,11 @@
       text-align: center;
     }
 
-    /* Cuadrícula: grupos de nueve, con una foto grande que alterna de lado */
-    .tierras-fotos {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      grid-auto-flow: dense;
-      gap: 14px;
-      max-width: 1560px;
+    /* Fotos: escenario + tira (el componente está más abajo, en «Galerías») */
+    .tierras-galeria {
+      max-width: 1240px;
       margin: 0 auto;
       padding: 0 clamp(14px, 3.5vw, 56px);
-      list-style: none;
-    }
-
-    .tierras-fotos li {
-      display: flex;
-      min-width: 0;
-    }
-
-    .tierras-fotos .destacada {
-      grid-column: span 2;
-      grid-row: span 2;
-    }
-
-    .tierras-fotos .destacada.derecha {
-      grid-column: 3 / span 2;
-    }
-
-    .tierras-fotos button {
-      position: relative;
-      display: block;
-      flex: 1;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      margin: 0;
-      padding: 0;
-      border: 1px solid rgba(200, 164, 92, 0.38);
-      border-radius: 0;
-      background: #000000;
-      color: var(--er-gracia);
-      font-family: var(--er-serif);
-      overflow: hidden;
-      cursor: zoom-in;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .tierras-fotos .destacada button {
-      aspect-ratio: auto;
-    }
-
-    .tierras-fotos img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.9;
-      transition: opacity 0.2s ease, transform 0.5s ease;
-    }
-
-    /* Número de la foto, en romanos */
-    .tierras-num {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      padding: 14px 22px 5px 10px;
-      background: linear-gradient(90deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0));
-      font-size: 0.95rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      line-height: 1;
-    }
-
-    .tierras-fotos .destacada .tierras-num {
-      padding: 20px 34px 9px 14px;
-      font-size: 1.3rem;
-    }
-
-    .tierras-fotos button:hover,
-    .tierras-fotos button:focus-visible {
-      border-color: var(--er-gracia);
-      box-shadow: 0 0 22px rgba(240, 223, 168, 0.3);
-    }
-
-    .tierras-fotos button:hover img,
-    .tierras-fotos button:focus-visible img {
-      opacity: 1;
-      transform: scale(1.03);
     }
 
     .tierras-pie {
@@ -2322,21 +2216,6 @@
     }
 
     @media (max-width: 800px) {
-      .tierras-fotos {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
-      }
-
-      .tierras-fotos .destacada,
-      .tierras-fotos .destacada.derecha {
-        grid-column: 1 / -1;
-        grid-row: auto;
-      }
-
-      .tierras-fotos .destacada button {
-        aspect-ratio: 16 / 9;
-      }
-
       .tierras-arbol {
         margin-top: -14px;
       }
@@ -2355,14 +2234,6 @@
         padding: 12px 14px 40px;
       }
 
-      .tierras-fotos {
-        gap: 8px;
-      }
-
-      .tierras-num {
-        font-size: 0.85rem;
-      }
-
       .ir-galeria {
         min-height: 124px;
       }
@@ -2376,10 +2247,940 @@
       .tierras-motas {
         display: none;
       }
+    }
 
-      .tierras-fotos button:hover img,
-      .tierras-fotos button:focus-visible img {
-        transform: none;
+    /* Capa HUD sobre el tema Holograma: se conservan la luz iridiscente y la marca, y se suman
+       esquinas cortadas, glitch y lecturas al estilo de Night City. Va al final para imponerse a
+       las reglas de Holograma de arriba; no toca el bloque del anime ni la galería de Elden Ring. */
+    [data-tema="holograma"] {
+      font-size: 1.2rem;      /* Rajdhani tiene la altura de x baja */
+      font-weight: 400;
+      line-height: 1.55;
+    }
+
+    /* Líneas de escaneo sobre toda la página; por debajo del z-index 11 del bloque del anime */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.028) 0 1px, transparent 1px 4px);
+      pointer-events: none;
+    }
+
+    body.en-galeria::after {
+      display: none;
+    }
+
+    /* Retícula en perspectiva al pie de la aurora; solo en el inicio */
+    .aurora::before {
+      content: "";
+      position: absolute;
+      top: 560px;
+      left: 50%;
+      width: 1500px;
+      height: 360px;
+      background:
+        repeating-linear-gradient(90deg, rgba(143, 233, 255, 0.2) 0 1px, transparent 1px 56px),
+        repeating-linear-gradient(0deg, rgba(143, 233, 255, 0.2) 0 1px, transparent 1px 56px);
+      transform: translateX(-50%) perspective(620px) rotateX(64deg);
+      -webkit-mask-image: radial-gradient(ellipse 50% 60% at 50% 40%, #000, transparent 72%);
+      mask-image: radial-gradient(ellipse 50% 60% at 50% 40%, #000, transparent 72%);
+    }
+
+    body:has(.contenedor.ancho) .aurora::before {
+      display: none;
+    }
+
+    .aurora {
+      overflow: hidden;
+    }
+
+    /* Barra superior: dirección del sitio y atajos a las secciones */
+    .barra-hud {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0 24px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--linea);
+      font-family: var(--hud);
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      line-height: 1.4;
+    }
+
+    .barra-hud-sitio {
+      color: var(--nc-amarillo);
+    }
+
+    .barra-hud-enlaces {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 22px;
+    }
+
+    .barra-hud a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      color: var(--cian);
+      text-decoration: none;
+    }
+
+    .barra-hud a:hover {
+      color: #ffffff;
+    }
+
+    /* Cabecera */
+    header {
+      --marca: clamp(3.4rem, 15vw, 10rem);
+      padding: 56px 0 88px;
+    }
+
+    .contenedor.ancho header {
+      --marca: clamp(2.2rem, 6vw, 3.8rem);
+    }
+
+    /* Mira: cuatro escuadras amarillas alrededor del retrato */
+    .emblema-mira {
+      position: absolute;
+      inset: -12px;
+      background:
+        linear-gradient(var(--nc-amarillo), var(--nc-amarillo)) left top / 20px 2px no-repeat,
+        linear-gradient(var(--nc-amarillo), var(--nc-amarillo)) left top / 2px 20px no-repeat,
+        linear-gradient(var(--nc-amarillo), var(--nc-amarillo)) right top / 20px 2px no-repeat,
+        linear-gradient(var(--nc-amarillo), var(--nc-amarillo)) right top / 2px 20px no-repeat,
+        linear-gradient(var(--nc-amarillo), var(--nc-amarillo)) left bottom / 20px 2px no-repeat,
+        linear-gradient(var(--nc-amarillo), var(--nc-amarillo)) left bottom / 2px 20px no-repeat,
+        linear-gradient(var(--nc-amarillo), var(--nc-amarillo)) right bottom / 20px 2px no-repeat,
+        linear-gradient(var(--nc-amarillo), var(--nc-amarillo)) right bottom / 2px 20px no-repeat;
+      pointer-events: none;
+    }
+
+    .emblema::after {
+      border-color: rgba(190, 150, 255, 0.55);
+      animation: emblema-gira 40s linear infinite;
+    }
+
+    @keyframes emblema-gira {
+      to { transform: rotate(360deg); }
+    }
+
+    h1,
+    .marca-reflejo {
+      font-weight: 600;
+    }
+
+    h1 {
+      position: relative;
+      margin-top: 34px;
+    }
+
+    /* Glitch de la marca: dos copias en cian y rojo que asoman en ráfagas cortas */
+    h1::before,
+    h1::after {
+      content: attr(data-texto);
+      position: absolute;
+      inset: 0;
+      padding-left: inherit;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    h1::before {
+      color: var(--nc-cian);
+      animation: glitch-cian 6s steps(1) infinite;
+    }
+
+    h1::after {
+      color: var(--nc-rojo);
+      animation: glitch-rojo 6s steps(1) infinite;
+    }
+
+    @keyframes glitch-cian {
+      0%, 90%, 100% { opacity: 0; }
+      91% { opacity: 0.9; transform: translate(-7px, 0); clip-path: inset(10% 0 60% 0); }
+      93% { opacity: 0.9; transform: translate(5px, 0); clip-path: inset(64% 0 8% 0); }
+      95% { opacity: 0.9; transform: translate(-3px, 0); clip-path: inset(38% 0 36% 0); }
+      97% { opacity: 0; }
+    }
+
+    @keyframes glitch-rojo {
+      0%, 90%, 100% { opacity: 0; }
+      91% { opacity: 0.85; transform: translate(7px, 0); clip-path: inset(52% 0 20% 0); }
+      93% { opacity: 0.85; transform: translate(-5px, 0); clip-path: inset(6% 0 70% 0); }
+      95% { opacity: 0.85; transform: translate(4px, 0); clip-path: inset(74% 0 4% 0); }
+      97% { opacity: 0; }
+    }
+
+    /* Reflejo: con este interlineado la línea base de Rajdhani queda en el borde del recuadro,
+       así que al voltearlo las letras nacen justo bajo la marca. */
+    .marca-reflejo {
+      height: calc(var(--marca) * 0.595);
+      margin-top: calc(var(--marca) * -0.2);
+      line-height: 0.595;
+    }
+
+    .marca-base {
+      margin-top: calc(var(--marca) * -0.595);
+    }
+
+    .chips {
+      gap: 10px 12px;
+      margin-top: calc(var(--marca) * 0.8);
+      font-size: 1.15rem;
+      font-weight: 500;
+    }
+
+    /* Esquina cortada: dos cortes en diagonal. Como clip-path recorta el borde, el filete se
+       dibuja con una sombra interior y dos degradados en las esquinas (--b filete, --f relleno). */
+    .chips li,
+    #vista-inicio .boton-video,
+    #vista-inicio .formulario input,
+    #vista-inicio .filtros button,
+    #vista-juego > .tarjeta .videos button {
+      --b: rgba(190, 150, 255, 0.5);
+      --f: rgba(140, 110, 255, 0.1);
+      --trazo:
+        linear-gradient(135deg, var(--b) 0 calc(var(--corte) * 0.7071 + 1.3px), transparent 0),
+        linear-gradient(315deg, var(--b) 0 calc(var(--corte) * 0.7071 + 1.3px), transparent 0);
+      border: 0;
+      border-radius: 0;
+      background: var(--trazo), var(--f);
+      box-shadow: inset 0 0 0 1px var(--b);
+    }
+
+    .chips li,
+    #vista-inicio .juegos a,
+    #vista-inicio .boton-principal,
+    #vista-inicio .boton-video,
+    #vista-inicio .formulario input,
+    #vista-inicio .filtros button,
+    #vista-inicio .cancion-video,
+    #vista-juego > .tarjeta #marco,
+    #vista-juego > .tarjeta .reproductor iframe,
+    #vista-juego > .tarjeta .miniatura,
+    #vista-inicio .reproductor iframe,
+    #vista-inicio .miniatura,
+    #vista-juego > .tarjeta .videos button,
+    #vista-juego > .tarjeta .ir-galeria {
+      border-radius: 0;
+      clip-path: polygon(var(--corte) 0, 100% 0, 100% calc(100% - var(--corte)), calc(100% - var(--corte)) 100%, 0 100%, 0 var(--corte));
+    }
+
+    /* El contorno del foco se dibuja por dentro: por fuera lo recortaría el clip-path */
+    #vista-inicio .juegos a:focus-visible,
+    #vista-inicio .boton-video:focus-visible,
+    #vista-inicio .filtros button:focus-visible,
+    #vista-juego > .tarjeta .videos button:focus-visible,
+    #vista-juego > .tarjeta .ir-galeria:focus-visible {
+      outline: 2px solid var(--nc-amarillo);
+      outline-offset: -5px;
+    }
+
+    #vista-inicio .boton-principal:focus-visible {
+      outline: 2px solid #0b0616;
+      outline-offset: -5px;
+    }
+
+    .chips li {
+      --corte: 9px;
+      --b: rgba(143, 233, 255, 0.5);
+      --f: rgba(5, 3, 8, 0.6);
+      padding: 6px 20px;
+    }
+
+    /* Secciones del inicio: regla con muescas en lugar de la línea lisa */
+    #vista-inicio {
+      border-top: 0;
+    }
+
+    #vista-inicio .tarjeta {
+      padding: 47px 0 52px;
+      border-bottom: 0;
+      background:
+        linear-gradient(var(--nc-amarillo), var(--nc-amarillo)) left top / 56px 3px no-repeat,
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.34) 0 1px, transparent 1px 8px) right top / 96px 7px no-repeat,
+        linear-gradient(var(--linea), var(--linea)) left top / 100% 1px no-repeat;
+      scroll-margin-top: 16px;
+    }
+
+    #vista-inicio .tarjeta > h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      line-height: 1.3;
+      text-transform: uppercase;
+    }
+
+    #vista-inicio .tarjeta p {
+      color: #c6bddc;
+    }
+
+    #titulo-sobre-mi ~ p:first-of-type {
+      color: var(--texto);
+      font-size: 1.6rem;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* Las secciones entran una sola vez, al asomar en pantalla (la clase la pone el script) */
+    .con-entrada #vista-inicio .tarjeta {
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    .con-entrada #vista-inicio .tarjeta:not(.visible) {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+
+    /* Juegos: tarjeta con la primera foto al fondo, franja amarilla y conteos en chips */
+    #vista-inicio .juegos {
+      gap: 14px;
+    }
+
+    #vista-inicio .juegos a {
+      --corte: 20px;
+      position: relative;
+      isolation: isolate;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 10px 20px;
+      min-height: 136px;
+      padding: 24px 28px 22px 36px;
+      border: 0;
+      background: #0b0714;
+      color: #ffffff;
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .juego-foto {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.5;
+      transition: opacity 0.2s ease;
+    }
+
+    #vista-inicio .juegos a:hover .juego-foto,
+    #vista-inicio .juegos a:focus-visible .juego-foto {
+      opacity: 0.72;
+    }
+
+    /* Velo para que el nombre se lea, con la franja amarilla a la izquierda */
+    #vista-inicio .juegos a::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(var(--nc-amarillo), var(--nc-amarillo)) left top / 6px 100% no-repeat,
+        linear-gradient(90deg, rgba(5, 3, 8, 0.95) 0%, rgba(5, 3, 8, 0.74) 45%, rgba(5, 3, 8, 0.2) 100%);
+    }
+
+    /* Filete de la tarjeta, por encima de la foto */
+    #vista-inicio .juegos a::after {
+      --b: rgba(190, 150, 255, 0.5);
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      background:
+        linear-gradient(135deg, var(--b) 0 calc(var(--corte) * 0.7071 + 1.3px), transparent 0),
+        linear-gradient(315deg, var(--b) 0 calc(var(--corte) * 0.7071 + 1.3px), transparent 0);
+      box-shadow: inset 0 0 0 1px var(--b);
+      pointer-events: none;
+    }
+
+    #vista-inicio .juegos a:hover::after,
+    #vista-inicio .juegos a:focus-visible::after {
+      --b: var(--cian);
+    }
+
+    .juego-barrido {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -40%;
+      z-index: 1;
+      width: 30%;
+      background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transform: skewX(-18deg);
+      pointer-events: none;
+    }
+
+    #vista-inicio .juegos a:hover .juego-barrido,
+    #vista-inicio .juegos a:focus-visible .juego-barrido {
+      animation: juego-barrido 0.7s ease-out;
+    }
+
+    @keyframes juego-barrido {
+      to { left: 125%; }
+    }
+
+    #vista-inicio .juego-nombre,
+    #vista-inicio .juego-cuenta {
+      position: relative;
+      z-index: 2;
+    }
+
+    #vista-inicio .juego-nombre {
+      flex: 0 1 auto;
+      font-size: 2.3rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    #vista-inicio .juego-cuenta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-family: var(--hud);
+      font-size: 0.9rem;
+    }
+
+    .chip-hud {
+      padding: 3px 10px;
+      border: 1px solid var(--nc-amarillo);
+      background: rgba(5, 3, 8, 0.7);
+      color: var(--nc-amarillo);
+      line-height: 1.5;
+    }
+
+    /* Botones */
+    #vista-inicio .boton-principal,
+    #vista-inicio .enlace-artista,
+    #vista-inicio .enlace-artista:hover {
+      display: inline-flex;
+      align-items: center;
+      min-height: 48px;
+      padding: 8px 28px;
+      background: var(--nc-amarillo);
+      color: #0b0616;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      box-shadow: none;
+    }
+
+    #vista-inicio .boton-principal:hover,
+    #vista-inicio .enlace-artista:hover {
+      background: var(--nc-cian);
+    }
+
+    #vista-inicio .boton-video {
+      --corte: 9px;
+      --b: var(--cian);
+      --f: rgba(143, 233, 255, 0.08);
+      min-height: 44px;
+      padding: 6px 20px;
+      font-weight: 600;
+    }
+
+    #vista-inicio .boton-video:hover,
+    #vista-inicio .boton-video[aria-expanded="true"] {
+      --f: rgba(143, 233, 255, 0.2);
+    }
+
+    #vista-inicio .cancion h3 {
+      font-size: 1.35rem;
+      letter-spacing: 0.04em;
+    }
+
+    #vista-inicio .cancion-acciones {
+      font-size: 1.1rem;
+    }
+
+    /* Reproductores: el recuadro hace de filete y el video va recortado dentro */
+    #vista-inicio .cancion-video,
+    #vista-juego > .tarjeta #marco {
+      --corte: 22px;
+      padding: 1px;
+      background: rgba(143, 233, 255, 0.55);
+    }
+
+    #vista-inicio .reproductor iframe,
+    #vista-inicio .miniatura,
+    #vista-juego > .tarjeta .reproductor iframe,
+    #vista-juego > .tarjeta .miniatura {
+      --corte: 22px;
+      border: 0;
+    }
+
+    /* Lista de tareas */
+    #vista-inicio .formulario input {
+      --b: rgba(255, 255, 255, 0.3);
+      --f: rgba(255, 255, 255, 0.04);
+      min-height: 48px;
+      padding: 8px 20px;
+    }
+
+    #vista-inicio .formulario input:focus {
+      --b: var(--nc-amarillo);
+      box-shadow: inset 0 0 0 2px var(--b);
+    }
+
+    #vista-inicio .filtros button {
+      --corte: 9px;
+      --b: rgba(255, 255, 255, 0.24);
+      --f: transparent;
+      padding: 4px 20px;
+    }
+
+    #vista-inicio .filtros button:hover {
+      --b: rgba(255, 255, 255, 0.6);
+      color: #ffffff;
+    }
+
+    #vista-inicio .filtros button[aria-pressed="true"] {
+      --b: var(--cian);
+      --f: rgba(143, 233, 255, 0.14);
+      background: var(--trazo), var(--f);
+      color: var(--cian);
+      font-weight: 600;
+      box-shadow: inset 0 0 0 1px var(--b);
+    }
+
+    #vista-inicio .tarea input[type="checkbox"],
+    #vista-inicio .eliminar {
+      border-radius: 0;
+    }
+
+    /* Página de cada juego. La columna no puede crecer con su contenido: la tira de fotos
+       mide miles de píxeles de ancho y debe deslizarse dentro de ella. */
+    #vista-juego {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    #vista-juego > .tarjeta {
+      padding-top: 39px;
+      border-top: 0;
+      background:
+        linear-gradient(var(--nc-amarillo), var(--nc-amarillo)) left top / 56px 3px no-repeat,
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.34) 0 1px, transparent 1px 8px) right top / 96px 7px no-repeat,
+        linear-gradient(var(--linea), var(--linea)) left top / 100% 1px no-repeat;
+    }
+
+    #vista-juego > .tarjeta > h2 {
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    #vista-juego > .tarjeta .subtitulo-videos,
+    #vista-juego > .tarjeta .galeria-titulo {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    #vista-juego > .tarjeta p {
+      color: #c6bddc;
+    }
+
+    #vista-juego > .tarjeta p.reproductor-titulo {
+      color: var(--texto);
+      font-size: 1.1rem;
+    }
+
+    /* Aviso junto al título del video que está sonando */
+    .en-vivo {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 12px;
+      padding: 1px 10px;
+      border: 1px solid var(--linea);
+      color: #ffffff;
+      font-family: var(--hud);
+      font-size: 0.85rem;
+      vertical-align: 1px;
+    }
+
+    .en-vivo::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--nc-rojo);
+      animation: parpadeo 1.1s steps(1) infinite;
+    }
+
+    @keyframes parpadeo {
+      50% { opacity: 0; }
+    }
+
+    #vista-juego > .tarjeta .videos button {
+      min-height: 56px;
+      padding: 14px 22px;
+    }
+
+    #vista-juego > .tarjeta .videos button:hover {
+      --b: var(--cian);
+    }
+
+    #vista-juego > .tarjeta .videos button[aria-current="true"] {
+      --b: var(--cian);
+      --f: rgba(143, 233, 255, 0.12);
+      background: var(--trazo), var(--f);
+      font-weight: 600;
+      box-shadow: inset 0 0 0 1px var(--b);
+    }
+
+    #vista-juego > .tarjeta .video-num {
+      color: var(--nc-amarillo);
+      font-family: var(--hud);
+      font-size: 0.95rem;
+    }
+
+    /* Portal a la galería aparte: mismo corte; las diagonales del filete van en un pseudo-elemento */
+    #vista-juego > .tarjeta .ir-galeria {
+      --corte: 20px;
+    }
+
+    .ir-galeria::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background:
+        linear-gradient(135deg, rgba(200, 164, 92, 0.7) 0 calc(var(--corte) * 0.7071 + 1.3px), transparent 0),
+        linear-gradient(315deg, rgba(200, 164, 92, 0.7) 0 calc(var(--corte) * 0.7071 + 1.3px), transparent 0);
+      pointer-events: none;
+    }
+
+    /* Pie */
+    .contenedor > footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px 24px;
+      margin-top: 28px;
+      padding: 28px 0 48px;
+      border-top: 1px solid var(--linea);
+      font-size: 1.05rem;
+      text-align: left;
+    }
+
+    .pie-sitio {
+      font-family: var(--hud);
+      font-size: 0.9rem;
+    }
+
+    .pie-sitio::after {
+      content: "";
+      display: inline-block;
+      width: 0.6em;
+      height: 1em;
+      margin-left: 6px;
+      background: var(--nc-amarillo);
+      vertical-align: -2px;
+      animation: parpadeo 1.1s steps(1) infinite;
+    }
+
+    /* Galerías: escenario + tira. Una foto grande y, debajo, las miniaturas en una fila que se
+       desliza. Cada tema fija el filete, la sombra del marco y la tinta con las variables --esc-*. */
+    #vista-juego > .tarjeta .galeria {
+      --esc-filete: rgba(143, 233, 255, 0.55);
+      --esc-sombra: 0 0 40px rgba(150, 120, 255, 0.25);
+      --esc-tinta: var(--cian);
+      --esc-realce: #ffffff;
+      --esc-activa: 0 0 18px rgba(143, 233, 255, 0.4);
+      --esc-tenue: rgba(255, 255, 255, 0.2);
+      --esc-fuente: var(--hud);
+    }
+
+    #vista-juego[data-tema="sekiro"] > .tarjeta .galeria {
+      --esc-filete: #e0b04c;
+      --esc-sombra: 0 0 0 5px #110c0c, 0 0 0 6px #e5382c, 0 0 34px rgba(224, 176, 76, 0.3);
+      --esc-tinta: #e0b04c;
+      --esc-realce: #e5382c;
+      --esc-activa: 0 0 0 2px #110c0c, 0 0 0 3px #e5382c, 0 0 18px rgba(224, 176, 76, 0.4);
+    }
+
+    .tierras-galeria {
+      --esc-filete: var(--er-oro);
+      --esc-sombra: 0 0 0 6px #0c0a07, 0 0 0 7px rgba(200, 164, 92, 0.45), 0 0 44px rgba(200, 164, 92, 0.28);
+      --esc-tinta: var(--er-gracia);
+      --esc-realce: #ffffff;
+      --esc-activa: 0 0 22px rgba(240, 223, 168, 0.4);
+      --esc-tenue: rgba(200, 164, 92, 0.38);
+      --esc-fuente: var(--er-serif);
+    }
+
+    .escenario {
+      position: relative;
+      margin: 24px 7px 0;
+    }
+
+    .escenario-foto {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      padding: 0;
+      border: 1px solid var(--esc-filete);
+      border-radius: 0;
+      background: #000000;
+      box-shadow: var(--esc-sombra);
+      overflow: hidden;
+      cursor: zoom-in;
+    }
+
+    .escenario-foto img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .escenario-foto img.funde {
+      animation: escenario-funde 0.3s ease-out;
+    }
+
+    @keyframes escenario-funde {
+      from { opacity: 0.35; }
+    }
+
+    /* Sekiro recupera las esquinas marcadas en bermellón */
+    #vista-juego[data-tema="sekiro"] .escenario-foto::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      background:
+        linear-gradient(#e5382c, #e5382c) left top / 22px 2px no-repeat,
+        linear-gradient(#e5382c, #e5382c) left top / 2px 22px no-repeat,
+        linear-gradient(#e5382c, #e5382c) right bottom / 22px 2px no-repeat,
+        linear-gradient(#e5382c, #e5382c) right bottom / 2px 22px no-repeat;
+      pointer-events: none;
+    }
+
+    .escenario-contador {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      padding: 18px 20px 10px 48px;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.82) 45%);
+      color: var(--esc-tinta);
+      font-family: var(--esc-fuente);
+      font-size: 1.05rem;
+      letter-spacing: 0.2em;
+      line-height: 1.2;
+    }
+
+    .tierras-galeria .escenario-contador {
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+    }
+
+    .escenario-flecha {
+      position: absolute;
+      top: 50%;
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 80px;
+      padding: 0 0 6px;
+      border: 1px solid var(--esc-filete);
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.6);
+      color: var(--esc-tinta);
+      font-family: system-ui, sans-serif;
+      font-size: 2.6rem;
+      line-height: 1;
+      transform: translateY(-50%);
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .escenario-flecha:hover {
+      border-color: var(--esc-realce);
+      color: var(--esc-realce);
+    }
+
+    .escenario-anterior {
+      left: 16px;
+    }
+
+    .escenario-siguiente {
+      right: 16px;
+    }
+
+    .tira {
+      position: relative;
+      display: flex;
+      gap: 10px;
+      margin: 20px 0 0;
+      padding: 6px 4px 14px;
+      list-style: none;
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      scrollbar-width: thin;
+      scrollbar-color: var(--esc-filete) rgba(255, 255, 255, 0.12);
+    }
+
+    .tira li {
+      flex: 0 0 clamp(112px, 15vw, 168px);
+      scroll-snap-align: center;
+    }
+
+    .tira button {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      padding: 0;
+      border: 1px solid var(--esc-tenue);
+      border-radius: 0;
+      background: #000000;
+      opacity: 0.62;
+      overflow: hidden;
+      transition: opacity 0.15s ease;
+    }
+
+    .tira button:hover,
+    .tira button:focus-visible,
+    .tira button[aria-current="true"] {
+      opacity: 1;
+    }
+
+    .tira button[aria-current="true"] {
+      border-color: var(--esc-filete);
+      box-shadow: var(--esc-activa);
+    }
+
+    .tira button:focus-visible {
+      outline-offset: -4px;
+    }
+
+    .tira img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .tira-num {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      padding: 8px 14px 3px 6px;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+      color: var(--esc-tinta);
+      font-family: var(--esc-fuente);
+      font-size: 0.8rem;
+      line-height: 1;
+    }
+
+    .tierras-galeria .tira-num {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+    }
+
+    /* Avance dentro de la galería */
+    .tira-avance {
+      height: 3px;
+      background: var(--esc-tenue);
+    }
+
+    .tira-avance span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: var(--esc-filete);
+    }
+
+    @media (max-width: 800px) {
+      #vista-inicio .tarjeta {
+        padding: 35px 0 40px;
+      }
+
+      #vista-inicio .juego-nombre {
+        font-size: 1.9rem;
+      }
+
+      .escenario-flecha {
+        width: 44px;
+        height: 64px;
+        font-size: 2.2rem;
+      }
+
+      .escenario-anterior {
+        left: 6px;
+      }
+
+      .escenario-siguiente {
+        right: 6px;
+      }
+
+      .tira li {
+        flex-basis: clamp(104px, 24vw, 150px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      [data-tema="holograma"] {
+        font-size: 1.12rem;
+      }
+
+      header {
+        padding: 40px 0 64px;
+      }
+
+      .contenedor.ancho header {
+        padding: 28px 0 32px;
+      }
+
+      #titulo-sobre-mi ~ p:first-of-type {
+        font-size: 1.35rem;
+      }
+
+      #vista-inicio .juegos a {
+        --corte: 14px;
+        padding: 20px 18px 18px 26px;
+      }
+
+      #vista-inicio .cancion-video,
+      #vista-juego > .tarjeta #marco,
+      #vista-inicio .reproductor iframe,
+      #vista-juego > .tarjeta .reproductor iframe,
+      #vista-inicio .miniatura,
+      #vista-juego > .tarjeta .miniatura {
+        --corte: 14px;
+      }
+
+      .escenario-contador {
+        padding: 14px 12px 8px 36px;
+        font-size: 0.9rem;
+      }
+
+      .tierras-galeria .escenario-contador {
+        font-size: 1.05rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .emblema::after,
+      h1::before,
+      h1::after,
+      .en-vivo::before,
+      .pie-sitio::after,
+      .escenario-foto img.funde,
+      #vista-inicio .juegos a:hover .juego-barrido,
+      #vista-inicio .juegos a:focus-visible .juego-barrido {
+        animation: none;
       }
     }
 
@@ -2403,11 +3204,21 @@
   </svg>
 
   <div class="contenedor">
+    <nav class="barra-hud" data-tema="holograma" aria-label="Secciones">
+      <span class="barra-hud-sitio">donpablei.github.io/pagina</span>
+      <span class="barra-hud-enlaces">
+        <a href="#gaming">Gaming</a>
+        <a href="#musica">Música</a>
+        <a href="#tareas">Tareas</a>
+      </span>
+    </nav>
+
     <header data-tema="holograma">
       <div class="emblema">
+        <span class="emblema-mira" aria-hidden="true"></span>
         <img class="logo" src="logo/logo.png" alt="Retrato de José Pablo López en estilo neón" width="180" height="180">
       </div>
-      <h1>Pablei</h1>
+      <h1 data-texto="Pablei">Pablei</h1>
       <!-- Reflejo y base del holograma: decorativos -->
       <div class="marca-reflejo" aria-hidden="true">Pablei</div>
       <span class="marca-base" aria-hidden="true"></span>
@@ -2439,14 +3250,14 @@
       </section>
 
       <section class="tarjeta" id="musica" aria-labelledby="titulo-musica">
-        <h2 id="titulo-musica">Música original</h2>
+        <h2 id="titulo-musica" tabindex="-1">Música original</h2>
         <p>Mis canciones como Pablei. Escúchalas aquí mismo, mira sus videos o ábrelas en Spotify.</p>
         <a class="boton-principal enlace-artista" href="https://open.spotify.com/artist/5CWfvQCAdNwCMFklTBER5y" target="_blank" rel="noopener">Mi perfil de artista en Spotify ↗</a>
         <ul class="canciones" id="canciones"></ul>
       </section>
 
-      <section class="tarjeta" aria-labelledby="titulo-tareas">
-        <h2 id="titulo-tareas">Lista de tareas</h2>
+      <section class="tarjeta" id="tareas" aria-labelledby="titulo-tareas">
+        <h2 id="titulo-tareas" tabindex="-1">Lista de tareas</h2>
         <p>Se guarda en este navegador, así que sigue aquí cuando vuelvas.</p>
 
         <form class="formulario" id="formulario" autocomplete="off">
@@ -2486,7 +3297,7 @@
         <div class="reproductor" id="reproductor" hidden>
           <div id="marco"></div>
           <p class="reproductor-titulo">
-            <span id="video-titulo" aria-live="polite"></span> ·
+            <span class="en-vivo">Reproduciendo</span><span id="video-titulo" aria-live="polite"></span> ·
             <a id="video-enlace" href="https://www.youtube.com/" target="_blank" rel="noopener">Ver en YouTube</a>
           </p>
         </div>
@@ -2501,8 +3312,10 @@
 
         <div class="galeria" id="galeria" hidden>
           <h3 class="galeria-titulo">Galería <span lang="ja" aria-hidden="true">写真</span></h3>
-          <p>Fotos tomadas por mí durante el juego. Elige una para verla en grande.</p>
-          <ul class="fotos" id="fotos"></ul>
+          <p>Fotos tomadas por mí durante el juego. Elige una miniatura; toca la foto grande para verla a pantalla completa.</p>
+          <div class="escenario" id="escenario"></div>
+          <ul class="tira" id="fotos" aria-label="Miniaturas"></ul>
+          <div class="tira-avance" aria-hidden="true"><span id="avance"></span></div>
         </div>
       </section>
 
@@ -2511,7 +3324,8 @@
     </main>
 
     <footer data-tema="holograma">
-      © <span id="anio">2026</span> José Pablo López
+      <span>© <span id="anio">2026</span> José Pablo López</span>
+      <span class="pie-sitio">donpablei.github.io/pagina</span>
     </footer>
   </div>
 
@@ -2551,7 +3365,11 @@
       </div>
       <p class="tierras-nota" id="tierras-nota"></p>
     </div>
-    <ul class="tierras-fotos" id="tierras-fotos"></ul>
+    <div class="tierras-galeria">
+      <div class="escenario" id="tierras-escenario"></div>
+      <ul class="tira" id="tierras-fotos" aria-label="Miniaturas"></ul>
+      <div class="tira-avance" aria-hidden="true"><span id="tierras-avance"></span></div>
+    </div>
     <div class="tierras-pie">
       <a class="tierras-volver" id="tierras-volver-pie" href="#gaming">← Volver</a>
     </div>
@@ -2689,6 +3507,8 @@
       var sello = document.getElementById('sello');
       var galeria = document.getElementById('galeria');
       var listaFotos = document.getElementById('fotos');
+      var escenarioJuego = document.getElementById('escenario');
+      var avanceJuego = document.getElementById('avance');
       var visor = document.getElementById('visor');
       var visorImagen = document.getElementById('visor-imagen');
       var visorContador = document.getElementById('visor-contador');
@@ -2703,6 +3523,9 @@
       var tituloGaleria = document.getElementById('titulo-galeria');
       var notaGaleria = document.getElementById('tierras-nota');
       var fotosGaleria = document.getElementById('tierras-fotos');
+      var escenarioGaleria = document.getElementById('tierras-escenario');
+      var avanceGaleria = document.getElementById('tierras-avance');
+      var sinMovimiento = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
       var subtituloVideos = document.getElementById('subtitulo-videos');
       var irGaleria = document.getElementById('ir-galeria');
       var irGaleriaCuenta = document.getElementById('ir-galeria-cuenta');
@@ -2741,14 +3564,14 @@
         return null;
       }
 
-      // Resumen de lo que hay dentro de un juego: "2 videos · 30 fotos".
+      // Lo que hay dentro de un juego, en partes: ["2 videos", "30 fotos"].
       function cuenta(juego) {
         var partes = [];
         var videos = juego.videos.length;
         var fotos = juego.fotos || 0;
         if (videos > 0) partes.push(videos === 1 ? '1 video' : videos + ' videos');
         if (fotos > 0) partes.push(fotos === 1 ? '1 foto' : fotos + ' fotos');
-        return partes.length ? partes.join(' · ') : 'Próximamente';
+        return partes.length ? partes : ['Próximamente'];
       }
 
       // Efectos de sonido: cada archivo se carga una sola vez y se reinicia si se vuelve a pedir.
@@ -2783,13 +3606,33 @@
             enlace.addEventListener('click', function () { sonar(juego.sonido); });
           }
 
+          // Fondo de la tarjeta: la primera foto del juego y el barrido de luz del hover.
+          if (juego.fotos) {
+            var portada = document.createElement('img');
+            portada.className = 'juego-foto';
+            portada.src = 'fotos/' + encodeURIComponent(juego.id) + '/mini/01.jpg';
+            portada.alt = '';
+            portada.width = 480;
+            portada.height = 270;
+            enlace.appendChild(portada);
+          }
+          var barrido = document.createElement('span');
+          barrido.className = 'juego-barrido';
+          barrido.setAttribute('aria-hidden', 'true');
+          enlace.appendChild(barrido);
+
           var nombre = document.createElement('span');
           nombre.className = 'juego-nombre';
           nombre.textContent = juego.nombre;
 
           var total = document.createElement('span');
           total.className = 'juego-cuenta';
-          total.textContent = cuenta(juego);
+          cuenta(juego).forEach(function (parte) {
+            var chip = document.createElement('span');
+            chip.className = 'chip-hud';
+            chip.textContent = parte;
+            total.appendChild(chip);
+          });
 
           enlace.appendChild(nombre);
           enlace.appendChild(total);
@@ -2955,12 +3798,12 @@
         sello.textContent = (juego && juego.sello) || '';
         sello.hidden = !(juego && juego.sello);
 
-        listaFotos.textContent = '';
         // Con galería aparte, las fotos no se pintan aquí: van en su propia vista.
         var total = (juego && !juego.galeriaAparte && juego.fotos) || 0;
         galeria.hidden = total === 0;
         coleccionJuego = {
           rutas: [],
+          minis: [],
           lista: listaFotos,
           tema: tema,
           sello: juego && juego.sello,
@@ -2968,23 +3811,9 @@
         };
         for (var i = 0; i < total; i++) {
           coleccionJuego.rutas.push(rutaFoto(i, false));
-
-          var li = document.createElement('li');
-          var boton = document.createElement('button');
-          boton.type = 'button';
-          boton.dataset.indice = i;
-
-          var imagen = document.createElement('img');
-          imagen.src = rutaFoto(i, true);
-          imagen.alt = textoFoto(i);
-          imagen.loading = 'lazy';
-          imagen.width = 480;
-          imagen.height = 270;
-
-          boton.appendChild(imagen);
-          li.appendChild(boton);
-          listaFotos.appendChild(li);
+          coleccionJuego.minis.push(rutaFoto(i, true));
         }
+        pintarEscenario(escenarioJuego, avanceJuego, coleccionJuego);
       }
 
       // Números romanos para la galería de Elden Ring (1 a 3999).
@@ -3001,7 +3830,7 @@
         return texto;
       }
 
-      // Galería aparte de un juego: cuadrícula en grupos de nueve, con la primera de cada grupo en grande.
+      // Galería aparte de un juego: escenario + tira, con la numeración en romanos.
       var coleccionGaleria = null;
       function pintarGaleria(juego) {
         var volver = '#/gaming/' + encodeURIComponent(juego.id);
@@ -3010,56 +3839,175 @@
         document.getElementById('tierras-volver-pie').href = volver;
         document.getElementById('tierras-volver-pie').textContent = '← Volver a ' + juego.nombre;
         tituloGaleria.textContent = juego.nombre;
-        notaGaleria.textContent = juego.fotos + ' capturas tomadas por mí durante el viaje. Elige una para verla en grande.';
+        notaGaleria.textContent = juego.fotos + ' capturas tomadas por mí durante el viaje. Elige una miniatura; toca la foto grande para verla a pantalla completa.';
         if (galeriaPintada === juego.id) return;
         galeriaPintada = juego.id;
 
-        fotosGaleria.textContent = '';
         coleccionGaleria = {
           rutas: [],
+          minis: [],
           lista: fotosGaleria,
           tema: juego.tema,
           texto: textoFoto,
+          numero: function (indice) { return romano(indice + 1); },
           contador: function (indice, total) { return romano(indice + 1) + ' / ' + romano(total); }
         };
         for (var i = 0; i < juego.fotos; i++) {
           coleccionGaleria.rutas.push(rutaFoto(i, false));
-          // Un último grupo de menos de cinco fotos va sin foto grande, para no dejar huecos.
-          var destacada = i % 9 === 0 && juego.fotos - i >= 5;
+          coleccionGaleria.minis.push(rutaFoto(i, true));
+        }
+        pintarEscenario(escenarioGaleria, avanceGaleria, coleccionGaleria);
+      }
 
+      // "03 / 85", o lo que diga la colección (la de Elden Ring cuenta en romanos).
+      function textoContador(coleccion, indice, total) {
+        return coleccion.contador
+          ? coleccion.contador(indice, total)
+          : dosCifras(indice + 1) + ' / ' + dosCifras(total);
+      }
+
+      // Escenario + tira: una foto grande en "caja" y las miniaturas en coleccion.lista, en una fila
+      // que se desliza. Deja en la colección elegir(indice, desplazar) para cambiar la foto grande.
+      function pintarEscenario(caja, avance, coleccion) {
+        var total = coleccion.rutas.length;
+        var lista = coleccion.lista;
+        caja.textContent = '';
+        lista.textContent = '';
+        avance.style.width = '0';
+        coleccion.actual = 0;
+        if (total === 0) return;
+
+        var grande = crear('button', 'escenario-foto');
+        grande.type = 'button';
+        var imagen = document.createElement('img');
+        imagen.loading = 'lazy';
+        imagen.width = 1920;
+        imagen.height = 1080;
+        var contador = crear('span', 'escenario-contador');
+        contador.setAttribute('aria-hidden', 'true');
+        grande.appendChild(imagen);
+        grande.appendChild(contador);
+
+        var anterior = crear('button', 'escenario-flecha escenario-anterior', '‹');
+        anterior.type = 'button';
+        anterior.setAttribute('aria-label', 'Foto anterior');
+        var siguiente = crear('button', 'escenario-flecha escenario-siguiente', '›');
+        siguiente.type = 'button';
+        siguiente.setAttribute('aria-label', 'Foto siguiente');
+
+        caja.appendChild(grande);
+        caja.appendChild(anterior);
+        caja.appendChild(siguiente);
+
+        for (var i = 0; i < total; i++) {
           var li = document.createElement('li');
-          if (destacada) li.className = Math.floor(i / 9) % 2 ? 'destacada derecha' : 'destacada';
           var boton = document.createElement('button');
           boton.type = 'button';
           boton.dataset.indice = i;
+          boton.setAttribute('aria-label', coleccion.texto(i, total));
 
-          var imagen = document.createElement('img');
-          // La foto grande de cada grupo usa la copia completa: la miniatura se vería borrosa.
-          imagen.src = rutaFoto(i, !destacada);
-          imagen.alt = textoFoto(i);
-          imagen.loading = 'lazy';
-          imagen.width = destacada ? 1920 : 480;
-          imagen.height = destacada ? 1080 : 270;
+          var mini = document.createElement('img');
+          mini.src = coleccion.minis[i];
+          mini.alt = '';
+          mini.loading = 'lazy';
+          mini.width = 480;
+          mini.height = 270;
 
-          var numero = document.createElement('span');
-          numero.className = 'tierras-num';
+          var numero = crear('span', 'tira-num', coleccion.numero ? coleccion.numero(i) : dosCifras(i + 1));
           numero.setAttribute('aria-hidden', 'true');
-          numero.textContent = romano(i + 1);
 
-          boton.appendChild(imagen);
+          boton.appendChild(mini);
           boton.appendChild(numero);
           li.appendChild(boton);
-          fotosGaleria.appendChild(li);
+          lista.appendChild(li);
         }
+
+        coleccion.elegir = function (indice, desplazar) {
+          indice = (indice + total) % total;
+          var previa = lista.querySelector('button[aria-current="true"]');
+          if (previa) previa.removeAttribute('aria-current');
+          var boton = lista.querySelector('button[data-indice="' + indice + '"]');
+          boton.setAttribute('aria-current', 'true');
+
+          if (coleccion.actual !== indice || !imagen.getAttribute('src')) {
+            imagen.classList.remove('funde');
+            imagen.src = coleccion.rutas[indice];
+            if (desplazar) {
+              void imagen.offsetWidth;    // reinicia el fundido
+              imagen.classList.add('funde');
+            }
+          }
+          coleccion.actual = indice;
+          imagen.alt = coleccion.texto(indice, total);
+          grande.setAttribute('aria-label', 'Ver a pantalla completa: ' + coleccion.texto(indice, total));
+          contador.textContent = textoContador(coleccion, indice, total);
+          avance.style.width = ((indice + 1) / total * 100) + '%';
+
+          if (desplazar) {
+            // Centra la miniatura en la tira y adelanta la carga de las fotos vecinas.
+            var celda = boton.parentNode;
+            lista.scrollTo({
+              left: celda.offsetLeft - (lista.clientWidth - celda.offsetWidth) / 2,
+              behavior: sinMovimiento ? 'auto' : 'smooth'
+            });
+            [indice - 1, indice + 1].forEach(function (vecina) {
+              new Image().src = coleccion.rutas[(vecina + total) % total];
+            });
+          }
+        };
+        coleccion.elegir(0, false);
       }
+
+      // Clics, flechas del teclado y deslizamiento de un escenario y su tira. Se enlaza una sola vez
+      // por galería; "coleccion" es una función porque la colección cambia con cada juego.
+      function enlazarEscenario(caja, lista, coleccion) {
+        caja.addEventListener('click', function (evento) {
+          var actual = coleccion();
+          if (!actual || !actual.elegir) return;
+          if (evento.target.closest('.escenario-anterior')) actual.elegir(actual.actual - 1, true);
+          else if (evento.target.closest('.escenario-siguiente')) actual.elegir(actual.actual + 1, true);
+          else if (evento.target.closest('.escenario-foto')) abrirVisor(actual, actual.actual);
+        });
+
+        lista.addEventListener('click', function (evento) {
+          var boton = evento.target.closest('button[data-indice]');
+          var actual = coleccion();
+          if (boton && actual && actual.elegir) actual.elegir(Number(boton.dataset.indice), true);
+        });
+
+        function conFlechas(evento) {
+          var paso = evento.key === 'ArrowLeft' ? -1 : evento.key === 'ArrowRight' ? 1 : 0;
+          var actual = coleccion();
+          if (!paso || !actual || !actual.elegir) return;
+          evento.preventDefault();
+          actual.elegir(actual.actual + paso, true);
+          // Si el foco estaba en la tira, acompaña a la miniatura elegida.
+          if (lista.contains(evento.target)) {
+            lista.querySelector('button[aria-current="true"]').focus({ preventScroll: true });
+          }
+        }
+        caja.addEventListener('keydown', conFlechas);
+        lista.addEventListener('keydown', conFlechas);
+
+        // En pantallas táctiles: deslizar sobre la foto grande cambia de foto.
+        var inicioX = null;
+        caja.addEventListener('touchstart', function (evento) {
+          inicioX = evento.touches.length === 1 ? evento.touches[0].clientX : null;
+        }, { passive: true });
+        caja.addEventListener('touchend', function (evento) {
+          var actual = coleccion();
+          if (inicioX === null || !actual || !actual.elegir) return;
+          var recorrido = evento.changedTouches[0].clientX - inicioX;
+          inicioX = null;
+          if (Math.abs(recorrido) > 50) actual.elegir(actual.actual + (recorrido < 0 ? 1 : -1), true);
+        });
+      }
+
+      enlazarEscenario(escenarioJuego, listaFotos, function () { return coleccionJuego; });
+      enlazarEscenario(escenarioGaleria, fotosGaleria, function () { return coleccionGaleria; });
 
       irGaleria.addEventListener('click', function () {
         if (juegoActual) sonar(juegoActual.sonidoGaleria);
-      });
-
-      fotosGaleria.addEventListener('click', function (evento) {
-        var boton = evento.target.closest('button[data-indice]');
-        if (boton) abrirVisor(coleccionGaleria, Number(boton.dataset.indice));
       });
 
       // El visor sirve para cualquier colección de fotos:
@@ -3070,9 +4018,7 @@
         fotoActual = (indice + total) % total;
         visorImagen.src = rutas[fotoActual];
         visorImagen.alt = coleccionVisor.texto(fotoActual, total);
-        visorContador.textContent = coleccionVisor.contador
-          ? coleccionVisor.contador(fotoActual, total)
-          : dosCifras(fotoActual + 1) + ' / ' + dosCifras(total);
+        visorContador.textContent = textoContador(coleccionVisor, fotoActual, total);
 
         // Se adelanta la carga de las vecinas para que el paso sea inmediato.
         [fotoActual - 1, fotoActual + 1].forEach(function (vecina) {
@@ -3401,11 +4347,6 @@
         video.scrollIntoView({ block: 'nearest' });
       });
 
-      listaFotos.addEventListener('click', function (evento) {
-        var boton = evento.target.closest('button[data-indice]');
-        if (boton) abrirVisor(coleccionJuego, Number(boton.dataset.indice));
-      });
-
       document.getElementById('visor-anterior').addEventListener('click', function () {
         mostrarFoto(fotoActual - 1);
       });
@@ -3442,10 +4383,27 @@
       visor.addEventListener('close', function () {
         document.documentElement.style.overflow = '';
         visorImagen.removeAttribute('src');
+        if (coleccionVisor && coleccionVisor.elegir) coleccionVisor.elegir(fotoActual, true);
         var miniatura = coleccionVisor &&
           coleccionVisor.lista.querySelector('button[data-indice="' + fotoActual + '"]');
         if (miniatura && miniatura.offsetParent) miniatura.focus();
       });
+
+      // Las secciones del inicio entran al asomar en pantalla. Sin movimiento, o sin observador,
+      // nacen visibles: la clase que las oculta solo se pone aquí.
+      if (!sinMovimiento && 'IntersectionObserver' in window) {
+        var observador = new IntersectionObserver(function (entradas) {
+          entradas.forEach(function (entrada) {
+            if (!entrada.isIntersecting) return;
+            entrada.target.classList.add('visible');
+            observador.unobserve(entrada.target);
+          });
+        }, { rootMargin: '0px 0px -8% 0px' });
+        document.documentElement.classList.add('con-entrada');
+        Array.prototype.forEach.call(vistaInicio.querySelectorAll('.tarjeta'), function (seccion) {
+          observador.observe(seccion);
+        });
+      }
 
       window.addEventListener('hashchange', enrutar);
       pintarJuegos();
