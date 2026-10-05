@@ -2582,6 +2582,7 @@
       // tema (marcos de las fotos de su galería y del visor) y sello (texto del sello decorativo).
       // sonido (archivo de sonidos/ que suena al elegir el juego en el inicio; cada video admite el suyo).
       // galeriaAparte (true: las fotos no van bajo los videos, sino en #/gaming/<id>/galeria, a pantalla completa).
+      // sonidoGaleria (suena al pulsar «Ir a Galería» en los juegos con galería aparte).
       var JUEGOS = [
         {
           id: 'sekiro',
@@ -2655,6 +2656,7 @@
           nombre: 'Elden Ring',
           tema: 'elden-ring',
           sonido: 'sonidos/eldenring-frasco.mp3',
+          sonidoGaleria: 'sonidos/eldenring-galeria.mp3',
           fotos: 68,
           galeriaAparte: true,
           videos: [
@@ -3050,6 +3052,10 @@
         }
       }
 
+      irGaleria.addEventListener('click', function () {
+        if (juegoActual) sonar(juegoActual.sonidoGaleria);
+      });
+
       fotosGaleria.addEventListener('click', function (evento) {
         var boton = evento.target.closest('button[data-indice]');
         if (boton) abrirVisor(coleccionGaleria, Number(boton.dataset.indice));
@@ -3275,6 +3281,7 @@
           irGaleria.href = '#/gaming/' + encodeURIComponent(juego.id) + '/galeria';
           irGaleria.style.backgroundImage = 'url("' + rutaFoto(0, true) + '")';
           irGaleriaCuenta.textContent = juego.fotos + ' fotos';
+          prepararSonido(juego.sonidoGaleria);
         }
 
         if (!juego) {
