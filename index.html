@@ -2258,12 +2258,13 @@
       line-height: 1.55;
     }
 
-    /* Líneas de escaneo sobre toda la página; por debajo del z-index 11 del bloque del anime */
+    /* Líneas de escaneo del fondo. Van detrás de todo el contenido (z-index negativo) para que
+       fotos y videos se vean limpios; nunca encima de ellos. */
     body::after {
       content: "";
       position: fixed;
       inset: 0;
-      z-index: 5;
+      z-index: -1;
       background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.028) 0 1px, transparent 1px 4px);
       pointer-events: none;
     }
