@@ -4148,6 +4148,548 @@
         transform: none;
       }
     }
+
+    /* ===== Propuesta «Cine» (5 nov 2026): la presentación del inicio la cargan mis capturas ======
+       Una toma a pantalla completa (Sekiro y Elden Ring alternados) que se funde con la siguiente,
+       la marca PABLEI abajo, el lema y dos acciones, y una ficha de cristal con la toma en pantalla.
+       La barra superior pasa a ser una capa translúcida. Va al final para mandar sobre PABLEI // OS. */
+    :root {
+      --cine-tinta: #f3f0ea;
+      --cine-suave: rgba(243, 240, 234, 0.74);
+      --cine-tenue: rgba(243, 240, 234, 0.5);
+      --cine-cristal: rgba(12, 10, 18, 0.46);
+      --cine-filo: rgba(255, 255, 255, 0.14);
+      --cine-toma: 7s;
+      --cine-funde: 1.4s;
+    }
+
+    ::selection {
+      background: rgba(252, 238, 10, 0.32);
+      color: #ffffff;
+    }
+
+    /* Barra: cristal sobre lo que pasa por debajo, a todo el ancho de la ventana */
+    .contenedor:has(> #vista-inicio:not([hidden])) > .barra-hud {
+      background: transparent;
+      box-shadow: none;
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+      flex-wrap: nowrap;
+    }
+
+    .contenedor:has(> #vista-inicio:not([hidden])) > .barra-hud::before {
+      content: "";
+      position: absolute;
+      inset: 0 calc(50% - 50vw);
+      z-index: -1;
+      background: rgba(5, 3, 8, 0.52);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      backdrop-filter: blur(18px) saturate(160%);
+    }
+
+    .contenedor:has(> #vista-inicio:not([hidden])) .barra-hud-sitio {
+      color: var(--cine-tinta);
+      white-space: nowrap;
+    }
+
+    .contenedor:has(> #vista-inicio:not([hidden])) .barra-hud-enlaces {
+      flex-wrap: nowrap;
+      align-items: center;
+    }
+
+    .contenedor:has(> #vista-inicio:not([hidden])) .barra-hud a {
+      color: var(--cine-suave);
+      white-space: nowrap;
+      transition: color 0.15s ease;
+    }
+
+    .contenedor:has(> #vista-inicio:not([hidden])) .barra-hud a:hover,
+    .contenedor:has(> #vista-inicio:not([hidden])) .barra-hud a[aria-current="true"] {
+      color: var(--nc-amarillo);
+    }
+
+    /* La presentación ocupa la primera pantalla; la barra (≈56 px) queda encima */
+    .os-hero {
+      justify-content: flex-start;
+      gap: clamp(20px, 3vh, 32px);
+      min-height: max(620px, calc(100svh - 58px));
+      padding: 28px 0 clamp(28px, 4.5vh, 48px);
+    }
+
+    .os-fondo {
+      background: var(--vacio);
+    }
+
+    .os-cine,
+    .os-toma {
+      position: absolute;
+      inset: 0;
+    }
+
+    .os-toma {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: var(--pos, 50% 50%);
+      opacity: 0;
+      transform: scale(1.06);
+      transition: opacity var(--cine-funde) ease, transform calc(var(--cine-toma) + var(--cine-funde)) cubic-bezier(0.33, 0, 0.2, 1);
+      will-change: opacity, transform;
+    }
+
+    .os-toma.activa {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Telones: abajo funde con el fondo de la página, a la izquierda protege el texto */
+    .os-cine {
+      z-index: 0;
+    }
+
+    .os-fondo::before,
+    .os-fondo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .os-fondo::before {
+      background:
+        linear-gradient(0deg, var(--vacio) 0%, rgba(5, 3, 8, 0.82) 17%, rgba(5, 3, 8, 0.36) 32%, rgba(5, 3, 8, 0.04) 50%, transparent 78%, rgba(5, 3, 8, 0.32) 100%),
+        linear-gradient(90deg, rgba(5, 3, 8, 0.42) 0%, transparent 40%);
+    }
+
+    /* Grano fino: une las capturas con la interfaz y evita bandas en los degradados */
+    .os-fondo::after {
+      opacity: 0.06;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+    }
+
+    .os-estado {
+      color: var(--cine-suave);
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+    }
+
+    .os-estado time {
+      color: var(--cine-tinta);
+    }
+
+    .os-pie-hero {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(20px, 3vh, 32px);
+    }
+
+    /* Marca: blanco hueso con un leve degradado vertical, sin el arcoíris encima de la foto */
+    /* Arriba, sobre el cielo de las capturas, para no tapar a los personajes */
+    .os-marca {
+      width: fit-content;
+      margin-bottom: auto;
+      font-size: clamp(4.5rem, 36cqw, 27rem);
+      letter-spacing: -0.01em;
+      line-height: 0.78;
+      text-shadow: none;
+    }
+
+    .os-holo {
+      background: linear-gradient(180deg, #ffffff 0%, var(--cine-tinta) 58%, #c9c4bb 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      filter: drop-shadow(0 16px 38px rgba(0, 0, 0, 0.35));
+    }
+
+    /* El glitch ya no se repite: pasa una vez al terminar el arranque y al pasar el cursor */
+    .os-ga,
+    .os-gb {
+      animation: none;
+    }
+
+    .os-arranque .os-ga,
+    .os-marca:hover .os-ga {
+      animation: os-glitch-a 1.2s steps(1) 0s 1;
+    }
+
+    .os-arranque .os-gb,
+    .os-marca:hover .os-gb {
+      animation: os-glitch-b 1.2s steps(1) 0s 1;
+    }
+
+    .os-arranque .os-ga,
+    .os-arranque .os-gb {
+      animation-delay: 1.15s;
+    }
+
+    .os-sufijo {
+      position: absolute;
+      top: calc(100% + 0.06em);
+      right: 0.02em;
+      padding: 4px 10px 2px;
+      background: var(--nc-amarillo);
+      color: #0b0616;
+      font-family: var(--hud);
+      font-size: clamp(0.85rem, 1.5cqw, 1.15rem);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      line-height: 1.3;
+    }
+
+    .os-arranque .os-sufijo {
+      animation: os-sube 0.4s var(--os-sale) 1.75s both;
+    }
+
+    .os-hero-fila {
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+      gap: 32px 48px;
+      align-items: end;
+    }
+
+    .os-hero-texto {
+      gap: 22px;
+    }
+
+    #vista-inicio .os-lema {
+      display: block;
+      max-width: 30em;
+      margin: 0;
+      color: var(--cine-tinta);
+      font-size: clamp(1.2rem, 1.9cqw, 1.5rem);
+      font-weight: 500;
+      line-height: 1.35;
+      letter-spacing: 0;
+      text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+    }
+
+    .os-acciones {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 16px;
+    }
+
+    #vista-inicio .os-acciones .boton-principal {
+      min-height: 48px;
+      margin: 0;
+      padding: 12px 26px;
+    }
+
+    /* Botón secundario: el mismo cristal que la ficha, con la esquina cortada de la casa */
+    .os-boton-cristal {
+      --corte: 12px;
+      display: inline-flex;
+      align-items: center;
+      min-height: 48px;
+      padding: 12px 24px;
+      background:
+        linear-gradient(135deg, var(--cine-filo) 0 calc(var(--corte) * 0.7071 + 1px), transparent 0),
+        linear-gradient(315deg, var(--cine-filo) 0 calc(var(--corte) * 0.7071 + 1px), transparent 0),
+        var(--cine-cristal);
+      box-shadow: inset 0 0 0 1px var(--cine-filo);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      backdrop-filter: blur(16px) saturate(140%);
+      clip-path: polygon(var(--corte) 0, 100% 0, 100% calc(100% - var(--corte)), calc(100% - var(--corte)) 100%, 0 100%, 0 var(--corte));
+      color: var(--cine-tinta);
+      font-family: var(--futura);
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      transition: background-color 0.15s ease, transform 0.14s var(--os-sale);
+    }
+
+    .os-boton-cristal:hover {
+      background-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .os-boton-cristal:active {
+      transform: scale(0.97);
+    }
+
+    .os-boton-cristal:focus-visible {
+      outline: 2px solid var(--nc-amarillo);
+      outline-offset: -4px;
+    }
+
+    /* Ficha de la toma */
+    .os-ficha-toma {
+      --corte: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 16px 18px 14px;
+      background:
+        linear-gradient(135deg, var(--cine-filo) 0 calc(var(--corte) * 0.7071 + 1px), transparent 0),
+        linear-gradient(315deg, var(--cine-filo) 0 calc(var(--corte) * 0.7071 + 1px), transparent 0),
+        var(--cine-cristal);
+      box-shadow: inset 0 0 0 1px var(--cine-filo);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
+      backdrop-filter: blur(18px) saturate(140%);
+      clip-path: polygon(var(--corte) 0, 100% 0, 100% calc(100% - var(--corte)), calc(100% - var(--corte)) 100%, 0 100%, 0 var(--corte));
+    }
+
+    #vista-inicio .os-toma-dato {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin: 0;
+    }
+
+    .os-toma-n {
+      color: var(--cine-tenue);
+      font-family: var(--hud);
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .os-toma-enlace {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 32px;
+      color: var(--cine-tinta);
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      text-decoration: none;
+    }
+
+    .os-toma-enlace span {
+      color: var(--nc-amarillo);
+      transition: transform 0.2s var(--os-sale);
+    }
+
+    .os-toma-enlace:hover span,
+    .os-toma-enlace:focus-visible span {
+      transform: translateX(4px);
+    }
+
+    .os-toma-controles {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .os-toma-avance {
+      flex: 1;
+      height: 2px;
+      margin-right: 8px;
+      background: rgba(255, 255, 255, 0.16);
+      overflow: hidden;
+    }
+
+    /* El avance marca el tiempo de cada toma; al terminar su animación pasa a la siguiente */
+    #os-toma-avance {
+      display: block;
+      height: 100%;
+      background: var(--holo);
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    #os-toma-avance.corre {
+      animation: os-toma-corre var(--cine-toma) linear forwards;
+    }
+
+    .os-ficha-toma.en-pausa #os-toma-avance {
+      animation-play-state: paused;
+    }
+
+    @keyframes os-toma-corre {
+      to { transform: scaleX(1); }
+    }
+
+    .os-toma-boton {
+      display: inline-grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      margin: -8px 0;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: var(--cine-suave);
+      cursor: pointer;
+      transition: color 0.15s ease, transform 0.12s var(--os-sale);
+    }
+
+    .os-toma-boton:hover {
+      color: var(--cine-tinta);
+    }
+
+    .os-toma-boton:active {
+      transform: scale(0.9);
+    }
+
+    .os-toma-boton:focus-visible {
+      outline: 2px solid var(--nc-amarillo);
+      outline-offset: -6px;
+    }
+
+    .os-toma-boton .icono-seguir,
+    .os-ficha-toma.en-pausa .os-toma-boton .icono-pausa {
+      display: none;
+    }
+
+    .os-ficha-toma.en-pausa .os-toma-boton .icono-seguir {
+      display: block;
+    }
+
+    /* Lecturas: una franja serena bajo la presentación, en el color del texto */
+    .os-lecturas {
+      margin: 0;
+      padding-bottom: 8px;
+    }
+
+    .os-lecturas dt,
+    .os-lecturas .os-lectura-rosa dt {
+      color: var(--texto-suave);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+
+    .os-lecturas b {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .os-lecturas dd span {
+      color: var(--texto-suave);
+      font-size: 1.05rem;
+    }
+
+    /* Retrato: ahora abre el expediente de «Sobre mí» */
+    #sobre-mi .os-retrato {
+      width: 150px;
+      height: 150px;
+      margin: 18px 18px 52px;
+    }
+
+    #sobre-mi .os-anillo {
+      inset: -16px;
+    }
+
+    #sobre-mi .os-retrato-pie {
+      top: calc(100% + 26px);
+      right: auto;
+      gap: 18px;
+    }
+
+    @media (max-width: 800px) {
+      .os-hero {
+        min-height: max(560px, calc(100svh - 58px));
+      }
+
+      .os-hero-fila {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+      }
+
+      .os-ficha-toma {
+        max-width: 420px;
+      }
+
+      .os-fondo::before {
+        background: linear-gradient(0deg, var(--vacio) 0%, rgba(5, 3, 8, 0.94) 38%, rgba(5, 3, 8, 0.72) 52%, rgba(5, 3, 8, 0.2) 66%, rgba(5, 3, 8, 0.1) 82%, rgba(5, 3, 8, 0.6) 100%);
+      }
+
+      .os-toma {
+        object-position: var(--pos-movil, var(--pos, 50% 50%));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .contenedor:has(> #vista-inicio:not([hidden])) > .barra-hud {
+        font-size: 0.82rem;
+        letter-spacing: 0.02em;
+      }
+
+      .contenedor:has(> #vista-inicio:not([hidden])) .barra-hud-enlaces {
+        justify-content: space-between;
+        width: 100%;
+        gap: 0 4px;
+      }
+
+      /* «Reiniciar» se queda en su ícono para que la barra quepa en una línea */
+      .os-reinicio .os-reinicio-texto {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      .contenedor:has(> #vista-inicio:not([hidden])) .os-reinicio {
+        justify-content: center;
+        min-width: 44px;
+      }
+
+      .os-marca {
+        font-size: clamp(4rem, 34cqw, 9rem);
+      }
+
+      .os-sufijo {
+        font-size: 0.72rem;
+      }
+
+      .os-acciones > a {
+        flex: 1 1 auto;
+        justify-content: center;
+      }
+
+      .os-ficha-toma {
+        max-width: none;
+      }
+
+      #sobre-mi .os-retrato {
+        width: 120px;
+        height: 120px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .os-toma {
+        transform: none !important;
+        transition: opacity 0.2s ease;
+      }
+
+      .os-arranque .os-sufijo,
+      .os-arranque .os-ga,
+      .os-arranque .os-gb,
+      .os-marca:hover .os-ga,
+      .os-marca:hover .os-gb {
+        animation: none !important;
+      }
+
+      #os-toma-avance {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-transparency: reduce) {
+      .contenedor:has(> #vista-inicio:not([hidden])) > .barra-hud::before,
+      .os-ficha-toma,
+      .os-boton-cristal {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        background-color: #0c0a12;
+      }
+
+      .contenedor:has(> #vista-inicio:not([hidden])) > .barra-hud::before {
+        background: #050308;
+      }
+    }
+
+    @media (prefers-contrast: more) {
+      .os-ficha-toma,
+      .os-boton-cristal {
+        --cine-filo: rgba(255, 255, 255, 0.6);
+        background-color: #0c0a12;
+      }
+    }
   </style>
   <!-- Arranque de PABLEI // OS: una vez por sesión, solo al entrar por el inicio y con movimiento
        permitido. La clase se pone antes de pintar para que la página no asome y luego se tape. -->
@@ -4187,7 +4729,7 @@
         <!-- Vuelve a correr el arranque; solo se ve en el inicio -->
         <button type="button" class="os-reinicio" id="os-reinicio">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 1.5v5"></path><path d="M4.2 3.6a5.5 5.5 0 1 0 7.6 0"></path></svg>
-          Reiniciar
+          <span class="os-reinicio-texto">Reiniciar</span>
         </button>
       </span>
       <span class="os-progreso" aria-hidden="true"><span id="os-progreso"></span></span>
@@ -4213,11 +4755,12 @@
       <!-- Presentación PABLEI // OS. En el inicio sustituye a la cabecera de arriba, que sigue
            siendo la de la página de cada juego. -->
       <section class="os-hero" id="os-hero" aria-label="Presentación">
+        <!-- Fondo de cine: mis capturas a pantalla completa, una tras otra. Las tomas las pinta
+             pintarTomas() a partir de TOMAS; la primera ya viene aquí para que se vea sin esperar. -->
         <div class="os-fondo" aria-hidden="true">
-          <span class="os-luz os-luz-a"></span>
-          <span class="os-luz os-luz-b"></span>
-          <span class="os-reticula"></span>
-          <canvas class="os-campo" id="os-campo"></canvas>
+          <div class="os-cine" id="os-cine">
+            <img class="os-toma activa" src="fotos/sekiro/77.jpg" alt="" width="1920" height="1080" fetchpriority="high" decoding="async">
+          </div>
         </div>
 
         <div class="os-estado os-sube" style="--i: 0">
@@ -4229,37 +4772,39 @@
           <span class="os-holo" aria-hidden="true">PABLEI</span>
           <span class="os-ga" aria-hidden="true">PABLEI</span>
           <span class="os-gb" aria-hidden="true">PABLEI</span>
+          <span class="os-sufijo" aria-hidden="true">// OS</span>
         </p>
 
-        <div class="os-hero-fila">
-          <div class="os-hero-texto">
-            <div class="os-lema os-sube" style="--i: 1">
-              <span class="os-etiqueta" aria-hidden="true">// OS</span>
-              <p>Un testimonio digital de mi paso por este mundo incierto y vertiginoso, que ahora además alberga inteligencias artificiales.</p>
+        <div class="os-pie-hero">
+          <div class="os-hero-fila">
+            <div class="os-hero-texto">
+              <p class="os-lema os-sube" style="--i: 1">Un testimonio digital de mi paso por este mundo incierto y vertiginoso, que ahora además alberga inteligencias artificiales.</p>
+              <div class="os-acciones os-sube" style="--i: 2">
+                <a class="boton-principal" href="#gaming">Elegir misión</a>
+                <a class="os-boton-cristal" href="#musica">Escuchar mi música</a>
+              </div>
             </div>
-            <ul class="chips os-sube" style="--i: 2" aria-label="A qué me dedico">
-              <li>Gestión de sitios de e-commerce</li>
-              <li>Programación</li>
-              <li>IA</li>
-            </ul>
-            <div class="os-sube" style="--i: 3"><a class="boton-principal" href="#gaming">Elegir misión</a></div>
-          </div>
 
-          <div class="os-retrato os-sube" style="--i: 2">
-            <span class="os-anillo" aria-hidden="true"></span>
-            <img class="os-foto" src="logo/logo.png" alt="Retrato de Pablei en estilo neón" width="260" height="260">
-            <span class="os-mira" aria-hidden="true"></span>
-            <p class="os-retrato-pie" aria-hidden="true"><span>@donpablei</span><span>identidad confirmada</span></p>
+            <!-- Ficha de la toma en pantalla: de qué juego es, a qué galería lleva y cuánto falta
+                 para la siguiente. Se pausa sola fuera de pantalla y con movimiento reducido. -->
+            <div class="os-ficha-toma os-sube" style="--i: 3" id="os-ficha-toma">
+              <p class="os-toma-dato">
+                <span class="os-toma-n" id="os-toma-n">01 / 06</span>
+                <a class="os-toma-enlace" id="os-toma-enlace" href="#/gaming/sekiro">Sekiro · captura 77 <span aria-hidden="true">→</span></a>
+              </p>
+              <div class="os-toma-controles">
+                <span class="os-toma-avance" aria-hidden="true"><span id="os-toma-avance"></span></span>
+                <button type="button" class="os-toma-boton" id="os-toma-pausa" aria-label="Pausar las capturas" aria-pressed="false">
+                  <svg class="icono-pausa" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 2h3v10H3zM8 2h3v10H8z" fill="currentColor"/></svg>
+                  <svg class="icono-seguir" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg>
+                </button>
+                <button type="button" class="os-toma-boton" id="os-toma-siguiente" aria-label="Siguiente captura">
+                  <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 1.5v11l7-5.5zM10 2h2.5v10H10z" fill="currentColor"/></svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-
-        <!-- Las cifras y las listas las escribe pintarLecturas() a partir de JUEGOS y CANCIONES -->
-        <dl class="os-lecturas os-sube" style="--i: 4">
-          <div><dt>Juegos</dt><dd><b id="os-n-juegos">0</b><span id="os-d-juegos"></span></dd></div>
-          <div><dt>Videos</dt><dd><b id="os-n-videos">0</b><span>Jefes vencidos, en YouTube</span></dd></div>
-          <div><dt>Capturas</dt><dd><b id="os-n-fotos">0</b><span>Tomadas por mí dentro del juego</span></dd></div>
-          <div class="os-lectura-rosa"><dt>Canciones</dt><dd><b id="os-n-canciones">0</b><span id="os-d-canciones"></span></dd></div>
-        </dl>
 
         <div class="os-boot" aria-hidden="true">
           <div class="os-boot-linea" style="--i: 0">pablei.os, iniciando</div>
@@ -4269,6 +4814,14 @@
           <div class="os-boot-barra"><span></span></div>
         </div>
       </section>
+
+      <!-- Las cifras y las listas las escribe pintarLecturas() a partir de JUEGOS y CANCIONES -->
+      <dl class="os-lecturas" aria-label="Lo que hay en el sitio">
+        <div><dt>Juegos</dt><dd><b id="os-n-juegos">0</b><span id="os-d-juegos"></span></dd></div>
+        <div><dt>Videos</dt><dd><b id="os-n-videos">0</b><span>Jefes vencidos, en YouTube</span></dd></div>
+        <div><dt>Capturas</dt><dd><b id="os-n-fotos">0</b><span>Tomadas por mí dentro del juego</span></dd></div>
+        <div><dt>Canciones</dt><dd><b id="os-n-canciones">0</b><span id="os-d-canciones"></span></dd></div>
+      </dl>
 
       <section class="tarjeta os-seccion" id="gaming" aria-labelledby="titulo-gaming">
         <div class="os-cabeza">
@@ -4295,6 +4848,13 @@
         </div>
         <div class="os-exp">
           <div class="os-exp-texto">
+            <!-- Retrato en mira: antes vivía en la presentación -->
+            <div class="os-retrato">
+              <span class="os-anillo" aria-hidden="true"></span>
+              <img class="os-foto" src="logo/logo.png" alt="Retrato de Pablei en estilo neón" width="260" height="260" loading="lazy">
+              <span class="os-mira" aria-hidden="true"></span>
+              <p class="os-retrato-pie" aria-hidden="true"><span>@donpablei</span><span>identidad confirmada</span></p>
+            </div>
             <p class="os-exp-grande">
               Me dedico a la gestión de sitios de <span style="white-space: nowrap">e-commerce</span>: cuido que las tiendas en línea
               funcionen bien, que el catálogo esté al día y que comprar sea sencillo.
@@ -4468,12 +5028,13 @@
           nombre: 'Sekiro',
           tema: 'sekiro',
           sello: '隻狼',
-          logro: 'Isshin y Búho, sin recibir golpe',
+          logro: 'Isshin, Búho y Genichiro, sin recibir golpe',
           sonido: 'sonidos/sekiro-choque.mp3',
           fotos: 85,
           videos: [
             { titulo: 'ISSHIN: JEFE FINAL - NO HIT (RECUERDO DE FUERZA)', youtube: 'clfXQU7W5jQ', sonido: 'sonidos/sekiro-isshin.mp3' },
-            { titulo: 'PADRE INTERIOR (BUHO) - NO HIT (RECUERDO DE FUERZA)', youtube: 'cV6uGKEgM8A', sonido: 'sonidos/sekiro-buho.mp3' }
+            { titulo: 'PADRE INTERIOR (BUHO) - NO HIT (RECUERDO DE FUERZA)', youtube: 'cV6uGKEgM8A', sonido: 'sonidos/sekiro-buho.mp3' },
+            { titulo: 'GENICHIRO ASHINA - NO HIT (NG+5, SIN AMULETO DE KURO)', youtube: 'IsE_vuWQBx8', sonido: 'sonidos/sekiro-genichiro.mp3' }
           ],
           // Bloque sobre el anime, debajo de la galería. Debe ir después de "fotos" del juego.
           // En los párrafos, un trozo ['em', texto] va en cursiva y ['strong', texto] en negrita.
@@ -5696,121 +6257,128 @@
         });
       }
 
-      // Campo de partículas de la presentación: puntos que derivan y se enlazan entre sí y con el
-      // cursor. Se detiene cuando la presentación sale de pantalla o la pestaña pierde el foco.
+      // Tomas de la presentación: mis capturas a pantalla completa, alternando juegos.
+      // n es el número de la foto en fotos/<juego>/; pos y posMovil encuadran al personaje
+      // (en el teléfono la foto se recorta a lo alto). La primera ya viene en el HTML.
+      var TOMAS = [
+        { juego: 'sekiro', n: 77, pos: '50% 62%', posMovil: '30% 50%' },
+        { juego: 'elden-ring', n: 14, pos: '50% 38%', posMovil: '46% 50%' },
+        { juego: 'sekiro', n: 5, pos: '50% 30%', posMovil: '78% 50%' },
+        { juego: 'elden-ring', n: 26, pos: '50% 34%', posMovil: '52% 50%' },
+        { juego: 'sekiro', n: 81, pos: '50% 40%', posMovil: '36% 50%' },
+        { juego: 'elden-ring', n: 79, pos: '50% 48%', posMovil: '60% 50%' }
+      ];
+
       (function () {
-        var lienzo = document.getElementById('os-campo');
-        var tinta = lienzo.getContext && lienzo.getContext('2d');
-        if (sinMovimiento || !tinta || !window.requestAnimationFrame || !('IntersectionObserver' in window)) return;
+        var cine = document.getElementById('os-cine');
+        var ficha = document.getElementById('os-ficha-toma');
+        var avance = document.getElementById('os-toma-avance');
+        var numero = document.getElementById('os-toma-n');
+        var enlace = document.getElementById('os-toma-enlace');
+        var botonPausa = document.getElementById('os-toma-pausa');
+        var botonSiguiente = document.getElementById('os-toma-siguiente');
+        var imagenes = [];
+        var actual = 0;
+        var pedida = 0;
+        var pausaElegida = false;
+        var aLaVista = true;
 
-        var puntos = [];
-        var ancho = 0;
-        var alto = 0;
-        var cursor = null;
-        var aLaVista = false;
-        var corriendo = false;
-
-        function medir() {
-          var caja = lienzo.getBoundingClientRect();
-          var densidad = Math.min(window.devicePixelRatio || 1, 2);
-          ancho = caja.width;
-          alto = caja.height;
-          lienzo.width = Math.round(ancho * densidad);
-          lienzo.height = Math.round(alto * densidad);
-          tinta.setTransform(densidad, 0, 0, densidad, 0, 0);
-
-          var cuantos = Math.max(24, Math.min(90, Math.round(ancho * alto / 16000)));
-          puntos = [];
-          for (var i = 0; i < cuantos; i++) {
-            puntos.push({
-              x: Math.random() * ancho,
-              y: Math.random() * alto,
-              vx: (Math.random() - 0.5) * 0.24,
-              vy: (Math.random() - 0.5) * 0.24,
-              lado: Math.random() < 0.25 ? 3 : 2,
-              rosa: Math.random() < 0.3
-            });
-          }
+        function archivo(toma) {
+          return 'fotos/' + toma.juego + '/' + dosCifras(toma.n) + '.jpg';
         }
 
-        function cuadro() {
-          if (!aLaVista || document.hidden || vistaInicio.hidden) {
-            corriendo = false;
-            return;
+        TOMAS.forEach(function (toma, i) {
+          var img = i === 0 ? cine.querySelector('.os-toma') : document.createElement('img');
+          if (i > 0) {
+            img.className = 'os-toma';
+            img.alt = '';
+            img.width = 1920;
+            img.height = 1080;
+            img.decoding = 'async';
+            cine.appendChild(img);
           }
-          tinta.clearRect(0, 0, ancho, alto);
-
-          for (var i = 0; i < puntos.length; i++) {
-            var p = puntos[i];
-            p.x += p.vx;
-            p.y += p.vy;
-            if (p.x < 0) p.x += ancho; else if (p.x > ancho) p.x -= ancho;
-            if (p.y < 0) p.y += alto; else if (p.y > alto) p.y -= alto;
-
-            for (var j = i + 1; j < puntos.length; j++) {
-              var q = puntos[j];
-              var dx = p.x - q.x;
-              var dy = p.y - q.y;
-              var d2 = dx * dx + dy * dy;
-              if (d2 < 12100) {
-                tinta.strokeStyle = 'rgba(143, 233, 255, ' + (0.16 * (1 - d2 / 12100)).toFixed(3) + ')';
-                tinta.beginPath();
-                tinta.moveTo(p.x, p.y);
-                tinta.lineTo(q.x, q.y);
-                tinta.stroke();
-              }
-            }
-
-            if (cursor) {
-              var cx = p.x - cursor.x;
-              var cy = p.y - cursor.y;
-              var c2 = cx * cx + cy * cy;
-              if (c2 < 32400) {
-                tinta.strokeStyle = 'rgba(252, 238, 10, ' + (0.5 * (1 - c2 / 32400)).toFixed(3) + ')';
-                tinta.beginPath();
-                tinta.moveTo(p.x, p.y);
-                tinta.lineTo(cursor.x, cursor.y);
-                tinta.stroke();
-              }
-            }
-
-            tinta.fillStyle = p.rosa ? 'rgba(255, 106, 213, 0.7)' : 'rgba(143, 233, 255, 0.7)';
-            tinta.fillRect(p.x - p.lado / 2, p.y - p.lado / 2, p.lado, p.lado);
-          }
-          requestAnimationFrame(cuadro);
-        }
-
-        function echarAndar() {
-          if (corriendo || !aLaVista || document.hidden || vistaInicio.hidden) return;
-          if (!ancho) medir();
-          corriendo = true;
-          requestAnimationFrame(cuadro);
-        }
-
-        new IntersectionObserver(function (entradas) {
-          aLaVista = entradas[0].isIntersecting;
-          echarAndar();
-        }).observe(hero);
-
-        document.addEventListener('visibilitychange', echarAndar);
-        window.addEventListener('hashchange', function () { setTimeout(echarAndar, 0); });
-
-        var remedir = null;
-        window.addEventListener('resize', function () {
-          clearTimeout(remedir);
-          remedir = setTimeout(function () {
-            if (!vistaInicio.hidden) medir();
-          }, 150);
+          img.style.setProperty('--pos', toma.pos);
+          img.style.setProperty('--pos-movil', toma.posMovil);
+          imagenes.push(img);
         });
 
-        if (conRaton) {
-          window.addEventListener('pointermove', function (evento) {
-            if (!corriendo) return;
-            var caja = lienzo.getBoundingClientRect();
-            var y = evento.clientY - caja.top;
-            cursor = (y >= 0 && y <= caja.height) ? { x: evento.clientX - caja.left, y: y } : null;
-          }, { passive: true });
+        function cargar(i) {
+          if (!imagenes[i].getAttribute('src')) imagenes[i].src = archivo(TOMAS[i]);
         }
+
+        function rotular(i) {
+          var toma = TOMAS[i];
+          var juego = JUEGOS.filter(function (j) { return j.id === toma.juego; })[0];
+          numero.textContent = dosCifras(i + 1) + ' / ' + dosCifras(TOMAS.length);
+          enlace.firstChild.nodeValue = (juego ? juego.nombre : toma.juego) + ' · captura ' + toma.n + ' ';
+          enlace.href = '#/gaming/' + toma.juego + (juego && juego.galeriaAparte ? '/galeria' : '');
+        }
+
+        // El avance es una animación CSS de --cine-toma; al terminar pasa a la toma siguiente.
+        // Pausarla (botón, fuera de pantalla o pestaña oculta) también detiene el pase.
+        function pintarPausa() {
+          var quieta = pausaElegida || !aLaVista || document.hidden;
+          ficha.classList.toggle('en-pausa', quieta);
+          botonPausa.setAttribute('aria-pressed', pausaElegida ? 'true' : 'false');
+        }
+
+        function correrAvance() {
+          avance.classList.remove('corre');
+          void avance.offsetWidth;
+          if (!sinMovimiento) avance.classList.add('corre');
+        }
+
+        function mostrar(i) {
+          pedida = i;
+          cargar(i);
+          cargar((i + 1) % TOMAS.length);
+          var img = imagenes[i];
+          function poner() {
+            if (pedida !== i) return;   // otra toma se pidió mientras esta cargaba
+            if (actual !== i) imagenes[actual].classList.remove('activa');
+            img.classList.add('activa');
+            actual = i;
+            rotular(i);
+            correrAvance();
+          }
+          if (img.complete && img.naturalWidth) {
+            poner();
+          } else {
+            img.addEventListener('load', poner, { once: true });
+            img.addEventListener('error', function () {
+              if (pedida === i) mostrar((i + 1) % TOMAS.length);
+            }, { once: true });
+          }
+        }
+
+        avance.addEventListener('animationend', function () {
+          mostrar((actual + 1) % TOMAS.length);
+        });
+
+        botonSiguiente.addEventListener('click', function () {
+          mostrar((pedida + 1) % TOMAS.length);
+        });
+
+        botonPausa.addEventListener('click', function () {
+          pausaElegida = !pausaElegida;
+          pintarPausa();
+        });
+
+        // Con movimiento reducido no avanza solo: queda el botón «Siguiente».
+        if (sinMovimiento) botonPausa.hidden = true;
+
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(function (entradas) {
+            aLaVista = entradas[0].isIntersecting;
+            pintarPausa();
+          }).observe(hero);
+        }
+        document.addEventListener('visibilitychange', pintarPausa);
+
+        rotular(0);
+        cargar(1);
+        correrAvance();
+        pintarPausa();
       })();
 
       window.addEventListener('hashchange', enrutar);
