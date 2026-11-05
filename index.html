@@ -4674,6 +4674,41 @@
       }
     }
 
+    /* Constelaciones en las franjas negras a los lados del inicio. El lienzo es fijo y va detrás
+       del contenido (como las líneas de escaneo); la máscara lo borra sobre la columna central,
+       cuyos bordes (--lado-izq, --lado-der) mide el script. Solo en el inicio. */
+    .os-campo-lados {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--lado-izq, 0px) - 48px), transparent var(--lado-izq, 0px), transparent var(--lado-der, 100vw), #000 calc(var(--lado-der, 100vw) + 48px));
+      mask-image: linear-gradient(90deg, #000 calc(var(--lado-izq, 0px) - 48px), transparent var(--lado-izq, 0px), transparent var(--lado-der, 100vw), #000 calc(var(--lado-der, 100vw) + 48px));
+    }
+
+    body:has(#vista-inicio:not([hidden])) .os-campo-lados {
+      display: block;
+    }
+
+    /* El recorte de la barra la volvía «raíz de fondo»: su cristal no veía lo de abajo y no
+       desenfocaba nada. Sin recorte, el cristal sí difumina lo que pasa por debajo. */
+    .contenedor:has(> #vista-inicio:not([hidden])) > .barra-hud {
+      clip-path: none;
+    }
+
+    .contenedor:has(> #vista-inicio:not([hidden])) > .barra-hud::before {
+      background: rgba(5, 3, 8, 0.72);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .os-campo-lados {
+        display: none !important;
+      }
+    }
+
     @media (prefers-reduced-transparency: reduce) {
       .contenedor:has(> #vista-inicio:not([hidden])) > .barra-hud::before,
       .os-ficha-toma,
@@ -4722,6 +4757,9 @@
       <feDisplacementMap in="SourceGraphic" in2="ruido" scale="16" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
   </svg>
+
+  <!-- Constelaciones de las franjas laterales del inicio: las pinta el campo lateral del script -->
+  <canvas class="os-campo-lados" id="os-campo-lados" aria-hidden="true"></canvas>
 
   <div class="contenedor">
     <nav class="barra-hud" data-tema="holograma" aria-label="Secciones">
@@ -6379,6 +6417,138 @@
             cursor = (y >= 0 && y <= caja.height) ? { x: evento.clientX - caja.left, y: y } : null;
           }, { passive: true });
         }
+      })();
+
+      // Campo lateral: las mismas constelaciones en las franjas negras a los lados de la columna,
+      // en todo el inicio. Cada punto se queda en su franja; si una franja mide menos de 40 px
+      // (pantallas angostas) no se pinta nada. Se detiene fuera del inicio y con la pestaña oculta.
+      (function () {
+        var lienzo = document.getElementById('os-campo-lados');
+        var tinta = lienzo.getContext && lienzo.getContext('2d');
+        var columna = document.querySelector('.contenedor');
+        if (sinMovimiento || !tinta || !window.requestAnimationFrame) return;
+
+        var puntos = [];
+        var ancho = 0;
+        var alto = 0;
+        var izq = 0;
+        var der = 0;
+        var cursor = null;
+        var corriendo = false;
+
+        function medir() {
+          var densidad = Math.min(window.devicePixelRatio || 1, 2);
+          ancho = window.innerWidth;
+          alto = window.innerHeight;
+          lienzo.width = Math.round(ancho * densidad);
+          lienzo.height = Math.round(alto * densidad);
+          tinta.setTransform(densidad, 0, 0, densidad, 0, 0);
+
+          // Bordes del contenido: la caja de .contenedor menos su relleno
+          var caja = columna.getBoundingClientRect();
+          var estilo = getComputedStyle(columna);
+          izq = Math.max(0, caja.left + parseFloat(estilo.paddingLeft) - 8);
+          der = Math.min(ancho, caja.right - parseFloat(estilo.paddingRight) + 8);
+          lienzo.style.setProperty('--lado-izq', izq + 'px');
+          lienzo.style.setProperty('--lado-der', der + 'px');
+
+          puntos = [];
+          [[0, izq], [der, ancho]].forEach(function (franja) {
+            var a = franja[1] - franja[0];
+            if (a < 40) return;
+            var cuantos = Math.max(8, Math.min(70, Math.round(a * alto / 6000)));
+            for (var i = 0; i < cuantos; i++) {
+              puntos.push({
+                x0: franja[0],
+                x1: franja[1],
+                x: franja[0] + Math.random() * a,
+                y: Math.random() * alto,
+                vx: (Math.random() - 0.5) * 0.24,
+                vy: (Math.random() - 0.5) * 0.24,
+                lado: Math.random() < 0.25 ? 3 : 2,
+                rosa: Math.random() < 0.3
+              });
+            }
+          });
+        }
+
+        function cuadro() {
+          if (vistaInicio.hidden || document.hidden || !puntos.length) {
+            corriendo = false;
+            tinta.clearRect(0, 0, ancho, alto);
+            return;
+          }
+          tinta.clearRect(0, 0, ancho, alto);
+
+          for (var i = 0; i < puntos.length; i++) {
+            var p = puntos[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < p.x0) p.x += p.x1 - p.x0; else if (p.x > p.x1) p.x -= p.x1 - p.x0;
+            if (p.y < 0) p.y += alto; else if (p.y > alto) p.y -= alto;
+
+            for (var j = i + 1; j < puntos.length; j++) {
+              var q = puntos[j];
+              var dx = p.x - q.x;
+              var dy = p.y - q.y;
+              var d2 = dx * dx + dy * dy;
+              if (d2 < 12100) {
+                tinta.strokeStyle = 'rgba(143, 233, 255, ' + (0.16 * (1 - d2 / 12100)).toFixed(3) + ')';
+                tinta.beginPath();
+                tinta.moveTo(p.x, p.y);
+                tinta.lineTo(q.x, q.y);
+                tinta.stroke();
+              }
+            }
+
+            if (cursor) {
+              var cx = p.x - cursor.x;
+              var cy = p.y - cursor.y;
+              var c2 = cx * cx + cy * cy;
+              if (c2 < 32400) {
+                tinta.strokeStyle = 'rgba(252, 238, 10, ' + (0.5 * (1 - c2 / 32400)).toFixed(3) + ')';
+                tinta.beginPath();
+                tinta.moveTo(p.x, p.y);
+                tinta.lineTo(cursor.x, cursor.y);
+                tinta.stroke();
+              }
+            }
+
+            tinta.fillStyle = p.rosa ? 'rgba(255, 106, 213, 0.7)' : 'rgba(143, 233, 255, 0.7)';
+            tinta.fillRect(p.x - p.lado / 2, p.y - p.lado / 2, p.lado, p.lado);
+          }
+          requestAnimationFrame(cuadro);
+        }
+
+        function echarAndar() {
+          if (corriendo || vistaInicio.hidden || document.hidden) return;
+          medir();
+          if (!puntos.length) return;
+          corriendo = true;
+          requestAnimationFrame(cuadro);
+        }
+
+        document.addEventListener('visibilitychange', echarAndar);
+        window.addEventListener('hashchange', function () { setTimeout(echarAndar, 0); });
+
+        var remedir = null;
+        window.addEventListener('resize', function () {
+          clearTimeout(remedir);
+          remedir = setTimeout(function () {
+            if (vistaInicio.hidden) return;
+            medir();
+            echarAndar();
+          }, 150);
+        });
+
+        if (conRaton) {
+          window.addEventListener('pointermove', function (evento) {
+            cursor = { x: evento.clientX, y: evento.clientY };
+          }, { passive: true });
+          document.addEventListener('pointerleave', function () { cursor = null; });
+        }
+
+        echarAndar();
       })();
 
       // Tomas de la presentación: mis capturas a pantalla completa, alternando juegos.
