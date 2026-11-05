@@ -4709,6 +4709,292 @@
       }
     }
 
+    /* ===== Cine en las páginas de juego (5 nov 2026) ==========================================
+       La cabecera vieja (retrato, marca en arcoíris y chips) se oculta; arriba va .cj-hero: una
+       captura del juego a todo el ancho con telones, grano y constelaciones (#cj-campo), el nombre
+       en blanco hueso, el logro y los datos. La barra superior es la misma capa de cristal del
+       inicio, fija arriba y por encima del bloque del anime (z-index 11). La galería de Elden Ring
+       (#vista-galeria) no cambia. */
+    .contenedor:has(> #vista-juego:not([hidden])) > header {
+      display: none;
+    }
+
+    body:has(#vista-juego:not([hidden])) .aurora {
+      display: none;
+    }
+
+    .contenedor:has(> #vista-juego:not([hidden])) > .barra-hud {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      flex-wrap: nowrap;
+      background: transparent;
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .contenedor:has(> #vista-juego:not([hidden])) > .barra-hud::before {
+      content: "";
+      position: absolute;
+      inset: 0 calc(50% - 50vw);
+      z-index: -1;
+      background: rgba(5, 3, 8, 0.72);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      backdrop-filter: blur(18px) saturate(160%);
+    }
+
+    .contenedor:has(> #vista-juego:not([hidden])) .barra-hud-sitio {
+      color: var(--cine-tinta);
+      white-space: nowrap;
+    }
+
+    .contenedor:has(> #vista-juego:not([hidden])) .barra-hud-enlaces {
+      flex-wrap: nowrap;
+      align-items: center;
+    }
+
+    .contenedor:has(> #vista-juego:not([hidden])) .barra-hud a {
+      color: var(--cine-suave);
+      white-space: nowrap;
+      transition: color 0.15s ease;
+    }
+
+    .contenedor:has(> #vista-juego:not([hidden])) .barra-hud a:hover {
+      color: var(--nc-amarillo);
+    }
+
+    /* Constelaciones laterales también aquí */
+    body:has(#vista-juego:not([hidden])) .os-campo-lados {
+      display: block;
+    }
+
+    /* Portada */
+    .cj-hero {
+      position: relative;
+      isolation: isolate;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 40px;
+      min-height: clamp(440px, 66svh, 700px);
+      padding: 18px 0 clamp(32px, 5vh, 56px);
+      container-type: inline-size;
+    }
+
+    /* Sube 80 px bajo la barra de cristal, que así difumina la foto en vez de una franja negra */
+    .cj-fondo {
+      position: absolute;
+      inset: -80px calc(50% - 50vw) 0;
+      z-index: -1;
+      overflow: hidden;
+      background: var(--vacio);
+      pointer-events: none;
+    }
+
+    .cj-foto {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: var(--pos, 50% 50%);
+      opacity: 0;
+      transform: scale(1.05);
+      transition: opacity 0.8s ease, transform 2.4s cubic-bezier(0.33, 0, 0.2, 1);
+    }
+
+    .cj-foto.lista {
+      opacity: 1;
+      transform: none;
+    }
+
+    .cj-fondo::before,
+    .cj-fondo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .cj-fondo::before {
+      background:
+        linear-gradient(0deg, var(--vacio) 0%, rgba(5, 3, 8, 0.84) 20%, rgba(5, 3, 8, 0.34) 46%, rgba(5, 3, 8, 0.04) 70%, rgba(5, 3, 8, 0.45) 100%),
+        linear-gradient(90deg, rgba(5, 3, 8, 0.5) 0%, transparent 46%);
+    }
+
+    .cj-fondo::after {
+      opacity: 0.06;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+    }
+
+    .cj-campo {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* «Volver» y «Anime» como botones de cristal con la esquina cortada */
+    .cj-hero .navegacion-juego {
+      gap: 10px 12px;
+    }
+
+    .cj-hero .navegacion-juego .volver {
+      --corte: 10px;
+      min-height: 44px;
+      padding: 0 18px;
+      background:
+        linear-gradient(135deg, var(--cine-filo) 0 calc(var(--corte) * 0.7071 + 1px), transparent 0),
+        linear-gradient(315deg, var(--cine-filo) 0 calc(var(--corte) * 0.7071 + 1px), transparent 0),
+        var(--cine-cristal);
+      box-shadow: inset 0 0 0 1px var(--cine-filo);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      backdrop-filter: blur(16px) saturate(140%);
+      clip-path: polygon(var(--corte) 0, 100% 0, 100% calc(100% - var(--corte)), calc(100% - var(--corte)) 100%, 0 100%, 0 var(--corte));
+      color: var(--cine-tinta);
+      font-family: var(--futura);
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.15s ease, transform 0.14s var(--os-sale);
+    }
+
+    .cj-hero .navegacion-juego .volver:hover {
+      background-color: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+
+    .cj-hero .navegacion-juego .volver:active {
+      transform: scale(0.97);
+    }
+
+    .cj-hero .navegacion-juego .volver:focus-visible {
+      outline: 2px solid var(--nc-amarillo);
+      outline-offset: -4px;
+    }
+
+    .cj-pie {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .cj-ceja {
+      margin: 0;
+      color: var(--cine-suave);
+      font-family: var(--hud);
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+    }
+
+    /* El nombre del juego: blanco hueso con un leve degradado vertical, como PABLEI en el inicio */
+    .cj-hero #titulo-juego {
+      margin: 0 0 4px -0.03em;
+      padding: 0;
+      border: 0;
+      background: linear-gradient(180deg, #ffffff 0%, var(--cine-tinta) 58%, #c9c4bb 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-family: var(--futura);
+      font-size: clamp(3.4rem, 15cqw, 11rem);
+      font-weight: 700;
+      letter-spacing: -0.005em;
+      line-height: 0.82;
+      text-transform: uppercase;
+      text-shadow: none;
+      filter: drop-shadow(0 14px 34px rgba(0, 0, 0, 0.4));
+      overflow-wrap: anywhere;
+    }
+
+    .cj-hero #titulo-juego::before,
+    .cj-hero #titulo-juego::after {
+      content: none;
+    }
+
+    .cj-logro {
+      margin: 0;
+      color: var(--cine-tinta);
+      font-family: var(--hud);
+      font-size: clamp(0.95rem, 1.6cqw, 1.15rem);
+      line-height: 1.4;
+      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+    }
+
+    .cj-datos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 4px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .cj-datos li {
+      padding: 4px 10px 3px;
+      box-shadow: inset 0 0 0 1px rgba(252, 238, 10, 0.75);
+      background: rgba(5, 3, 8, 0.35);
+      color: var(--nc-amarillo);
+      font-family: var(--hud);
+      font-size: 0.9rem;
+      line-height: 1.3;
+    }
+
+    /* La tarjeta abre justo bajo la portada */
+    #vista-juego > .tarjeta {
+      padding-top: 12px;
+    }
+
+    @media (max-width: 480px) {
+      .contenedor:has(> #vista-juego:not([hidden])) > .barra-hud {
+        font-size: 0.82rem;
+        letter-spacing: 0.02em;
+      }
+
+      .contenedor:has(> #vista-juego:not([hidden])) .barra-hud-sitio {
+        display: none;
+      }
+
+      .contenedor:has(> #vista-juego:not([hidden])) .barra-hud-enlaces {
+        justify-content: space-between;
+        width: 100%;
+        gap: 0 4px;
+      }
+
+      .cj-hero {
+        min-height: clamp(380px, 60svh, 560px);
+      }
+
+      .cj-fondo::before {
+        background: linear-gradient(0deg, var(--vacio) 0%, rgba(5, 3, 8, 0.9) 26%, rgba(5, 3, 8, 0.4) 50%, rgba(5, 3, 8, 0.08) 72%, rgba(5, 3, 8, 0.5) 100%);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cj-foto {
+        transform: none !important;
+        transition: opacity 0.2s ease;
+      }
+
+      .cj-campo {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-transparency: reduce) {
+      .contenedor:has(> #vista-juego:not([hidden])) > .barra-hud::before,
+      .cj-hero .navegacion-juego .volver {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        background-color: #0c0a12;
+      }
+    }
+
     @media (prefers-reduced-transparency: reduce) {
       .contenedor:has(> #vista-inicio:not([hidden])) > .barra-hud::before,
       .os-ficha-toma,
@@ -4948,14 +5234,29 @@
     </main>
 
     <main id="vista-juego" hidden>
-      <nav class="navegacion-juego" data-tema="holograma" aria-label="Navegación del juego">
-        <a class="volver" href="#gaming">← Volver al inicio</a>
-        <a class="volver" id="ir-anime" href="#anime" hidden></a>
-      </nav>
+      <!-- Portada de cine del juego: una captura propia a todo el ancho (propiedad "portada" de
+           JUEGOS), constelaciones encima y el nombre del juego en grande. La pinta pintarPortadaJuego(). -->
+      <div class="cj-hero" id="cj-hero" data-tema="holograma">
+        <div class="cj-fondo" aria-hidden="true">
+          <img class="cj-foto" id="cj-foto" alt="" width="1920" height="1080" decoding="async" hidden>
+          <canvas class="cj-campo" id="cj-campo"></canvas>
+        </div>
+
+        <nav class="navegacion-juego" data-tema="holograma" aria-label="Navegación del juego">
+          <a class="volver" href="#gaming">← Volver al inicio</a>
+          <a class="volver" id="ir-anime" href="#anime" hidden></a>
+        </nav>
+
+        <div class="cj-pie">
+          <p class="cj-ceja" id="cj-ceja" aria-hidden="true">// Misión</p>
+          <h2 id="titulo-juego" tabindex="-1"></h2>
+          <p class="cj-logro" id="cj-logro" hidden></p>
+          <ul class="cj-datos" id="cj-datos" aria-label="Contenido del juego"></ul>
+        </div>
+      </div>
 
       <section class="tarjeta" data-tema="holograma" aria-labelledby="titulo-juego">
         <span class="sello" id="sello" lang="ja" aria-hidden="true" hidden></span>
-        <h2 id="titulo-juego" tabindex="-1"></h2>
         <h3 class="subtitulo-videos" id="subtitulo-videos" hidden>Videos</h3>
         <p id="aviso-juego"></p>
 
@@ -5066,7 +5367,10 @@
       // sonido (archivo de sonidos/ que suena al elegir el juego en el inicio; cada video admite el suyo).
       // galeriaAparte (true: las fotos no van bajo los videos, sino en #/gaming/<id>/galeria, a pantalla completa).
       // sonidoGaleria (suena al pulsar «Ir a Galería» en los juegos con galería aparte).
-      // logro (una línea que resume el juego en su tarjeta del inicio).
+      // logro (una línea que resume el juego en su tarjeta del inicio y en su portada).
+      // portada ({ n, pos } o { archivo, pos }: la foto fotos/<id>/<n>.jpg, o fotos/<id>/<archivo> si no es
+      // de la galería numerada, a todo el ancho arriba de su página; pos encuadra con object-position.
+      // Sin interfaz del juego y con espacio despejado para el nombre).
       var JUEGOS = [
         {
           id: 'sekiro',
@@ -5074,6 +5378,7 @@
           tema: 'sekiro',
           sello: '隻狼',
           logro: 'Isshin, Búho y Genichiro, sin recibir golpe',
+          portada: { archivo: 'video-buho-0009.jpg', pos: '50% 58%' },
           sonido: 'sonidos/sekiro-choque.mp3',
           fotos: 85,
           videos: [
@@ -5142,6 +5447,7 @@
           nombre: 'Elden Ring',
           tema: 'elden-ring',
           logro: 'Malenia y Radahn, sin invocar',
+          portada: { n: 14, pos: '50% 30%' },
           sonido: 'sonidos/eldenring-frasco.mp3',
           sonidoGaleria: 'sonidos/eldenring-galeria.mp3',
           fotos: 102,
@@ -5932,14 +6238,50 @@
         bloqueAnime.appendChild(galeriaAnime);
       }
 
+      // Portada de cine: la captura del juego, su logro y cuántos videos y fotos tiene.
+      var cjFoto = document.getElementById('cj-foto');
+      var cjLogro = document.getElementById('cj-logro');
+      var cjDatos = document.getElementById('cj-datos');
+
+      cjFoto.addEventListener('load', function () { cjFoto.classList.add('lista'); });
+
+      function pintarPortadaJuego(juego) {
+        var portada = juego && juego.portada;
+        cjFoto.classList.remove('lista');
+        if (portada) {
+          var ruta = 'fotos/' + encodeURIComponent(juego.id) + '/' + (portada.archivo || dosCifras(portada.n) + '.jpg');
+          cjFoto.style.setProperty('--pos', portada.pos || '50% 50%');
+          cjFoto.hidden = false;
+          if (cjFoto.getAttribute('src') !== ruta) cjFoto.src = ruta;
+          else if (cjFoto.complete && cjFoto.naturalWidth) cjFoto.classList.add('lista');
+        } else {
+          cjFoto.hidden = true;
+        }
+        document.getElementById('cj-ceja').hidden = !juego;
+        cjLogro.textContent = (juego && juego.logro) || '';
+        cjLogro.hidden = !(juego && juego.logro);
+        cjDatos.textContent = '';
+        if (!juego) return;
+        var datos = [];
+        if (juego.videos.length) datos.push(juego.videos.length + (juego.videos.length === 1 ? ' video' : ' videos'));
+        if (juego.fotos) datos.push(juego.fotos + ' fotos');
+        datos.forEach(function (texto) {
+          var li = document.createElement('li');
+          li.textContent = texto;
+          cjDatos.appendChild(li);
+        });
+      }
+
       function pintarJuego(juego) {
         juegoActual = juego;
         menuVideos.textContent = '';
         pintarAmbiente(juego);
         pintarAnime(juego);
+        pintarPortadaJuego(juego);
 
         var aparte = !!(juego && juego.galeriaAparte && juego.fotos);
-        subtituloVideos.hidden = !aparte;
+        // El nombre del juego vive en la portada; la tarjeta abre con el subtítulo «Videos».
+        subtituloVideos.hidden = !(juego && juego.videos.length);
         irGaleria.hidden = !aparte;
         if (aparte) {
           irGaleria.href = '#/gaming/' + encodeURIComponent(juego.id) + '/galeria';
@@ -6302,10 +6644,10 @@
         });
       }
 
-      // Campo de partículas de la presentación: puntos que derivan y se enlazan entre sí y con el
-      // cursor. Se detiene cuando la presentación sale de pantalla o la pestaña pierde el foco.
-      (function () {
-        var lienzo = document.getElementById('os-campo');
+      // Campo de partículas: puntos que derivan y se enlazan entre sí y con el cursor, sobre el
+      // fondo de una portada (la del inicio y la de cada juego). Se detiene cuando la portada sale
+      // de pantalla, su vista se oculta o la pestaña pierde el foco.
+      function campoConstelaciones(lienzo, zona, vista) {
         var tinta = lienzo.getContext && lienzo.getContext('2d');
         if (sinMovimiento || !tinta || !window.requestAnimationFrame || !('IntersectionObserver' in window)) return;
 
@@ -6340,7 +6682,7 @@
         }
 
         function cuadro() {
-          if (!aLaVista || document.hidden || vistaInicio.hidden) {
+          if (!aLaVista || document.hidden || vista.hidden) {
             corriendo = false;
             return;
           }
@@ -6387,7 +6729,7 @@
         }
 
         function echarAndar() {
-          if (corriendo || !aLaVista || document.hidden || vistaInicio.hidden) return;
+          if (corriendo || !aLaVista || document.hidden || vista.hidden) return;
           if (!ancho) medir();
           corriendo = true;
           requestAnimationFrame(cuadro);
@@ -6396,7 +6738,7 @@
         new IntersectionObserver(function (entradas) {
           aLaVista = entradas[0].isIntersecting;
           echarAndar();
-        }).observe(hero);
+        }).observe(zona);
 
         document.addEventListener('visibilitychange', echarAndar);
         window.addEventListener('hashchange', function () { setTimeout(echarAndar, 0); });
@@ -6405,7 +6747,7 @@
         window.addEventListener('resize', function () {
           clearTimeout(remedir);
           remedir = setTimeout(function () {
-            if (!vistaInicio.hidden) medir();
+            if (!vista.hidden) medir();
           }, 150);
         });
 
@@ -6417,10 +6759,13 @@
             cursor = (y >= 0 && y <= caja.height) ? { x: evento.clientX - caja.left, y: y } : null;
           }, { passive: true });
         }
-      })();
+      }
+
+      campoConstelaciones(document.getElementById('os-campo'), hero, vistaInicio);
+      campoConstelaciones(document.getElementById('cj-campo'), document.getElementById('cj-hero'), vistaJuego);
 
       // Campo lateral: las mismas constelaciones en las franjas negras a los lados de la columna,
-      // en todo el inicio. Cada punto se queda en su franja; si una franja mide menos de 40 px
+      // en todo el inicio y en la página de cada juego (no en la galería de Elden Ring). Cada punto se queda en su franja; si una franja mide menos de 40 px
       // (pantallas angostas) no se pinta nada. Se detiene fuera del inicio y con la pestaña oculta.
       (function () {
         var lienzo = document.getElementById('os-campo-lados');
@@ -6473,7 +6818,7 @@
         }
 
         function cuadro() {
-          if (vistaInicio.hidden || document.hidden || !puntos.length) {
+          if ((vistaInicio.hidden && vistaJuego.hidden) || document.hidden || !puntos.length) {
             corriendo = false;
             tinta.clearRect(0, 0, ancho, alto);
             return;
@@ -6521,7 +6866,7 @@
         }
 
         function echarAndar() {
-          if (corriendo || vistaInicio.hidden || document.hidden) return;
+          if (corriendo || (vistaInicio.hidden && vistaJuego.hidden) || document.hidden) return;
           medir();
           if (!puntos.length) return;
           corriendo = true;
@@ -6529,13 +6874,19 @@
         }
 
         document.addEventListener('visibilitychange', echarAndar);
-        window.addEventListener('hashchange', function () { setTimeout(echarAndar, 0); });
+        // Al cambiar de vista la columna cambia de ancho (el juego es más ancho): se vuelve a medir.
+        window.addEventListener('hashchange', function () {
+          setTimeout(function () {
+            if (corriendo) medir();
+            echarAndar();
+          }, 0);
+        });
 
         var remedir = null;
         window.addEventListener('resize', function () {
           clearTimeout(remedir);
           remedir = setTimeout(function () {
-            if (vistaInicio.hidden) return;
+            if (vistaInicio.hidden && vistaJuego.hidden) return;
             medir();
             echarAndar();
           }, 150);
@@ -6552,12 +6903,13 @@
       })();
 
       // Tomas de la presentación: mis capturas a pantalla completa, alternando juegos.
-      // n es el número de la foto en fotos/<juego>/; pos y posMovil encuadran al personaje
+      // n es el número de la foto en fotos/<juego>/ (o archivo, si la foto no es de la galería numerada,
+      // con su rotulo para la ficha); pos y posMovil encuadran al personaje
       // (en el teléfono la foto se recorta a lo alto). La primera ya viene en el HTML.
       var TOMAS = [
         { juego: 'sekiro', n: 77, pos: '50% 62%', posMovil: '30% 50%' },
         { juego: 'elden-ring', n: 14, pos: '50% 38%', posMovil: '46% 50%' },
-        { juego: 'sekiro', n: 5, pos: '50% 30%', posMovil: '78% 50%' },
+        { juego: 'sekiro', archivo: 'video-buho-0009.jpg', rotulo: 'Búho, sin recibir golpe', pos: '50% 50%', posMovil: '52% 50%' },
         { juego: 'elden-ring', n: 26, pos: '50% 34%', posMovil: '52% 50%' },
         { juego: 'sekiro', n: 81, pos: '50% 40%', posMovil: '36% 50%' },
         { juego: 'elden-ring', n: 79, pos: '50% 48%', posMovil: '60% 50%' }
@@ -6578,7 +6930,7 @@
         var aLaVista = true;
 
         function archivo(toma) {
-          return 'fotos/' + toma.juego + '/' + dosCifras(toma.n) + '.jpg';
+          return 'fotos/' + toma.juego + '/' + (toma.archivo || dosCifras(toma.n) + '.jpg');
         }
 
         TOMAS.forEach(function (toma, i) {
@@ -6604,7 +6956,7 @@
           var toma = TOMAS[i];
           var juego = JUEGOS.filter(function (j) { return j.id === toma.juego; })[0];
           numero.textContent = dosCifras(i + 1) + ' / ' + dosCifras(TOMAS.length);
-          enlace.firstChild.nodeValue = (juego ? juego.nombre : toma.juego) + ' · captura ' + toma.n + ' ';
+          enlace.firstChild.nodeValue = (juego ? juego.nombre : toma.juego) + ' · ' + (toma.rotulo || 'captura ' + toma.n) + ' ';
           enlace.href = '#/gaming/' + toma.juego + (juego && juego.galeriaAparte ? '/galeria' : '');
         }
 
