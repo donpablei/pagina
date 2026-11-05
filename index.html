@@ -4246,6 +4246,11 @@
       z-index: 0;
     }
 
+    /* Las constelaciones van encima de las fotos y de sus telones */
+    .os-fondo .os-campo {
+      z-index: 2;
+    }
+
     .os-fondo::before,
     .os-fondo::after {
       content: "";
@@ -4761,6 +4766,8 @@
           <div class="os-cine" id="os-cine">
             <img class="os-toma activa" src="fotos/sekiro/77.jpg" alt="" width="1920" height="1080" fetchpriority="high" decoding="async">
           </div>
+          <!-- Constelaciones: puntos que derivan, se enlazan entre sí y con el cursor, encima de las fotos -->
+          <canvas class="os-campo" id="os-campo"></canvas>
         </div>
 
         <div class="os-estado os-sube" style="--i: 0">
@@ -6256,6 +6263,123 @@
           tarjeta.style.removeProperty('--ry');
         });
       }
+
+      // Campo de partículas de la presentación: puntos que derivan y se enlazan entre sí y con el
+      // cursor. Se detiene cuando la presentación sale de pantalla o la pestaña pierde el foco.
+      (function () {
+        var lienzo = document.getElementById('os-campo');
+        var tinta = lienzo.getContext && lienzo.getContext('2d');
+        if (sinMovimiento || !tinta || !window.requestAnimationFrame || !('IntersectionObserver' in window)) return;
+
+        var puntos = [];
+        var ancho = 0;
+        var alto = 0;
+        var cursor = null;
+        var aLaVista = false;
+        var corriendo = false;
+
+        function medir() {
+          var caja = lienzo.getBoundingClientRect();
+          var densidad = Math.min(window.devicePixelRatio || 1, 2);
+          ancho = caja.width;
+          alto = caja.height;
+          lienzo.width = Math.round(ancho * densidad);
+          lienzo.height = Math.round(alto * densidad);
+          tinta.setTransform(densidad, 0, 0, densidad, 0, 0);
+
+          var cuantos = Math.max(24, Math.min(90, Math.round(ancho * alto / 16000)));
+          puntos = [];
+          for (var i = 0; i < cuantos; i++) {
+            puntos.push({
+              x: Math.random() * ancho,
+              y: Math.random() * alto,
+              vx: (Math.random() - 0.5) * 0.24,
+              vy: (Math.random() - 0.5) * 0.24,
+              lado: Math.random() < 0.25 ? 3 : 2,
+              rosa: Math.random() < 0.3
+            });
+          }
+        }
+
+        function cuadro() {
+          if (!aLaVista || document.hidden || vistaInicio.hidden) {
+            corriendo = false;
+            return;
+          }
+          tinta.clearRect(0, 0, ancho, alto);
+
+          for (var i = 0; i < puntos.length; i++) {
+            var p = puntos[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < 0) p.x += ancho; else if (p.x > ancho) p.x -= ancho;
+            if (p.y < 0) p.y += alto; else if (p.y > alto) p.y -= alto;
+
+            for (var j = i + 1; j < puntos.length; j++) {
+              var q = puntos[j];
+              var dx = p.x - q.x;
+              var dy = p.y - q.y;
+              var d2 = dx * dx + dy * dy;
+              if (d2 < 12100) {
+                tinta.strokeStyle = 'rgba(143, 233, 255, ' + (0.16 * (1 - d2 / 12100)).toFixed(3) + ')';
+                tinta.beginPath();
+                tinta.moveTo(p.x, p.y);
+                tinta.lineTo(q.x, q.y);
+                tinta.stroke();
+              }
+            }
+
+            if (cursor) {
+              var cx = p.x - cursor.x;
+              var cy = p.y - cursor.y;
+              var c2 = cx * cx + cy * cy;
+              if (c2 < 32400) {
+                tinta.strokeStyle = 'rgba(252, 238, 10, ' + (0.5 * (1 - c2 / 32400)).toFixed(3) + ')';
+                tinta.beginPath();
+                tinta.moveTo(p.x, p.y);
+                tinta.lineTo(cursor.x, cursor.y);
+                tinta.stroke();
+              }
+            }
+
+            tinta.fillStyle = p.rosa ? 'rgba(255, 106, 213, 0.7)' : 'rgba(143, 233, 255, 0.7)';
+            tinta.fillRect(p.x - p.lado / 2, p.y - p.lado / 2, p.lado, p.lado);
+          }
+          requestAnimationFrame(cuadro);
+        }
+
+        function echarAndar() {
+          if (corriendo || !aLaVista || document.hidden || vistaInicio.hidden) return;
+          if (!ancho) medir();
+          corriendo = true;
+          requestAnimationFrame(cuadro);
+        }
+
+        new IntersectionObserver(function (entradas) {
+          aLaVista = entradas[0].isIntersecting;
+          echarAndar();
+        }).observe(hero);
+
+        document.addEventListener('visibilitychange', echarAndar);
+        window.addEventListener('hashchange', function () { setTimeout(echarAndar, 0); });
+
+        var remedir = null;
+        window.addEventListener('resize', function () {
+          clearTimeout(remedir);
+          remedir = setTimeout(function () {
+            if (!vistaInicio.hidden) medir();
+          }, 150);
+        });
+
+        if (conRaton) {
+          window.addEventListener('pointermove', function (evento) {
+            if (!corriendo) return;
+            var caja = lienzo.getBoundingClientRect();
+            var y = evento.clientY - caja.top;
+            cursor = (y >= 0 && y <= caja.height) ? { x: evento.clientX - caja.left, y: y } : null;
+          }, { passive: true });
+        }
+      })();
 
       // Tomas de la presentación: mis capturas a pantalla completa, alternando juegos.
       // n es el número de la foto en fotos/<juego>/; pos y posMovil encuadran al personaje
